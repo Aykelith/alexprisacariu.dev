@@ -1,31 +1,17 @@
 module.exports = {
-    purge: false,
+    mode: 'jit',
+    purge: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
+    darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
-            screens: {
-                xs: "320px",
-            },
             fontFamily: {
-                poppins: ["Poppins"],
-            },
-            minWidth: {
-                xs: "320px",
-            },
-            textColor: {
-                main: "var(--colorPrimary)",
-                sub: "var(--colorSecondary)",
-            },
-            backgroundColor: {
-                main: "var(--backgroundColorPrimary)",
-                "code-block": "var(--backgroundColorSecondary)",
-                blockquote: "var(--backgroundColorThird)",
-            },
-            borderColor: {
-                main: "var(--colorPrimary)",
-            },
-            divideColor: {
-                main: "var(--colorPrimary)",
+                accent: ['Lato', 'sans-serif'],
+                normal: ['Roboto', 'sans-serif'],
             },
         },
     },
+    variants: {
+        extend: {},
+    },
+    plugins: [],
 };

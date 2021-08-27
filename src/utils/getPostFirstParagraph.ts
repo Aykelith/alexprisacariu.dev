@@ -1,0 +1,1 @@
+export default (postDirName: string) => {};
