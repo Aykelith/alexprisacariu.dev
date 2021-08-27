@@ -11,7 +11,10 @@ import { serialize } from 'next-mdx-remote/serialize';
 // Others
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 
+//= Style & Assets
+// Own
 import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 
 const SharedComponents = {};
 
@@ -46,7 +49,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             ...post,
             content: await serialize(post.content, {
                 mdxOptions: {
-                    remarkPlugins: [[require('remark-prism')]],
+                    remarkPlugins: [[require('remark-prism'), { plugins: ['line-numbers'] }]],
                 },
             }),
         },

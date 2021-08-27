@@ -10,6 +10,8 @@ for me) to handle the data between multiple components that can be accessed in
 any order because they are tabs?  Each component receive the same data the
 parent component.
 
+<center><img src="/imgs/posts/post1/tabs.gif" width="300" height="81"/></center>
+
 The main problem is that the components sometimes must perform long operations
 and in this time the user should be able to switch between tabs. A specific
 example is a tab that allow the user to upload images and it take some time
@@ -30,7 +32,7 @@ I came with 2 possible solutions:
 
 The first possible solution would look like this:
 
-```ts
+```ts[class="line-numbers"]
 type SharedData = { clientName: string };
 type ParentState = { sharedData: SharedData };
 
@@ -89,7 +91,7 @@ and to update it in both places (in the actual data variable and in the
 component's state) but I don't handle much data so it will not be a bottleneck
 for my use case.
 
-```ts
+```ts[class="line-numbers"]
 type SharedData = { clientName: string };
 
 class ParentComponent extends React.PureComponent<> {

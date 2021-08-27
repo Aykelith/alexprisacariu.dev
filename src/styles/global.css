@@ -9,3 +9,7 @@ body {
     @apply px-4;
     max-width: 900px;
 }
+
+ul, li {
+    list-style: auto;
+}
