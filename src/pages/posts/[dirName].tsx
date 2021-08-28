@@ -1,3 +1,7 @@
+//= Functions & Modules
+// Own
+import getPublishedDateString from '../../utils/getPublishedDateString';
+
 //= Structures & Data
 // Own
 import Post from '../../data/Post';
@@ -8,8 +12,12 @@ import getPost from '../../utils/getPost';
 import { serialize } from 'next-mdx-remote/serialize';
 
 //= React components
+// Own
+import Link from '../../components/Link';
+import PostTags from '../../components/PostTags';
 // Others
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
+import Head from 'next/head';
 
 //= Style & Assets
 // Own
@@ -24,12 +32,24 @@ type PagePost = Omit<Post, 'content'> & {
 
 export default function PostPage(post: PagePost) {
     return (
-        <div className="box">
-            <main className="flex flex-col space-y-8">
-                <h1 className="text-4xl">{post.title}</h1>
-                <MDXRemote {...post.content} components={SharedComponents} />
-            </main>
-        </div>
+        <>
+            <Head>
+                <title>{post.title}</title>
+            </Head>
+            <div className="page">
+                <div className="box">
+                    <main className="flex flex-col">
+                        <Link href="#">{'< See more posts'}</Link>
+                        <h1 className="text-4xl mt-1 mb-2">{post.title}</h1>
+                        <div className="flex items-center mb-8 space-x-3">
+                            <div>{getPublishedDateString(post.publishedOn)}</div>
+                            <PostTags tags={post.tags} />
+                        </div>
+                        <MDXRemote {...post.content} components={SharedComponents} />
+                    </main>
+                </div>
+            </div>
+        </>
     );
 }
 

@@ -8,11 +8,16 @@ import { readFileSync } from 'fs';
 // Own
 import PostsDirPath from '../data/PostsDirPath';
 import PostContentFileName from '../data/PostContentFileName';
+import Post from '../data/Post';
 
-type Data = { content: string; data: { title: string } };
-
-export default (postDirName: string): Data => {
+export default (postDirName: string): Post => {
     const result = matter(readFileSync(path.join(PostsDirPath, postDirName, PostContentFileName), { encoding: 'utf8' }).toString());
 
-    return (<unknown>result) as Data;
+    return {
+        title: result.data.title,
+        tags: result.data.tags,
+        publishedOn: result.data.publishedOn,
+        dirName: postDirName,
+        content: result.content,
+    };
 };

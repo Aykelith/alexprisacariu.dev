@@ -9,25 +9,30 @@ import RecentPosts from '../components/home/RecentPosts';
 import Head from 'next/head';
 
 //= Structures & Data
+// Own
+import Post from '../data/Post';
 // Others
 import { GetStaticProps } from 'next';
 
-export default function Home({ shortPosts }) {
+export default function Home({ shortPosts }: { shortPosts: Post[] }) {
     return (
         <>
             <Head>
-                <title>Create Next App</title>
+                <title>Alexandru Priscariu: The Website</title>
+                <meta name="description" content="Place of Alexandru Prisacariu" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="box">
-                <div className="flex flex-col font-normal py-8">
-                    <header>
-                        <h1 className="font-accent text-4xl font-bold">Alexandru Prisacariu</h1>
-                    </header>
-                    <main className="flex flex-col space-y-8">
-                        <div className=""></div>
-                        <RecentPosts shortPosts={shortPosts} />
-                    </main>
+            <div className="page">
+                <div className="box">
+                    <div className="flex flex-col font-normal">
+                        <header>
+                            <h1 className="font-accent text-4xl font-bold">Alexandru Prisacariu</h1>
+                        </header>
+                        <main className="flex flex-col space-y-8">
+                            <div className=""></div>
+                            <RecentPosts shortPosts={shortPosts} />
+                        </main>
+                    </div>
                 </div>
             </div>
         </>

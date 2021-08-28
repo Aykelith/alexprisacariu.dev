@@ -10,6 +10,10 @@ body {
     max-width: 900px;
 }
 
+.page {
+    @apply py-8;
+}
+
 ul, li {
     list-style: auto;
 }
