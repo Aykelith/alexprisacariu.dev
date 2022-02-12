@@ -19,5 +19,6 @@ export default (postDirName: string): Post => {
         publishedOn: result.data.publishedOn,
         dirName: postDirName,
         content: result.content,
+        skip: result.data.skip || null
     };
 };

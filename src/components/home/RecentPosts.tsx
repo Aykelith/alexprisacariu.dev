@@ -4,14 +4,14 @@ import Post from '../../data/Post';
 
 //= React components
 // Own
+import Section from "./Section";
 import ShortPost from '../ShortPost';
 // Others
 import Link from 'next/link';
 
 export default function RecentPosts({ shortPosts }: { shortPosts: Post[] }) {
     return (
-        <div className="flex flex-col space-y-3">
-            <h2 className="text-2xl font-bold">Sometimes I write</h2>
+        <Section title="Sometimes I write">
             <div className="flex flex-col">
                 {shortPosts &&
                     shortPosts.map((shortPost: any) => {
@@ -20,11 +20,11 @@ export default function RecentPosts({ shortPosts }: { shortPosts: Post[] }) {
             </div>
             <div>
                 <Link href="#">
-                    <a href="#" className="text-indigo-700 font-bold">
+                    <a href="#" className="font-bold">
                         Read more posts
                     </a>
                 </Link>
             </div>
-        </div>
+        </Section>
     );
 }

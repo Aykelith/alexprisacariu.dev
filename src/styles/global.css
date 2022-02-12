@@ -17,3 +17,8 @@ body {
 ul, li {
     list-style: auto;
 }
+
+a {
+    @apply text-indigo-700;
+    @apply hover:underline;
+}

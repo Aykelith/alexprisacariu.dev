@@ -15,6 +15,8 @@ export default (length: number): Post[] => {
     for (const postDirName of directories) {
         const postData = getPostFileData(postDirName);
 
+        if (postData.skip) continue;
+
         postData.content = postData.content.substring(0, postData.content.search(/^$/gm));
         posts.push(postData);
     }

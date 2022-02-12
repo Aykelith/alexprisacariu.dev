@@ -4,6 +4,7 @@ interface Post {
     publishedOn: string;
     dirName: string;
     content: string;
+    skip?: 1;
 }
 
 export default Post;
