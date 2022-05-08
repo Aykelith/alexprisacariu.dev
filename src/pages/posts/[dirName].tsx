@@ -36,7 +36,7 @@ export default function PostPage(post: PagePost) {
             <Head>
                 <title>{post.title}</title>
             </Head>
-            <div className="page">
+            <div id="PostPage" className="page">
                 <div className="box">
                     <main className="flex flex-col">
                         <Link href="#">{'< See more posts'}</Link>
@@ -45,7 +45,9 @@ export default function PostPage(post: PagePost) {
                             <div>{getPublishedDateString(post.publishedOn)}</div>
                             <PostTags tags={post.tags} />
                         </div>
-                        <MDXRemote {...post.content} components={SharedComponents} />
+                        <div className="postContent">
+                            <MDXRemote {...post.content} components={SharedComponents} />
+                        </div>
                     </main>
                 </div>
             </div>

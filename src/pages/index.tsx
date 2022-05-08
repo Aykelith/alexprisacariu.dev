@@ -8,15 +8,19 @@ import classNames from "classnames";
 // Own
 import RecentPosts from '../components/home/RecentPosts';
 import PinnedProjects from '../components/home/PinnedProjects';
+import { GitLabTag, GitHubTag, MyEmailTag } from "../components/tags";
 // Others
 import Head from 'next/head';
 
-//= Structures & Data
+//= Types & Enums & Consts
 // Own
 import Post from '../data/Post';
 import { Project } from "../modules/projects/data/Project";
 // Others
 import { GetStaticProps } from 'next';
+
+//= Assets
+// Own
 
 type Props = {
     shortPosts: Post[];
@@ -36,28 +40,16 @@ export default function Home({ shortPosts, pinnedProjects }: Props) {
                     <div className="flex flex-col font-normal">
                         <header>
                             <h1 className="font-accent text-4xl font-bold">Alexandru Prisacariu</h1>
-                            <div className="mt-2 flex divide-x-2 divide-gray-400">
-                                {[
-                                    { url: 'https://gitlab.com/AlexxanderX', label: 'GitLab' },
-                                    { url: 'https://github.com/Aykelith', label: 'GitHub' },
-                                    { url: 'mailto:alex@alexprisacariu.dev', label: 'alex@alexprisacariu.dev' },
-                                ].map((data, index) => (
-                                    <a
-                                        key={data.label}
-                                        href={data.url}
-                                        className={index == 0 ? 'pr-2' : 'px-2'}
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                    >
-                                        {data.label}
-                                    </a>
-                                ))}
+                            <div className="mt-2 flex gap-2 flex-wrap">
+                                <GitLabTag/>
+                                <GitHubTag/>
+                                <MyEmailTag/>
                             </div>
                         </header>
                         <main className="flex flex-col space-y-8">
                             <div className=""></div>
                             <RecentPosts shortPosts={shortPosts} />
-                            <PinnedProjects pinnedProjects={pinnedProjects}/>
+                            {/*<PinnedProjects pinnedProjects={pinnedProjects}/>*/}
                         </main>
                     </div>
                 </div>

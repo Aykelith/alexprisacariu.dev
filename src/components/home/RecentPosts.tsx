@@ -12,7 +12,7 @@ import Link from 'next/link';
 export default function RecentPosts({ shortPosts }: { shortPosts: Post[] }) {
     return (
         <Section title="Sometimes I write">
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-4">
                 {shortPosts &&
                     shortPosts.map((shortPost: any) => {
                         return <ShortPost {...shortPost} />;

@@ -1,0 +1,143 @@
+---
+title: "Creating a radio station on a Raspberry Pi using DarkIce and IceCast2"
+tags: 
+   - Linux
+   - Raspberry Pi
+   - Ubuntu
+   - Audio
+publishedOn: "2021-08-28T12:36:45.620Z"
+---
+At my church we offer translations to people who cannot speak romanian, but the
+system we are using is pretty low quality and is a lot of static noise and is 
+too expensive to upgrade it.
+
+So I've thinked I would be able to use a Raspberry Pi 3, an audio interface and
+some software to create a radio station that would then be hooked to the actual
+system.
+
+After searching for some software that would work on Raspberry Pi 3 I
+discovered `IceCast2` that would be able to create a radio station and using
+`DarkIce` to send the live audio from the microphone to `IceCast2`.
+
+So I've booted `Ubuntu 20.04` for Raspberry Pi and installed `icecast2` from the
+package manager.
+For the `darkice` the version from the package manager was **1.13**, but the
+latest available is **1.14** so I needed to compile it.  After some tries and
+searching and found that needed to install `ALSA` and compile another library,
+`lame`, because could not figure out how to configure `darkice` to use the 
+developer package from the package manager I figure it out and built the latest
+version of `darkice`.
+
+After playing out with both the `darkice` configuration and the `icecast2`
+configuration I had a working radio station.
+The only problem that I couldn't anticipated was that the latency was just too
+high for what I needed. I had around **5 to 10 seconds** of latency, which would
+be quite perfect for a normal radio station, but not what I needed.
+
+So here are the complet steps that I followed:
+
+```bash[class="line-numbers"]
+# Installing icecast2
+# Installing ALSA utilities
+# Installing pkgconfig required for `darkice` configuration
+# Installing build-essentials for compiling `darkice` and `lame`
+sudo apt install -y icecast2 alsa-utils asound2 libasound2-dev pkgconfig build-essentials
+
+# Getting lame
+wget https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
+tar -xvf lame-3.100.tar.gz
+cd lame-3.100
+
+# Configuring lame and building it
+./configure --with-fileio=lame --disable-gtktest --enable-expopt=full --prefix=/usr
+make
+sudo make install
+
+# Getting darkice
+wget https://github.com/rafael2k/darkice/releases/download/v1.4/darkice-1.4.tar.gz
+tar -xvf darkice-1.4.tar.gz
+cd darkice-1.4
+
+# Configuring darkice with ALSA and lame and building it
+./configure --with-alsa --with-lame
+make
+sudo make install
+```
+
+I've used the default **hackme** password when I've installed `icecast2`.
+
+The config for `icecast2` can be found at `/etc/icecast2/icecast.xml`.
+
+The configuration for `darkice` saved in `~/darkice.cfg`:
+
+```bash[class="line-numbers"]
+# this section describes general aspects of the live streaming session 
+[general] 
+duration     = 0     # duration of encoding, in seconds. 0 means forever 
+bufferSecs   = 5     # size of internal slip buffer, in seconds 
+reconnect    = yes   # reconnect to the server(s) if disconnected 
+# this section describes the audio input that will be streamed 
+[input] 
+device          = plughw:1,0  # Soundcard device for the audio input 
+sampleRate      = 22050     # sample rate in Hz. try 11025, 22050 or 44100 
+bitsPerSample   = 16        # bits per sample. try 16 
+channel         = 1         # channels. 1 = mono, 2 = stereo 
+# this section describes a streaming connection to an IceCast2 server 
+# there may be up to 8 of these sections, named [icecast2-0] ... [icecast2-7] 
+[icecast2-0] 
+bitrateMode     = abr       # average bit rate 
+format          = mp3       # format of the stream: ogg vorbis 
+bitrate         = 86        # bitrate of the stream sent to the server 
+server          = localhost # host name of the server 
+port            = 8000      # port of the IceCast2 server, usually 8000 
+password        = hackme 
+mountPoint      = Stream.mp3  # mount point of this stream on the IceCast2 server 
+name            = Raspberry Pi Stream # name of the stream 
+description     = Broadcast from Raspberry Pi # description of the stream 
+#public          = yes       advertise this stream?
+```
+
+To found out the right device you can run arecord -l and will return all the
+recording devices available. The card index is the first number, in my case 1
+and the device index is the second number, in my case 0.
+
+The password field is the source-password from the icecast2  config.
+
+And now, for starting everything we need first to start icecast2 by starting
+its service:
+
+```bash[class="line-numbers"]
+sudo systemctl start icecast2
+```
+
+And then we run darkice with our config file:
+
+```bash[class="line-numbers"]
+sudo darkice -c ~/darkice.cfg
+```
+
+You can also create a service for darkice replacing the username with your
+account username (line 8 and 14):
+
+```bash[class="line-numbers"]
+# /etc/systemd/system/darkice.service
+[Unit]
+Description=Darkice service
+After = network-online.target sound.target
+
+[Service]
+Type=simple
+User=ubuntu
+ExecStartPre=/bin/sleep 5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=darkice
+WorkingDirectory=/
+ExecStart=/usr/local/bin/darkice -c /home/ubuntu/darkice.cfg
+Restart=on-abort
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=4
+
+[Install]
+WantedBy=multi-user.target
+```

@@ -22,3 +22,7 @@ a {
     @apply text-indigo-700;
     @apply hover:underline;
 }
+
+#PostPage .postContent p {
+    @apply my-2;
+}
