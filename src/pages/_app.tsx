@@ -15,18 +15,17 @@ function MyApp({ Component, pageProps }) {
                     name="viewport"
                     content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui"
                 />
-
-                {/* Global site tag (gtag.js) - Google Analytics */}
-                <Script async src="https://www.googletagmanager.com/gtag/js?id=G-SJG5VB8MFX" strategy="afterInteractive"></Script>
-                <Script id="google-analytics" strategy="afterInteractive">
-                    {`window.dataLayer = window.dataLayer || [];
-                      function gtag(){window.dataLayer.push(arguments)}
-                      gtag('js', new Date());
-
-                      gtag('config', 'G-SJG5VB8MFX');
-                    `}
-                </Script>
             </Head>
+            {/* Global site tag (gtag.js) - Google Analytics */}
+            <Script async src="https://www.googletagmanager.com/gtag/js?id=G-SJG5VB8MFX" strategy="afterInteractive"></Script>
+            <Script id="google-analytics" strategy="afterInteractive">
+                {`window.dataLayer = window.dataLayer || [];
+                  function gtag(){window.dataLayer.push(arguments)}
+                  gtag('js', new Date());
+
+                  gtag('config', 'G-SJG5VB8MFX');
+                `}
+            </Script>
             <Component {...pageProps} />
         </>
     );
