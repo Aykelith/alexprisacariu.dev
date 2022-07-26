@@ -2,6 +2,8 @@
 // Others
 import Head from 'next/head';
 import Script from 'next/script';
+import Link from 'next/link';
+import NextNProgress from 'nextjs-progressbar';
 
 //= Style & Assets
 import 'tailwindcss/tailwind.css';
@@ -26,7 +28,24 @@ function MyApp({ Component, pageProps }) {
                   gtag('config', 'G-SJG5VB8MFX');
                 `}
             </Script>
+            <NextNProgress color="#006ad5" />
             <Component {...pageProps} />
+            <footer className="mt-2 mb-4">
+                <div className="box">
+                    © {new Date().getFullYear()} Alexandru Prisacariu | Powered by{' '}
+                    <Link href="https://nextjs.org">
+                        <a className="text-black underline" target="_blank" rel="noreferrer noopener">
+                            NextJS
+                        </a>
+                    </Link>
+                    ,{' '}
+                    <Link href="https://github.com">
+                        <a className="text-black underline" target="_blank" rel="noreferrer noopener">
+                            GitHub
+                        </a>
+                    </Link>
+                </div>
+            </footer>
         </>
     );
 }

@@ -1,13 +1,13 @@
 //= Functions & Modules
 // Own
-import getProjectsDirectories from './getProjectsDirectories';
-import getProjectFileData from './getProjectFileData';
+import { getProjectsDirectories } from './getProjectsDirectories';
+import { getProjectFileData } from './getProjectFileData';
 
 //= Structures & Data
 // Own
-import {Project} from '../data/Project';
+import { Project } from '../data/Project';
 
-export default function getPinnedProjects(): Project[] {
+export function getPinnedProjects(): Project[] {
     const directories = getProjectsDirectories();
 
     let projects: Project[] = [];
@@ -22,5 +22,4 @@ export default function getPinnedProjects(): Project[] {
     }
 
     return projects;
-};
-
+}

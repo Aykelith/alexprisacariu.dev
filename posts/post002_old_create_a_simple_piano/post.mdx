@@ -1,0 +1,372 @@
+---
+title: "OLD: Create a simple piano"
+tags: 
+   - Old
+   - SFML
+   - C++
+   - Tutorial
+publishedOn: "2014-04-11T12:36:45.620Z"
+---
+In this tutorial we will create a simple piano like this one:
+
+<center><img src="/imgs/posts/post002/piano-app.png"/></center>
+
+Before you start coding you need to know how SFML handles sounds. In order to play sounds in SFML you need a sf::SoundBuffer, which will storage audio samples of the sound, and a sf::Sound which will load a sf::SoundBuffer and after that will play the sound.
+
+More informations about SFML handling the sounds you can find here or check SFML API here.
+
+We will use std::array because we know the exact size of everything:
+
+```ts[class="line-numbers"]
+const unsigned int whiteKeys = 7;
+const unsigned int keys = 12;
+```
+
+First, we create a loading function which will load the sounds from the folder “sounds” into an array of sf::SoundBuffer/s:
+
+```ts[class="line-numbers"]
+std::array<sf::SoundBuffer, keys> soundBuffers;
+
+void loadBuffers()
+{
+    std::string filesName[keys] = {"sounds/C.wav", "sounds/D.wav", "sounds/E.wav", "sounds/F.wav", "sounds/G.wav", "sounds/A.wav", "sounds/B.wav", "sounds/C#.wav", "sounds/D#.wav", "sounds/F#.wav", "sounds/G#.wav", "sounds/A#.wav"};
+
+    for (unsigned int i=0; i<soundBuffers.size(); ++i)
+    {
+        soundBuffers[i].loadFromFile(filesName[i]);
+    }
+}
+```
+
+As you can see, we load 12 sounds because an octave consists of 7 white keys and 5 black keys. I downloaded them from <a href="https://theremin.music.uiowa.edu/MISpiano.html" rel="noopener noreferrer" target="_blank">University of Iowa</a>.
+
+Next step is to set the buffers to the sounds, so we create a vector of sounds:
+
+```ts[class="line-numbers"]
+std::array<sf::Sound, keys> keySounds;
+
+void setBuffers()
+{
+    for (unsigned int i=0; i<keySounds.size(); ++i)
+    {
+        keySounds[i] = sf::Sound(soundBuffers[i]);
+    }
+}
+```
+
+Next we need to setup the piano. Because the piano keys are simple rectangles, we will use a vector of sf::RectangleShape/s for keys: the first 7 rectangles are the white keys and the rest of 5 rectangles are the black keys.
+
+```ts[class="line-numbers"]
+std::array<sf::RectangleShape, keys> keyRects;
+const sf::Vector2f whiteKeySize(80, 230);
+const sf::Vector2f blackKeySize(40, 120);
+
+void setupPiano()
+{
+    // Creating the white keys
+    for (unsigned int i=0; i<whiteKeys; ++i)
+    {
+        keyRects[i].setSize(whiteKeySize);
+        keyRects[i].setFillColor(sf::Color::White);
+        keyRects[i].setOutlineThickness(1);
+        keyRects[i].setOutlineColor(sf::Color::Black);
+        keyRects[i].setPosition(whiteKeySize.x*i,0);
+    }
+
+    // Creating the black keys
+    // The i still goes until 7( whiteKeys) even if we only have 5 black keys to easily set their position
+    // We use a j variable to know the position of rects in the array
+    for (unsigned int i=0, j=whiteKeys; i<whiteKeys; ++i)
+    {
+        // Because in the position 2(E) and 6(B) we don't have black keys, we need to skip them
+        if (i!=2 && i!=6)
+        {
+            keyRects[j].setSize(blackKeySize);
+            keyRects[j].setFillColor(sf::Color::Black);
+            keyRects[j].setOutlineThickness(1);
+            keyRects[j].setOutlineColor(sf::Color::Black);
+
+            // Setting the position of the black keys exactly between white ones
+            keyRects[j].setPosition(i*whiteKeySize.x+blackKeySize.x/2+blackKeySize.x, 0);
+            ++j;
+        }
+    }
+}
+```
+
+For pressing the keys we use the keyboard: for the white keys we use the keyboard keys ‘A’, ‘S’, ‘D’, ‘F’, ‘G’, ‘H’, ‘J’, and for the black keys we use ‘W’, ‘E’, ‘R’, ‘T’, ‘Y’. In SFML every key has a code, so for the ‘A’ key we have 0, for the ‘S’ key have 18, … <a href="https://www.sfml-dev.org/documentation/2.1/classsf_1_1Keyboard.php" rel="noopener noreferrer" target="_blank">Here</a> you can see the code for each keyboard key.
+
+In order to make handling every key much easier, we create an array with the key codes we want:
+
+```ts[class="line-numbers"]
+//                       A,  S, D, F, G, H, J,  W, E,  R,  T,  Y
+int keyboardKey[keys] = {0, 18, 3, 5, 6, 7 ,9, 22, 4, 17, 19, 24};
+```
+
+And we need another array of booleans so we know when the keys are ready and set them to true as a default value:
+
+```ts[class="line-numbers"]
+bool keyReady[keys] = {true, true, true, true, true, true, true, true, true, true, true, true};
+```
+
+Now let’s create the window with the width of 7 white keys and the height of one white key:
+
+```ts[class="line-numbers"]
+sf::RenderWindow window(sf::VideoMode(whiteKeySize.x*whiteKeys, whiteKeySize.y), "Piano");
+```
+
+And let’s render our piano to the window:
+
+```ts[class="line-numbers"]
+while (window.isOpen())
+{
+    // ...
+
+    window.clear();
+
+    for (int i=0; i<keyRects.size(); ++i)
+    {
+        window.draw(keyRects[i]);
+    }
+
+    window.display();
+}
+```
+
+And the last step is to play our sounds when the right keyboard key is pressed. For this we will use sf::Event::KeyPressed and sf::Event::KeyReleased. We will go through the array of keyboard keys and verify if the key is pressed or released. If the keyboard key is pressed and ready to play the sound, it will change the color of the respective piano key, and if is released to stop the sound from playing, it will change back to the color of the piano key.
+
+```ts[class="line-numbers"]
+while (window.isOpen())
+{
+    sf::Event event;
+
+    while (window.pollEvent(event))
+    {
+        // ...
+
+        if (event.type == sf::Event::KeyPressed)
+        {
+            for (int i=0; i<keys; ++i)
+            {
+                // Verifying if the key is pressed and ready
+                if (event.key.code == sf::Keyboard::Key(keyboardKey[i]) && keyReady[i])
+                {
+                    keySounds[i].play();
+
+                    // Setting the key state to false to know it was pressed
+                    keyReady[i] = false;
+
+                    // Coloring the white keys( the first 7) in red and the black keys(the rest) in dark red
+                    if (i<whiteKeys) keyRects[i].setFillColor(sf::Color::Red);
+                    else keyRects[i].setFillColor(sf::Color(164,3,3));
+                }
+            }
+        }
+
+
+
+        if (event.type == sf::Event::KeyReleased)
+        {
+            for (int i=0; i<keys; ++i)
+            {
+                // Verifying if the key is released and if it has been pressed
+                if (event.key.code == sf::Keyboard::Key(keyboardKey[i]) && !keyReady[i])
+                {
+                    keySounds[i].stop();
+
+                    // Set the key state to true to make it playable
+                    keyReady[i] = true;
+
+                    // Coloring back the piano keys
+                    if (i<whiteKeys) keyRects[i].setFillColor(sf::Color::White);
+                    else keyRects[i].setFillColor(sf::Color::Black);
+                }
+            }
+        }
+    }
+
+    // ...
+}
+```
+
+And this is how we create a simple piano with SFML.
+
+If you listen to the piano sounds of the University of Iowa, you will notice that they are a bit delayed. In order to correct this, we need to use the function <a href="https://www.sfml-dev.org/documentation/2.1/classsf_1_1Sound.php#ab905677846558042022dd6ab15cddff0" rel="noopener noreferrer" target="_blank">setPlayingOffset(Time timeOffset)</a> to the sounds on the setBuffer() function:
+
+```ts[class="line-numbers"]
+void setBuffers()
+{
+    for (unsigned int i=0; i<keySounds.size(); ++i)
+    {
+        keySounds[i] = sf::Sound(soundBuffers[i]);
+        keySounds[i].setPlayingOffset(sf::milliseconds(700));
+    }
+}
+```
+
+But we also need to set the playing offset when the keyboard key is released:
+
+```ts[class="line-numbers"]
+if (event.type == sf::Event::KeyReleased)
+{
+    for (int i=0; i<keys; ++i)
+    {
+        // Verify if the key is released and was pressed
+        if (event.key.code == sf::Keyboard::Key(keyboardKey[i]) && !keyReady[i])
+        {
+            keySounds[i].stop();
+
+            // Resetting the playing offset
+            keySounds[i].setPlayingOffset(sf::milliseconds(700));
+
+            // ...
+        }
+    }
+}
+```
+
+And this is the complete code of our simple piano:
+
+```ts[class="line-numbers"]
+#include <array>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+const unsigned int whiteKeys = 7;
+const unsigned int keys = 12;
+
+std::array<sf::SoundBuffer, keys> soundBuffers;
+std::array<sf::Sound, keys> keySounds;
+
+std::array<sf::RectangleShape, keys> keyRects;
+const sf::Vector2f whiteKeySize(80, 230);
+const sf::Vector2f blackKeySize(40, 120);
+
+void loadBuffers()
+{
+    std::string filesName[keys] = {"sounds/C.wav", "sounds/D.wav", "sounds/E.wav", "sounds/F.wav", "sounds/G.wav", "sounds/A.wav", "sounds/B.wav", "sounds/C#.wav", "sounds/D#.wav", "sounds/F#.wav", "sounds/G#.wav", "sounds/A#.wav"};
+
+    for (unsigned int i=0; i<soundBuffers.size(); ++i)
+    {
+        soundBuffers[i].loadFromFile(filesName[i]);
+    }
+}
+
+void setBuffers()
+{
+    for (unsigned int i=0; i<keySounds.size(); ++i)
+    {
+        keySounds[i] = sf::Sound(soundBuffers[i]);
+        keySounds[i].setPlayingOffset(sf::milliseconds(700));
+    }
+}
+
+void setupPiano()
+{
+    // Creating the white keys
+    for (unsigned int i=0; i<whiteKeys; ++i)
+    {
+        keyRects[i].setSize(whiteKeySize);
+        keyRects[i].setFillColor(sf::Color::White);
+        keyRects[i].setOutlineThickness(1);
+        keyRects[i].setOutlineColor(sf::Color::Black);
+        keyRects[i].setPosition(whiteKeySize.x*i,0);
+    }
+
+    // Creating the black keys
+    // The i still goes until 7( whiteKeys) even if we only have 5 black keys to easily set their position
+    // We use a j variable to know the position of rects in the array
+    for (unsigned int i=0, j=whiteKeys; i<whiteKeys; ++i)
+    {
+        // Because in the position 2(E) and 6(B) we don't have black keys, we need to skip them
+        if (i!=2 && i!=6)
+        {
+            keyRects[j].setSize(blackKeySize);
+            keyRects[j].setFillColor(sf::Color::Black);
+            keyRects[j].setOutlineThickness(1);
+            keyRects[j].setOutlineColor(sf::Color::Black);
+
+            // Setting the position of the black keys exactly between white ones
+            keyRects[j].setPosition(i*whiteKeySize.x+blackKeySize.x/2+blackKeySize.x, 0);
+            ++j;
+        }
+    }
+}
+
+int main()
+{
+    loadBuffers();
+    setBuffers();
+    setupPiano();
+
+    //                       A,  S, D, F, G, H, J,  W, E,  R,  T,  Y
+    int keyboardKey[keys] = {0, 18, 3, 5, 6, 7 ,9, 22, 4, 17, 19, 24};
+    bool keyReady[keys] = {true, true, true, true, true, true, true, true, true, true, true, true};
+
+    sf::RenderWindow window(sf::VideoMode(whiteKeySize.x*whiteKeys, whiteKeySize.y), "Piano");
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            if (event.type == sf::Event::KeyPressed)
+            {
+                for (unsigned int i=0; i<keys; ++i)
+                {
+                    // Verifying if the key is pressed and ready
+                    if (event.key.code == sf::Keyboard::Key(keyboardKey[i]) && keyReady[i])
+                    {
+                        keySounds[i].play();
+
+                        // Setting the key state to false to know it was pressed
+                        keyReady[i] = false;
+
+                        // Coloring the white keys( the first 7) in red and the black keys(the rest) in dark red
+                        if (i<7) keyRects[i].setFillColor(sf::Color::Red);
+                        else keyRects[i].setFillColor(sf::Color(164,3,3));
+                    }
+                }
+            }
+
+            if (event.type == sf::Event::KeyReleased)
+            {
+                for (unsigned int i=0; i<keys; ++i)
+                {
+                    // Verifying if the key is released and if it has been pressed
+                    if (event.key.code == sf::Keyboard::Key(keyboardKey[i]) && !keyReady[i])
+                    {
+                        keySounds[i].stop();
+
+                        // Resetting the playing offset
+                        keySounds[i].setPlayingOffset(sf::milliseconds(700));
+
+                        // Set the key state to true to make it playable
+                        keyReady[i] = true;
+
+                        // Coloring back the piano keys
+                        if (i<whiteKeys) keyRects[i].setFillColor(sf::Color::White);
+                        else keyRects[i].setFillColor(sf::Color::Black);
+                    }
+                }
+            }
+        }
+
+        window.clear();
+
+        for (unsigned int i=0; i<keyRects.size(); ++i)
+        {
+            window.draw(keyRects[i]);
+        }
+
+        window.display();
+    }
+}
+```
+
+You can find the source code and the resources on <a href="https://github.com/Aykelith/AlexanderX.net/tree/master/Tutorials/Create%20a%20simple%20piano" rel="noopener noreferrer" target="_blank">GitHub</a>:

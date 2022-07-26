@@ -14,7 +14,12 @@ body {
     @apply py-8;
 }
 
-ul, li {
+.page > .box > main {
+    @apply mt-8;
+}
+
+ul,
+li {
     list-style: auto;
 }
 
