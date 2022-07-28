@@ -6,3 +6,25 @@ tags:
 description: "Real estate website optimized for speed and for Googlebot"
 pinned: 1
 ---
+- created using NextJS;
+- optimized for Googlebot;
+- PWA;
+- using SSR (Server-side rendering) and ISR (Incremental Static Regeneration);
+- getting the data from PanoroCRM.
+
+<a href="https://imocentral.ro" target="_blank" rel="noreferrer noopener">imocentral.ro</a>
+is a website created for a real estate agency for displaying their offers and
+offer informations about the company.
+
+My job was to implement the design into a functional website that would be very
+friendly with the Googlebot for crawling it and having max scores on
+Lighthouse.
+
+Created using NextJS and using SSR and ISR to be able to have the best loading
+time, but also be able to update the data when is changed.
+
+Also I implemented for the website a PWA, and also published it on Google Play.
+
+The data of the website is gathered from PanoroCRM. Every request that must be
+called from client is proxied through another request created by NextJs in 
+order to not expose sensitive data.
