@@ -1,6 +1,11 @@
+//= Functions
+// Others
+import classNames from 'classnames';
+
 //= React components
 // Own
 import { Header } from '../../general';
+import { GitLabTag, GitHubTag, MyEmailTag, LinkedInTag } from '../../tags';
 // Others
 import Head from 'next/head';
 
@@ -15,24 +20,43 @@ export default function AboutMePage() {
                     <Header small useH2 showContacts={false} />
                     <main className="flex flex-col gap-6">
                         <div>
-                            My name is <Highlight>Alex</Highlight> and I'm an programmer from Romania with a passion for writing software
-                            and audio engineering. I also enjoy going hiking and playing my ukulele and electric guitar.
+                            My name is <HighlightName>Alex</HighlightName> and I'm an programmer from Romania with a passion for coming out
+                            with solutions and audio engineering. I also enjoy going hiking and playing my ukulele and electric guitar.
                         </div>
                         <div>
-                            Started programming from little in Visual Basic 3 at a programming club, progressed to Visual Basic 6. Switched
-                            to C++ as my passion of creating games increased. Later started learning web development.
+                            Started programming from little in <HighlightLanguage>Visual Basic 3</HighlightLanguage> at a programming club,
+                            progressed to <HighlightLanguage>Visual Basic 6</HighlightLanguage>. Switched to{' '}
+                            <HighlightLanguage>C++</HighlightLanguage> as my passion of creating games increased. Later started learning web
+                            development.
                         </div>
                         <div>
-                            While I was doing my bachelor degree at [xxx] I founded a tech company, Softprovider, with my uncle and we
-                            developed different applications in the domain of real estate, but as our main software is PanoroCRM and our 360
-                            tours editor.
+                            While I was doing my bachelor's degree at{' '}
+                            <HighlightName>Babeș-Bolyai University (UBB) in Cluj-Napoca</HighlightName> I founded a tech company,{' '}
+                            <HighlightName>Softprovider</HighlightName>, with my uncle and we developed different applications in the domain
+                            of real estate, but as our main software is <HighlightSoftware>PanoroCRM</HighlightSoftware> and our 360 tours editor.
                         </div>
                         <div>
-                            Now, my main programming languages are modern C++ and JavaScript, with strong knowledge in Linux, MongoDB, SQL,
-                            ReactJS, NextJS and Qt. I also have experimented with Java(also Kotlin), C#, . Now I'm learning Rust (and I like
-                            it).
+                            Now, my main programming languages are modern <HighlightLanguage>C++</HighlightLanguage> and{' '}
+                            <HighlightLanguage>JavaScript</HighlightLanguage>, with strong knowledge in <HighlightOS>Linux</HighlightOS>,{' '}
+                            <HighlightLanguage>Python</HighlightLanguage>, <HighlightLanguage>SQL</HighlightLanguage>,{' '}
+                            <HighlightTechnology>MongoDB</HighlightTechnology>, <HighlightTechnology>React</HighlightTechnology>,{' '}
+                            <HighlightTechnology>Next.js</HighlightTechnology> and <HighlightTechnology>Qt</HighlightTechnology>. I also have
+                            experimented with <HighlightLanguage>Java</HighlightLanguage> (also <HighlightLanguage>Kotlin</HighlightLanguage>
+                            ), <HighlightLanguage>C#</HighlightLanguage> and <HighlightLanguage>Ruby</HighlightLanguage>. Now I'm learning{' '}
+                            <HighlightLanguage>Rust</HighlightLanguage> (and I like it).
                         </div>
-                        <div>You can find me on:</div>
+                        <div>
+                            My editor of choice is <HighlightSoftware>NeoVim</HighlightSoftware> and all the programming I do is inside a container running <HighlightOS>Alpine</HighlightOS>.
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <div>You can find me on:</div>
+                            <div className="flex flex-wrap gap-2">
+                                <GitLabTag />
+                                <GitHubTag />
+                                <LinkedInTag />
+                                <MyEmailTag />
+                            </div>
+                        </div>
                     </main>
                 </div>
             </div>
@@ -40,6 +64,26 @@ export default function AboutMePage() {
     );
 }
 
-function Highlight({ children }: React.PropsWithChildren<{}>) {
-    return <span>{children}</span>;
+function Highlight({ children, className }: React.PropsWithChildren<{ className?: string }>) {
+    return <span className={classNames('font-bold', className)}>{children}</span>;
+}
+
+function HighlightName({ children }: React.PropsWithChildren<{}>) {
+    return <Highlight className="text-blue-800">{children}</Highlight>;
+}
+
+function HighlightLanguage({ children }: React.PropsWithChildren<{}>) {
+    return <Highlight className="text-green-800">{children}</Highlight>;
+}
+
+function HighlightTechnology({ children }: React.PropsWithChildren<{}>) {
+    return <Highlight className="text-violet-800">{children}</Highlight>;
+}
+
+function HighlightOS({ children }: React.PropsWithChildren<{}>) {
+    return <Highlight className="text-pink-800">{children}</Highlight>;
+}
+
+function HighlightSoftware({ children }: React.PropsWithChildren<{}>) {
+    return <Highlight className="text-sky-800">{children}</Highlight>;
 }

@@ -7,60 +7,57 @@ tags:
    - Tutorial
 publishedOn: "2014-04-30T12:36:45.620Z"
 ---
-[photo:Preview image showing flipped sprites]
-
 When you create games, and not only, you will sometimes need to flip sprites( e.g. in a game where for the enemy right walking animation you use 8 sprites, you don’t need to use a image manipulator program to create the left walking animation). For this you have 2 possibilities:
 
+- modifying the scale of sprite;
+- inverting the texture/texture rect.
 
-
-modifying the scale of sprite;
-
-inverting the texture/texture rect.
+<center><img src="/imgs/posts/post005/Preview.png"/></center>
 
 You can flip the sprite by modifying the sprite’s scale when you have a static sprite( no changes to the texture or texture rect). You only need to negate one or both values of the sprite’s scale.
 
-
-
+```ts[class="line-numbers"]
 sprite.setScale(x, y);
+```
 
 By negating the first value/horizontal scale you will obtain a flipped sprite on the horizontal axis.
 
-
-
+```ts[class="line-numbers"]
 sprite.setScale(-1, 1);
+```
 
 By negating the second value/vertical scale you will obtain a flipped sprite on the vertical axis.
 
-
-
+```ts[class="line-numbers"]
 sprite.setScale(1, -1);
+```
 
 And by negating both values you will obtain a flipped sprite on both axes.
 
-
-
+```ts[class="line-numbers"]
 sprite.setScale(-1, -1);
+```
 
 If you don’t have a static sprite and you need to create an animation, or load different rects from texture, you don’t need to set the texture rect and then to change the sprite scale and you only need to invert the texture rect.
 
 If you want to flip the horizontal axis you will need to set the texture rect such that the texture rect is flipped:
 
-
-
+```ts[class="line-numbers"]
 sprite.setTextureRect(sf::IntRect(x + width,y,-width,height)
+```
 
 Same for flipping the vertical axis:
 
-
-
+```ts[class="line-numbers"]
 sprite.setTextureRect(sf::IntRect(x,y + height,width,-height)
+```
 
 And if you want to flip the both axes:
 
-
-
+```ts[class="line-numbers"]
 sprite.setTextureRect(sf::IntRect(x + width,y + height,-width,-height)
+```
 
-The variables x and y are the left and top positions of where the rect start.
+The variables `x` and `y` are the left and top positions of where the rect start.
 
 These are the methods you can use in SFML to flip a sprite.

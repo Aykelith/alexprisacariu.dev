@@ -1,4 +1,5 @@
 export interface Project {
+    id: string;
     title: string;
     dirName: string;
     content: string;
@@ -6,5 +7,4 @@ export interface Project {
     tags: string[];
     description: string;
     pinned?: 1;
-    skip?: 1;
 }

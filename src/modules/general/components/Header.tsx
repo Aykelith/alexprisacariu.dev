@@ -29,9 +29,9 @@ export default function Header({ small, useH2, showContacts = true }: HeaderProp
             )}
             <div className="mt-2 flex gap-2 flex-wrap">
                 <MenuTag href="/about_me">About me</MenuTag>
-                <MenuTag href="#">Projects</MenuTag>
+                {/*<MenuTag href="#">Projects</MenuTag>*/}
                 <MenuTag href="/blog/1">Blog</MenuTag>
-                <MenuTag href="/cv">CV</MenuTag>
+                <MenuTag href="/cv">Resume</MenuTag>
             </div>
         </header>
     );

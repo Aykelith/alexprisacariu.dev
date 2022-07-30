@@ -5,19 +5,17 @@ import { getProjectFileData } from './getProjectFileData';
 
 //= Structures & Data
 // Own
-import { Project } from '../data/Project';
+import { PinnedProject } from '../data/PinnedProject';
 
-export function getPinnedProjects(): Project[] {
+export function getPinnedProjects(): PinnedProject[] {
     const directories = getProjectsDirectories();
 
-    let projects: Project[] = [];
+    let projects: PinnedProject[] = [];
 
     for (const projectDirName of directories) {
         const projectData = getProjectFileData(projectDirName);
 
-        if (projectData.skip) continue;
-
-        projectData.content = projectData.content.substring(0, projectData.content.search(/^$/gm));
+        delete projectData.content;
         projects.push(projectData);
     }
 

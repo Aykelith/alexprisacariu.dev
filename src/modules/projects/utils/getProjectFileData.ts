@@ -14,13 +14,13 @@ export function getProjectFileData(projectDirName: string): Project {
     const result = matter(readFileSync(path.join(ProjectsDirPath, projectDirName, ProjectContentFileName), { encoding: 'utf8' }).toString());
 
     return {
+        id: projectDirName,
         title: result.data.title,
         dirName: projectDirName,
         image: result.data.image,
         tags: result.data.tags,
         description: result.data.description,
-        content: result.content || "",
-        skip: result.data.skip || null
+        content: result.content || ""
     };
 };
 

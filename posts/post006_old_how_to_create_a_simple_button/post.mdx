@@ -1,764 +1,485 @@
 ---
-title: "OLD: How to create a simple button"
-tags: 
-   - Old
-   - SFML
-   - C++
-   - Tutorial
-publishedOn: "2014-05-21T12:36:45.620Z"
+title: 'OLD: How to create a simple button'
+tags:
+    - Old
+    - SFML
+    - C++
+    - Tutorial
+publishedOn: '2014-05-21T12:36:45.620Z'
 ---
-In this tutorial I will show you how to create a simple button. For the button design we will use a sf::RectangleShape.
+
+In this tutorial I will show you how to create a simple button. For the button design we will use a `sf::RectangleShape`.
 
 Here is our initial class code:
 
-
-
+```ts[class="line-numbers"]
 #ifndef BUTTON_HPP
-
 #define BUTTON_HPP
-
-
 
 #include <SFML/Graphics.hpp>
 
-
-
 class Button: public sf::Drawable, public sf::Transformable
-
 {
-
 public:
-
 	Button();
 
-
-
 private:
-
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-
-
-private:
-
-
 
 };
 
-
-
 #endif
+```
 
-From what you can observe from the code, our Button class inherits the class sf::Drawable with the function draw() so we can easily display our button and from inheriting the class sf::Transformable we can use/set functions like setPosition(), setRotation(), setOrigin() and others that are provided by the sf::Trasformable class.
+From what you can observe from the code, our Button class inherits the class `sf::Drawable` with the function `draw()` so we can easily display our button and from inheriting the class `sf::Transformable` we can use/set functions like `setPosition()`, `setRotation()`, `setOrigin()` and others that are provided by the `sf::Trasformable` class.
 
+In the constructor, we pass as parameter the size of the button and declare a `sf::Vector2f` variable for holding it:
 
-
-In the constructor, we pass as parameter the size of the button and declare a sf::Vector2f variable for holding it:
-
-
-
+```ts[class="line-numbers"]
 public:
-
 	Button(const sf::Vector2f size = sf::Vector2f(0,0));
 
 private:
-
 	sf::Vector2f m_size;
+```
 
-We also declare as private a sf::RectangleShape and we call it ‘m_body’ because is the body of the button and we create the function setSize() that, obviously, will set the size of our button.
+We also declare as private a `sf::RectangleShape` and we call it `m_body` because is the body of the button and we create the function `setSize()` that, obviously, will set the size of our button.
 
-In the constructor we pass the size parameter to m_size variable and call the function setSize() to set the size of m_body:
+In the constructor we pass the size parameter to `m_size` variable and call the function `setSize()` to set the size of `m_body`:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void setSize(const sf::Vector2f size);
 
 private:
-
 	sf::RectangleShape m_body;
 
 
-
 // Button.cpp
-
 Button::Button(const sf::Vector2f size)
-
 {
-
 	setSize(size);
-
 }
-
-
 
 void Button::setSize(const sf::Vector2f size)
-
 {
-
 	m_size = size;
-
 	m_body.setSize(m_size);
-
 }
+```
 
-And in the draw() function we draw the body:
+And in the `draw()` function we draw the body:
 
-
-
+```ts[class="line-numbers"]
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
-
 {
-
 	states.transform *= getTransform();
-
 	target.draw(m_body, states);
-
 }
+```
 
-If we run an app with the code we’ve written so far we will see on screen a black rectangle at the position (0,0) and with the size m_size.
+If we run an app with the code we’ve written so far we will see on screen a black rectangle at the position **(0,0)** and with the size `m_size`.
 
+Every button, besides the body, has a text or an image, or both, but in this tutorial we will create a button only with text. For this we create a private `sf::Text` named `m_text` and the following function which will set the string of the text and call another function named `update()`:
 
-
-Every button, besides the body, has a text or an image, or both, but in this tutorial we will create a button only with text. For this we create a private sf::Text named ‘m_text’ and the following function which will set the string of the text and call another function named update():
-
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	setString(const std::string string);
 
 private:
-
 	sf::Text m_text;
 
 
-
 // Button.cpp
-
 void Button::setString(const std::string string)
-
 {
-
 	m_text.setString(string);
-
 	update();
-
 }
+```
 
-When a variable x depends on a variable y, and the variable y is changed, the variable x needs to be readjusted according to the variable y. Therefore, we create the function update() which readjusts the character size of the text according to the size of the button:
+When a variable **x** depends on a variable **y**, and the variable **y** is changed, the variable **x** needs to be readjusted according to the variable **y**. Therefore, we create the function `update()` which readjusts the character size of the text according to the size of the button:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 private:
-
 	update();
-
 
 
 // Button.cpp
-
 void Button::update()
-
 {
-
 	if (m_size.x > 0 && m_size.y > 0 && m_text.getString() != "")
-
 	{
-
 		if (m_text.getGlobalBounds().width < m_size.x/4*3 && m_text.getGlobalBounds().height < m_size.y-10.f)
-
 		{
-
 			while (m_text.getGlobalBounds().width < m_size.x/4*3 && m_text.getGlobalBounds().height < m_size.y-10.f)
-
 			{
-
 				m_text.setCharacterSize(m_text.getCharacterSize()+1);
-
 			}
 
 			if (m_text.getGlobalBounds().width < m_size.x/4*3 || m_text.getGlobalBounds().height < m_size.y-10.f)
-
 			{
-
 				m_text.setCharacterSize(m_text.getCharacterSize()-1);
-
 			}
-
 		}
-
 		else
-
 		{
-
 			while (m_text.getGlobalBounds().width > m_size.x/4*3 && m_text.getGlobalBounds().height > m_size.y-10.f)
-
 			{
-
 				m_text.setCharacterSize(m_text.getCharacterSize()-1);
-
 			}
 
 			if (m_text.getGlobalBounds().width > m_size.x/4*3 || m_text.getGlobalBounds().height > m_size.y-10.f)
-
 			{
-
 				m_text.setCharacterSize(m_text.getCharacterSize()+1);
-
 			}
-
 		}
 
-
-
 		m_text.setOrigin(m_text.getLocalBounds().left+m_text.getLocalBounds().width/2, m_text.getLocalBounds().top + m_text.getLocalBounds().height/2);
-
 		m_text.setPosition(m_size.x/2, m_size.y/2);
-
 	}
-
 }
+```
 
 First, we check if the size of the body has been set and the text’s string is not empty. After that we check if the width of the text is less than three quarters of the body’s width and if the height of the text is less then the body’s height minus 10 pixels, then we perform a last check to be sure that the text fit in our rules.
 
 The else code is the same but this time is checking if the text size is bigger than our rules.
 
-In the last two lines we set the origin of the text to the center of it and set position to the center of m_size so that the text is in the center of the button.
+In the last two lines we set the origin of the text to the center of it and set position to the center of `m_size` so that the text is in the center of the button.
 
 No matter what size the body is, the text would look like in this image:
 
-[photo:Button Scheme]
+<center><img src="/imgs/posts/post006/ButtonScheme.png"/></center>
 
 You can play with those values to find the ones you need.
 
+Also we need to add the `update()` function to the `setSize()` function because if the size is changed then we need to change the text size too:
 
-
-Also we need to add the update() function to the setSize() function because if the size is changed then we need to change the text size too:
-
-
-
+```ts[class="line-numbers"]
 void Button::setSize(const sf::Vector2f size)
-
 {
-
 	m_size = size;
-
 	m_body.setSize(m_size);
-
 	update();
-
 }
+```
 
-In order to draw a sf::Text we need a sf::Font, and for this we need to modify the constructor’s parameters by adding a refference to sf::Font and call the function setFont():
+In order to draw a `sf::Text` we need a `sf::Font`, and for this we need to modify the constructor’s parameters by adding a reference to `sf::Font` and call the function `setFont()`:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	Button(sf::Font& font, const sf::Vector2f size = sf::Vector2f(0,0));
-
 	void setFont(sf::Font &font);
 
 private:
-
 	sf::Font *m_font;
 
 
-
 // Button.cpp
-
 Button::Button(sf::Font& font, const sf::Vector2f size)
-
 {
-
 	setSize(size);
-
 	setFont(font);
-
 }
-
-
 
 void Button::setFont(sf::Font &font)
-
 {
-
 	m_font = &font;
-
 	m_text.setFont(*m_font);
-
 	update();
-
 }
+```
 
-We also call the function update() after we set the font because a new font means new sizes for every characther.
-
-
+We also call the function `update()` after we set the font because a new font means new sizes for every character.
 
 Now we can add functions for styling the button:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void setBackgroundColor(const sf::Color &color);
-
 	void setTextColor(const sf::Color &color);
-
 	void setOutlineThickness(float thickness);
-
 	void setOutlineColor(const sf::Color &color);
 
 private:
-
 	sf::Color m_backgroundColor;
-
 	sf::Color m_textColor;
-
 	sf::Color m_outlineColor;
 
 
-
 // Button.cpp
-
 void Button::setBackgroundColor(const sf::Color &color)
-
 {
-
 	m_backgroundColor = color;
-
 	m_body.setFillColor(color);
-
 }
-
-
 
 void Button::setTextColor(const sf::Color &color)
-
 {
-
 	m_textColor = color;
-
 	m_text.setColor(color);
-
 }
-
-
 
 void Button::setOutlineThickness(float thickness)
-
 {
-
 	m_body.setOutlineThickness(thickness);
-
 }
-
-
 
 void Button::setOutlineColor(const sf::Color &color)
-
 {
-
 	m_outlineColor = color;
-
 	m_body.setOutlineColor(color);
-
 }
+```
 
 We save the colors in order to use them later.
-
-
 
 Next I will show you how to add some actions to our button.
 
 First action we add is changing the colors of the button when the mouse cursor is over it. We won’t want this action every time, so we create a function and a variable that will enable/disable it and for the default value of feature we will set the variable to true/activated:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void setOverAction(bool active = true);
 
 private:
-
 	bool m_overActive;
 
 
-
 // Button.cpp
-
 Button::Button(sf::Font& font, const sf::Vector2f size)
-
 : m_overActive (true)
-
 { ... }
 
-
-
 void Button::setOverAction(bool active = true)
-
 {
-
 	m_overActive = active;
-
 }
+```
 
 And we add some functions to save the colors so we can use them when the mouse cursor is over the button:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void setOverAction(bool active = true);
-
 	void setOverBackgroundColor(const sf::Color &color);
-
 	void setOverTextColor(const sf::Color &color);
-
 	void setOverOutlineColor(const sf::Color &color);
 
 private:
-
 	sf::Color m_overBackgroundColor;
-
 	sf::Color m_overTextColor;
-
 	sf::Color m_overOutlineColor;
 
 
-
 // Button.cpp
-
 void Button::setOverBackgroundColor(const sf::Color &color)
-
 {
-
 	m_overBackgroundColor = color;
-
 }
-
-
 
 void Button::setOverTextColor(const sf::Color &color)
-
 {
-
 	m_overTextColor = color;
-
 }
-
-
 
 void Button::setOverOutlineColor(const sf::Color &color)
-
 {
-
 	m_overOutlineColor = color;
-
 }
+```
 
-And now we create a function named ‘handler’ which will verify if the mouse cursor is over the button and if is over the button and if m_overActive is true so it will change the colors of the button:
+And now we create a function named ‘handler’ which will verify if the mouse cursor is over the button and if is over the button and if `m_overActive` is `true` so it will change the colors of the button:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void handler(sf::RenderWindow &window);
 
 
-
 // Button.cpp
-
 void Button::handler(sf::RenderWindow &window)
-
 {
-
 	sf::FloatRect body(getPosition().x, getPosition().y, m_size.x, m_size.y);
 
 	if (body.contains(sf::Vector2f(sf::Mouse::getPosition(window))))
-
 	{
-
 		if (m_overActive)
-
 		{
-
 			m_text.setColor(m_overTextColor);
 
 			m_body.setFillColor(m_overBackgroundColor);
-
 			m_body.setOutlineColor(m_overOutlineColor);
-
 		}
-
 	}
-
 	else if (m_text.getColor() != m_textColor)
-
 	{
-
 		m_text.setColor(m_textColor);
 
 		m_body.setFillColor(m_backgroundColor);
-
 		m_body.setOutlineColor(m_outlineColor);
-
 	}
-
 }
+```
 
-First we create a sf::FloatRect with the ‘real’ position of our button( calling m_body.getPosition() we will get (0,0) everytime because we have never set the position of m_body, but what we change when we call setPosition() function is the values for position in the transformable object). Then we check if the position of the mouse, which is relative to our window, is in our rect. If it is, and if this feature is on( m_overActive is true), we change the color of our button to the colors we have set for this action, else we change back to the normal colors of our button if they are not already reset.
+First we create a `sf::FloatRect` with the ‘real’ position of our button (calling `m_body.getPosition()` we will get **(0,0)** everytime because we have never set the position of `m_body`, but what we change when we call `setPosition()` function is the values for position in the transformable object). Then we check if the position of the mouse, which is relative to our window, is in our rect. If it is, and if this feature is on (`m_overActive` is `true`), we change the color of our button to the colors we have set for this action, else we change back to the normal colors of our button if they are not already reset.
 
+The second action and the most important one is the click action. For click action we will use a function pointer that we will call the triggered function when the left button of the mouse is released after is has been pressed in the area of the button. For this we create another function named `events()` which takes as parameter a `sf::Event`. For determining when the mouse cursor is in/over the button, we declare a boolean variable named `m_mouseCursorOver` that we set to `true` for when the mouse cursor is over the button:
 
-
-The second action and the most important one is the click action. For click action we will use a function pointer that we will call the triggered function when the left button of the mouse is realeased after is has been pressed in the area of the button. For this we create another function named events() which takes as parameter a sf::Event. For determining when the mouse cursor is in/over the button, we declare a boolean variable named ‘m_mouseCursorOver’ that we set to true for when the mouse cursor is over the button:
-
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void events(sf::Event &event);
 
-
-
 private:
-
 	bool m_mouseCursorOver;
 
 
-
 // Button.cpp
-
 void Button::handler(sf::RenderWindow &window)
-
 {
-
 	m_mouseCursorOver = false;
 
 	sf::FloatRect body(getPosition().x, getPosition().y, m_size.x, m_size.y);
 
 	if (body.contains(sf::Vector2f(sf::Mouse::getPosition(window))))
-
 	{
-
 		m_mouseCursorOver = true;
-
 		...
-
 	}
 
 	...
-
 }
+```
 
 For the function pointer we declare it’s prototype using typedef key:
 
-
-
+```ts[class="line-numbers"]
 typedef void (*function)(void);
+```
 
-Now we can easily create a private variable named ‘m_triggerFunction’ which will hold the address of the function that will be triggered:
+Now we can easily create a private variable named `m_triggerFunction` which will hold the address of the function that will be triggered:
 
-
-
+```ts[class="line-numbers"]
 private:
-
 	function m_triggerFunction;
 
 ...
+```
 
-And for taking the address of the function we create the function setTriggerFunction():
+And for taking the address of the function we create the function `setTriggerFunction()`:
 
-
-
+```ts[class="line-numbers"]
 // Button.hpp
-
 public:
-
 	void setTriggerFunction(function triggerFunction);
 
 
-
 // Button.cpp
-
 void Button::setTriggerFunction(function triggerFunction)
-
 {
-
 	m_triggerFunction = triggerFunction;
-
 }
+```
 
 The function will simply store in our function pointer the address of the function that we want to be triggered when we click on the button.
 
+In the `events()` function we verify if we are in/over the button with the
+mouse cursor and if the left button is pressed. If yes, we set a boolean
+variable named `m_buttonPressed` to `true` and in the else case we check if the
+`m_buttonPressed` is `true` (if the button has been pressed) and if the left
+mouse button was released. If yes, we set the `m_butonPressed` to `false` and
+check if the mouse cursor is still over the button and if the function pointer
+is not null, if so we call the function held by the function pointer:
 
-
-In the events() function we verify if we are in/over the button with the mouse cursor and if the left button is pressed. If yes, we set a boolean variable named ‘m_buttonPressed’ to true and in the else case we check if the m_buttonPressed is true( if the button has been pressed) and if the left mouse button was released. If yes, we set the m_butonPressed to false and check if the mouse cursor is still over the button and if the function pointer is not null, if so we call the funtion held by the function pointer:
-
-
-
+```ts[class="line-numbers"]
 void Button::events(sf::Event &event)
-
 {
-
 	if (event.type == sf::Event::MouseButtonPressed && m_mouseCursorOver)
-
 	{
-
 		m_buttonPressed = true;
-
 	}
-
 	else if (m_buttonPressed && event.type == sf::Event::MouseButtonReleased)
-
 	{
-
 		m_buttonPressed = false;
 
 		if (m_mouseCursorOver && m_triggerFunction != nullptr)
-
 		{
-
 			m_triggerFunction();
-
 		}
-
 	}
-
 }
+```
 
-We also we need to set to false in constructor our ‘m_buttonPressed’ variable:
+We also we need to set to false in constructor our `m_buttonPressed` variable:
 
-
-
+```ts[class="line-numbers"]
 Button::Button(sf::Font& font, const sf::Vector2f size)
-
 : m_overActive (true)
-
 , m_buttonPressed (false)
-
 { ... }
+```
 
 And that’s it. You can add more features like changing the color when you click the button, creating a zero parameter constructor, …
 
+Here is an example in which we move our button by **(10.f, 10.f)** pixels by every click:
 
-
-Here is an example in which we move our button by (10.f, 10.f) pixels by every click:
-
-
-
+```ts[class="line-numbers"]
 #include <SFML/Graphics.hpp>
-
 #include "Button.hpp"
-
-
 
 sf::Font font;
 
 Button button(font, {300.f, 80.f});
 
-
-
 void triggered()
-
 {
-
 	button.setPosition(button.getPosition() + sf::Vector2f(10.f, 10.f));
-
 }
 
-
-
 int main()
-
 {
-
 	font.loadFromFile("whitrabt.ttf");
 
 	button.setString("ABCDE");
-
 	button.setPosition(200,200);
-
 	button.setBackgroundColor(sf::Color(59,134,134));
-
 	button.setTextColor(sf::Color(11,72,107));
-
 	button.setOutlineThickness(1.f);
-
 	button.setOutlineColor(sf::Color(168,219,168));
 
-
-
 	button.setOverBackgroundColor(sf::Color(121,189,154));
-
 	button.setOverTextColor(sf::Color(207,240,158));
-
 	button.setOverOutlineColor(sf::Color(168,219,168));
-
-
 
 	button.setTriggerFunction(triggered);
 
-
-
 	sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
-
     while (window.isOpen())
-
     {
-
         sf::Event event;
-
         while (window.pollEvent(event))
-
         {
-
             if (event.type == sf::Event::Closed)
-
                 window.close();
-
             button.events(event);
-
         }
-
-
 
         button.handler(window);
 
-
-
         window.clear();
-
         window.draw(button);
-
         window.display();
-
     }
 
-
-
 }
+```
 
-You can see the complete code for our button here:
-
-http://web.archive.org/web/20160202214709/https://github.com/Aykelith/AlexanderX.net/tree/master/Tutorials/How%20to%20create%20a%20simple%20button
+You can find the source code and the resources on <a href="https://github.com/Aykelith/AlexanderX.net/tree/master/Tutorials/How%20to%20create%20a%20simple%20button" rel="noopener noreferrer" target="_blank">GitHub</a>.

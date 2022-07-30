@@ -110,7 +110,7 @@ For physics we use a constant variable named gravity and we multiply it by the e
 
 These are the texture images I used: <a href="https://github.com/Aykelith/AlexanderX.net/blob/master/Tutorials/How%20to%20apply%20collision/player.png" rel="noopener noreferrer" target="_blank">player.png</a> and <a href="https://github.com/Aykelith/AlexanderX.net/blob/master/Tutorials/How%20to%20apply%20collision/grass.png" rel="noopener noreferrer" target="_blank">grass.png</a>.
 
-Now we need to detect the collision and after we detect it, we resolve it; but first, you need to know that objects which can be moved or destroyed are called ‘dynamic objects’ and other objects like terrain( grass) are called ‘static objects’. Because in our code we only have one dynamic object( the player) and 4 static objects( grass) we will verify the collision between the player and the grass blocks. If we had 2 dynamic objects and 4 static objects then we would have verified the collision between first dynamic objects and all 4 static objects and between second dynamic objects and all 4 static objects. And with that being said lets see how to detect collision:
+Now we need to detect the collision and after we detect it, we resolve it; but first, you need to know that objects which can be moved or destroyed are called ‘dynamic objects’ and other objects like terrain (grass) are called ‘static objects’. Because in our code we only have one dynamic object (the player) and 4 static objects (grass) we will verify the collision between the player and the grass blocks. If we had 2 dynamic objects and 4 static objects then we would have verified the collision between first dynamic objects and all 4 static objects and between second dynamic objects and all 4 static objects. And with that being said lets see how to detect collision:
 
 ```ts[class="line-numbers"]
 int main()
@@ -139,7 +139,7 @@ int main()
 }
 ```
 
-From what you can see we only call the intersects function of class sf::Rect which is returned by the getGlobalBounds() function.
+From what you can see we only call the intersects function of class `sf::Rect` which is returned by the `getGlobalBounds()` function.
 
 The above code can be translated into pseudo code:
 
@@ -196,6 +196,6 @@ Here is a demonstrative image of affected area:
 
 And that’s all for applying collision for AABB objects.
 
-I want to thank AlexAUT and his SFML Game Jam sources
+I want to thank **AlexAUT** and his SFML Game Jam sources.
 
-You can find the source code and the resources on <a href="https://github.com/Aykelith/AlexanderX.net/tree/master/Tutorials/How%20to%20apply%20collision" rel="noopener noreferrer" target="_blank">GitHub</a>:
+You can find the source code and the resources on <a href="https://github.com/Aykelith/AlexanderX.net/tree/master/Tutorials/How%20to%20apply%20collision" rel="noopener noreferrer" target="_blank">GitHub</a>.

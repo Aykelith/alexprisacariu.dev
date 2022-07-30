@@ -17,7 +17,5 @@ export const getStaticProps: GetStaticProps = async (_context) => {
     const shortPosts = getShortPosts(3);
     const pinnedProjects = getPinnedProjects();
 
-    console.log("PinnedProjects", pinnedProjects);
-
     return { props: { shortPosts, pinnedProjects } };
 };

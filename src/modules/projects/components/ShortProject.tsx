@@ -1,17 +1,13 @@
-//= Functions
-// Others
-import { useState, useRef } from 'react';
-
 //= Types & Enums & Consts
 // Own
-import { Project } from '../data/Project';
+import { PinnedProject } from '../data/PinnedProject';
 
 //= React components
 // Own
 import { ProjectTag } from '../../tags';
 
 type Props = {
-    project: Project;
+    project: PinnedProject;
 };
 
 export default function ShortProject({ project }: Props) {
