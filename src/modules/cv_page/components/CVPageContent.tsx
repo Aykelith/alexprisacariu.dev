@@ -33,7 +33,7 @@ export default function CVPage() {
                 <title>Alexandru Prisacariu | My resume</title>
             </Head>
             <div id="CVPage" className="flex flex-col items-center py-3 gap-3 bg-gray-300 print:bg-transparent print:block print:py-0">
-                <div className="print:hidden w-[210mm] flex justify-between">
+                <div className="px-2 lg:px-0 print:px-0 print:hidden w-full lg:w-[210mm] print:w-[210mm] flex justify-between">
                     <MenuTagSimple onClick={() => router.back()}>{'<'} Go back</MenuTagSimple>
                     <div className="flex gap-2">
                         <MenuTag href="/resume.pdf" className="flex gap-1 items-center">
@@ -46,10 +46,10 @@ export default function CVPage() {
                         </MenuTagSimple>
                     </div>
                 </div>
-                <div className="w-[210mm] h-[297mm] p-[1cm] bg-white flex flex-col gap-8 shadow-lg print:bg-transparent print:shadow-none">
+                <div className="w-full lg:w-[210mm] lg:h-[297mm] print:w-[210mm] print:h-[297mm] p-6 lg:p-[1cm] print:p-[1cm] bg-white flex flex-col gap-8 shadow-lg print:bg-transparent print:shadow-none">
                     <div className="flex flex-col gap-3">
                         <div className="text-5xl font-bold font-accent text-blue-600">Alexandru Prisacariu</div>
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 flex-col lg:flex-row print:flex-row">
                             <a className={HeadItemClasses} href={`mailto:${MailAddress}`}>
                                 <MailSVG className="w-4 h-4" />
                                 {MailAddress}
