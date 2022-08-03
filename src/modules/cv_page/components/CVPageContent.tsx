@@ -77,10 +77,10 @@ export default function CVPage() {
                                 <div>Node.js, React, Express, Next.js, TailwindCSS, Qt</div>
                             </Subsection>
                             <Subsection title="Tools & Platforms & Databases">
-                                <div>Git, MongoDB, Redis, Webpack, Babel, Docker, Kubernetes, Stripe</div>
+                                <div>Git, MongoDB, Redis, Webpack, Babel, NGINX, Docker, Kubernetes, Stripe</div>
                             </Subsection>
                             <Subsection title="OSs">
-                                <div>Linux (Debian, Arch, Alpine)</div>
+                                <div>Linux (Debian, Arch, Alpine), Unraid OS</div>
                             </Subsection>
                         </Section>
                         <Section title="Interesting projects">
