@@ -16,11 +16,7 @@ export default function PinnedProjects({ pinnedProjects }: Props) {
         <Section title="Some projects">
             <div className="flex flex-wrap justify-center lg:justify-start gap-5">
                 {pinnedProjects.map((project) => (
-                    <Link key={project.id} href={"#"/*`/project/${project.id}`*/}>
-                        <a className="hover:no-underline">
-                            <ShortProject project={project} />
-                        </a>
-                    </Link>
+                    <ShortProject key={project.id} project={project} />
                 ))}
             </div>
             <div>

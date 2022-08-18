@@ -30,15 +30,21 @@ export default function CVPageContent() {
                             <div>Linux (Debian, Arch, Alpine), Unraid OS</div>
                         </Subsection>
                     </Section>
-                    <Section title="Interesting projects">
-                        <Subsection title="PanoroCRM">
-                            CRM app created for real estate agencies with module for managing offers, publishing them to different portals,
-                            analytics, module for managing contacts and other modules. The application is constructed as microservices for
-                            easy scaling when required. Created everything but the design.
-                        </Subsection>
-                        <Subsection title="imocentral.ro">
-                            Real estate website optimized for speed and for Googlebot. Having SSR, ISR and a Progressive Web App. Created
-                            everything but the design.
+                    <Section title="Work">
+                        <Subsection title="Freelancer">
+                            <div className="text-accent font-semibold">2017 - Present</div>
+                            <ul>
+                                <li className="list-disc">
+                                    Created different web applications for real estate agencies providing complete solutions from backend
+                                    and frontend to releasing and maintaining the applications;
+                                </li>
+                                <li className="list-disc">
+                                    Worked on a CRM application created for real estate agencies with module for managing offers,
+                                    publishing them to different portals, analytics, module for managing contacts and other modules. The
+                                    application's backend is constructed as microservices for easy scaling when required. Created everything
+                                    but the design;
+                                </li>
+                            </ul>
                         </Subsection>
                     </Section>
                     <Section title="Education">

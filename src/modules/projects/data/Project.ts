@@ -7,4 +7,5 @@ export interface Project {
     tags: string[];
     description: string;
     pinned?: 1;
+    url?: string;
 }

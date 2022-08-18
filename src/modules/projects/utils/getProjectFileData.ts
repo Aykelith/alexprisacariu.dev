@@ -20,6 +20,7 @@ export function getProjectFileData(projectDirName: string): Project {
         image: result.data.image,
         tags: result.data.tags,
         description: result.data.description,
+        url: result.data.url,
         content: result.content || ""
     };
 };
