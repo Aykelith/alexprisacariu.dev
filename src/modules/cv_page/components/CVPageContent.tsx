@@ -34,15 +34,26 @@ export default function CVPageContent() {
                         <Subsection title="Freelancer">
                             <div className="text-accent font-semibold">2017 - Present</div>
                             <ul>
-                                <li className="list-disc">
-                                    Created different web applications for real estate agencies providing complete solutions from backend
-                                    and frontend to releasing and maintaining the applications;
+                                <li className="list-disc list-inside">
+                                    Worked on{' '}
+                                    <a href="https://beta.crm.panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
+                                        PanoroCRM
+                                    </a>
+                                    , a CRM application created for real estate agencies with module for managing offers, publishing them to
+                                    different portals, analytics, module for managing contacts and other modules. The application's backend
+                                    is constructed as microservices for easy scaling when required;
                                 </li>
-                                <li className="list-disc">
-                                    Worked on a CRM application created for real estate agencies with module for managing offers,
-                                    publishing them to different portals, analytics, module for managing contacts and other modules. The
-                                    application's backend is constructed as microservices for easy scaling when required. Created everything
-                                    but the design;
+                                <li className="list-disc list-inside">
+                                    Created different web applications for real estate agencies providing complete solutions from backend
+                                    and frontend to releasing and maintaining the applications like{' '}
+                                    <a href="https://imocentral.ro" target="_blank" rel="noreferrer noopener" className="underline">
+                                        imocentral.ro
+                                    </a>{' '}
+                                    and{' '}
+                                    <a href="https://panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
+                                        panoro.ro
+                                    </a>
+                                    .
                                 </li>
                             </ul>
                         </Subsection>
