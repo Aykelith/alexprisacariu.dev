@@ -18,7 +18,7 @@ export default function CVPageContent() {
                 <div className="flex flex-col gap-6">
                     <Section title="Skills">
                         <Subsection title="Programming Languages">
-                            <div>Typescript, JavaScript (ES6), C++17, SQL, Python, Java, Rust</div>
+                            <div>Typescript, JavaScript (ES6), C++17, SQL, Python, Java, Rust, HTML, CSS, SCSS</div>
                         </Subsection>
                         <Subsection title="Libraries & Frameworks">
                             <div>Node.js, React, Express, Next.js, TailwindCSS, Qt</div>
