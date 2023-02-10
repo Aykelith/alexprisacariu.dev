@@ -31,11 +31,20 @@ export default function CVPageContent() {
                         </Subsection>
                     </Section>
                     <Section title="Work">
+                        <Subsection title="Senior Web Developer" company="Rubrikk Group AS">
+                            <div className="text-accent font-semibold">2022 - Present</div>
+                            <ul>
+                                <li className="list-disc list-inside">
+                                    Working on the company's portals, improving and maintaining them. Assuring that the performance of the
+                                    websites are maximum in the Google's Lighthouse tool.
+                                </li>
+                            </ul>
+                        </Subsection>
                         <Subsection title="Freelancer">
                             <div className="text-accent font-semibold">2017 - Present</div>
                             <ul>
                                 <li className="list-disc list-inside">
-                                    Worked on{' '}
+                                    Working on{' '}
                                     <a href="https://beta.crm.panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
                                         PanoroCRM
                                     </a>
@@ -89,13 +98,17 @@ function Section({ className, title, children }: SectionProps) {
 
 type SubsectionProps = React.PropsWithChildren<{
     title: string;
+    company?: string;
     className?: string;
 }>;
 
-function Subsection({ className, title, children }: SubsectionProps) {
+function Subsection({ className, title, company, children }: SubsectionProps) {
     return (
         <div className={classNames('flex flex-col', className)}>
-            <div className="font-bold">{title}</div>
+            <div className="font-bold">
+                {title}
+                {company ? `  •  ${company}` : ''}
+            </div>
             {children}
         </div>
     );
