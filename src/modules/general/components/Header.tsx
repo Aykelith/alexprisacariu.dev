@@ -19,7 +19,7 @@ export default function Header({ small, useH2, showContacts = true }: HeaderProp
 
     return (
         <header>
-            <Link href="/"><a className="cursor-pointer hover:underline text-black">{useH2 ? <h2 className={titleClasses}>Alexandru Prisacariu</h2> : <h1 className={titleClasses}>Alexandru Prisacariu</h1>}</a></Link>
+            <Link href="/" className="cursor-pointer hover:underline text-black">{useH2 ? <h2 className={titleClasses}>Alexandru Prisacariu</h2> : <h1 className={titleClasses}>Alexandru Prisacariu</h1>}</Link>
             {showContacts && (
                 <div className="mt-2 mb-4 flex gap-2 flex-wrap">
                     <GitLabTag />
@@ -31,7 +31,7 @@ export default function Header({ small, useH2, showContacts = true }: HeaderProp
                 <MenuTag href="/about_me">About me</MenuTag>
                 {/*<MenuTag href="#">Projects</MenuTag>*/}
                 <MenuTag href="/blog/1">Blog</MenuTag>
-                <MenuTag href="/cv">Resume</MenuTag>
+                <MenuTag href="/cv">Resume/CV</MenuTag>
             </div>
         </header>
     );

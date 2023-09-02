@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import classNames from "classnames";
 
 //= React components
+// Own
+import { useConstructor } from "../../../utils/useConstructor";
 // Packages
 import Link from "next/link";
-import { useConstructor } from "@softprovider/react-ui-utils";
 
 const ButtonClasses =
     "hover:no-underline flex items-center justify-center border border-[#d9d9d9] text-sm hover:bg-gray-50";
@@ -95,25 +96,27 @@ export default function Pagination({
     return (
         <div className="flex justify-center items-center mt-4 gap-2">
             {showPrevButton && currentPage != 1 && (
-                <Link href={baseURL.replace("PAGE_NUMBER", (currentPage - 1).toString())}>
-                    <a rel="prev" className={`${ButtonClasses} ${PrevNextButtonsClasses}`} onClick={() => internalOnPageChange(currentPage - 1)}>
-                        {prevLabel}
-                    </a>
+                <Link 
+                    href={baseURL.replace("PAGE_NUMBER", (currentPage - 1).toString())}
+                    rel="prev" 
+                    className={`${ButtonClasses} ${PrevNextButtonsClasses}`}
+                    onClick={() => internalOnPageChange(currentPage - 1)}
+                >
+                    {prevLabel}
                 </Link>
             )}
             {labels.map((labelData) => {
                 if (labelData.type == 0) {
                     return (
-                        <Link href={baseURL.replace("PAGE_NUMBER", labelData.page.toString())} key={labelData.page}>
-                            <a
-                                className={classNames(`${ButtonClasses} min-w-[2.5rem] h-10`, {
-                                    "border-blue-500 text-blue-500":
-                                        labelData.page == currentPage,
-                                })}
-                                onClick={() => internalOnPageChange(labelData.page)}
-                            >
-                                {labelData.page}
-                            </a>
+                        <Link 
+                            href={baseURL.replace("PAGE_NUMBER", labelData.page.toString())} 
+                            key={labelData.page} 
+                            className={classNames(`${ButtonClasses} min-w-[2.5rem] h-10`, {
+                                "border-blue-500 text-blue-500": labelData.page == currentPage,
+                            })}
+                            onClick={() => internalOnPageChange(labelData.page)}
+                        >
+                            {labelData.page}
                         </Link>
                     );
                 } else {
@@ -121,10 +124,13 @@ export default function Pagination({
                 }
             })}
             {showNextButton && labels.length && currentPage != labels[labels.length - 1].page && (
-                <Link href={baseURL.replace("PAGE_NUMBER", (currentPage + 1).toString())}>
-                    <a rel="next" className={`${ButtonClasses} ${PrevNextButtonsClasses}`} onClick={() => internalOnPageChange(currentPage + 1)}>
-                        {nextLabel}
-                    </a>
+                <Link
+                    href={baseURL.replace("PAGE_NUMBER", (currentPage + 1).toString())}
+                    rel="next"
+                    className={`${ButtonClasses} ${PrevNextButtonsClasses}`}
+                    onClick={() => internalOnPageChange(currentPage + 1)}
+                >
+                    {nextLabel}
                 </Link>
             )}
         </div>

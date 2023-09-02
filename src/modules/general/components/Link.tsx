@@ -8,8 +8,8 @@ import NextLink from 'next/link';
 
 export default function Link({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
     return (
-        <NextLink href={href}>
-            <a className={classNames("text-indigo-700", className)}>{children}</a>
+        <NextLink href={href} className={classNames("text-indigo-700", className)}>
+            {children}
         </NextLink>
     );
 }

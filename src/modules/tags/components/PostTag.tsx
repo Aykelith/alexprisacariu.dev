@@ -16,10 +16,8 @@ export type PostTagProps = TagProps;
 
 export default function PostTag({ className, ...otherProps }: PostTagProps) {
     return (
-        <Link href="#">
-            <a className="hover:no-underline cursor-pointer">
-                <Tag size={Sizes.Small} className={classNames('text-white bg-blue-500 hover:bg-blue-400', className)} {...otherProps} />
-            </a>
+        <Link href="#" className="hover:no-underline cursor-pointer">
+            <Tag size={Sizes.Small} className={classNames('text-white bg-blue-500 hover:bg-blue-400', className)} {...otherProps} />
         </Link>
     );
 }

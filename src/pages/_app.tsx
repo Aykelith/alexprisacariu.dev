@@ -34,16 +34,12 @@ function MyApp({ Component, pageProps }) {
                 <footer className="mt-2 mb-4">
                     <div className="box">
                         © {new Date().getFullYear()} Alexandru Prisacariu | Powered by{' '}
-                        <Link href="https://nextjs.org">
-                            <a className="text-black underline" target="_blank" rel="noreferrer noopener">
-                                NextJS
-                            </a>
+                        <Link href="https://nextjs.org" className="text-black underline" target="_blank" rel="noreferrer noopener">
+                            NextJS
                         </Link>
                         ,{' '}
-                        <Link href="https://github.com">
-                            <a className="text-black underline" target="_blank" rel="noreferrer noopener">
-                                GitHub
-                            </a>
+                        <Link href="https://github.com" className="text-black underline" target="_blank" rel="noreferrer noopener">
+                            GitHub
                         </Link>
                     </div>
                 </footer>

@@ -20,10 +20,8 @@ export default function PinnedProjects({ pinnedProjects }: Props) {
                 ))}
             </div>
             <div>
-                <Link href="#">
-                    <a href="#" className="font-bold">
-                        See more projects
-                    </a>
+                <Link href="#" className="font-bold">
+                    See more projects
                 </Link>
             </div>
         </Section>

@@ -18,10 +18,8 @@ export type MenuTagProps = TagProps & {
 
 export default function MenuTag({ href, className, ...otherProps }: MenuTagProps) {
     return (
-        <Link href={href}>
-            <a className="hover:no-underline">
-                <Tag className={classNames('border border-[#3366cc] bg-white hover:border-[#24478f] hover:bg-[#ebf0fa]', className)} {...otherProps}/>
-            </a>
+        <Link href={href} className="hover:no-underline">
+            <Tag className={classNames('border border-[#3366cc] bg-white hover:border-[#24478f] hover:bg-[#ebf0fa]', className)} {...otherProps}/>
         </Link>
     );
 }

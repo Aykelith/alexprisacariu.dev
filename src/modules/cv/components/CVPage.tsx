@@ -2,20 +2,12 @@
 // Others
 import { useRouter } from 'next/router';
 
-//= Types & Enums & Consts
-// Own
-import { MailAddress, WebsiteAddress, GitHubAddress, GitLabAddress } from '../../general';
-
 //= React components
 // Own
 import { MenuTagSimple, MenuTag } from '../../tags';
 
 //= Assets
 // Own
-import MailSVG from '../../../icons/mail.svg';
-import GitLabSVG from '../../../icons/gitlab.svg';
-import GitHubSVG from '../../../icons/github.svg';
-import GlobeSVG from '../../../icons/globe.svg';
 import PrintSVG from '../../../icons/print.svg';
 import PDFSVG from '../../../icons/pdf.svg';
 
@@ -44,30 +36,7 @@ export default function CVPage({ id, pdfHref, children }: CVPageProps) {
                         </MenuTagSimple>
                     </div>
                 </div>
-                <div className="w-full lg:w-[210mm] lg:h-[297mm] print:w-[210mm] print:h-[297mm] p-6 lg:p-[1cm] print:p-[1cm] bg-white flex flex-col gap-8 shadow-lg print:bg-transparent print:shadow-none">
-                    <div className="flex flex-col gap-3">
-                        <div className="text-5xl font-bold font-accent text-blue-600">Alexandru Prisacariu</div>
-                        <div className="flex gap-4 flex-col lg:flex-row print:flex-row">
-                            <a className={HeadItemClasses} href={`mailto:${MailAddress}`}>
-                                <MailSVG className="w-4 h-4" />
-                                {MailAddress}
-                            </a>
-                            <a className={HeadItemClasses} href={WebsiteAddress}>
-                                <GlobeSVG className="w-4 h-4" />
-                                {WebsiteAddress}
-                            </a>
-                            <a className={HeadItemClasses} href={GitLabAddress}>
-                                <GitLabSVG className="w-4 h-4" />
-                                @AlexxanderX
-                            </a>
-                            <a className={HeadItemClasses} href={GitHubAddress}>
-                                <GitHubSVG className="w-4 h-4" />
-                                Aykelith
-                            </a>
-                        </div>
-                    </div>
-                    {children}
-                </div>
+                {children}
             </div>
     );
 }

@@ -19,10 +19,8 @@ export default function RecentPosts({ shortPosts }: { shortPosts: Post[] }) {
                     })}
             </div>
             <div>
-                <Link href="/blog/1">
-                    <a className="font-bold">
-                        Read more posts
-                    </a>
+                <Link href="/blog/1" className="font-bold">
+                    Read more posts
                 </Link>
             </div>
         </Section>
