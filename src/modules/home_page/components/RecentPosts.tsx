@@ -14,8 +14,8 @@ export default function RecentPosts({ shortPosts }: { shortPosts: Post[] }) {
         <Section title="Sometimes I write">
             <div className="flex flex-col gap-4">
                 {shortPosts &&
-                    shortPosts.map((shortPost: any) => {
-                        return <ShortPost {...shortPost} />;
+                    shortPosts.map((shortPost: Post) => {
+                        return <ShortPost key={shortPost.dirName} {...shortPost} />;
                     })}
             </div>
             <div>

@@ -32,3 +32,12 @@ a {
 #PostPage .postContent p {
     @apply my-2;
 }
+
+#ProjectPage .postContent ul {
+    padding: revert;
+    margin: revert;
+}
+
+#ProjectPage .postContent ul li {
+    list-style: disc;
+}

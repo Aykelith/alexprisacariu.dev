@@ -16,3 +16,4 @@ export * from "./data/WebsiteAddress";
 export { default as Link } from "./components/Link";
 export { default as Header } from "./components/Header";
 export { default as Pagination } from "./components/Pagination";
+export { default as ImageOnClickFullscreen } from "./components/ImageOnClickFullscreen";

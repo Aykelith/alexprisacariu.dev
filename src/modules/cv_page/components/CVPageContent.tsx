@@ -20,19 +20,19 @@ export default function CVPageContent() {
                     <div className="flex flex-col gap-6">
                         <Section title="Skills">
                             <Subsection title="Programming Languages">
-                                <ExpertizeSection title="Expert (over 5 years):">JavaScript/ECMAScript (ES6), Typescript, C++17, HTML, CSS, SCSS</ExpertizeSection>
-                                <ExpertizeSection title="Proficient (over 3 years):">SQL, Java</ExpertizeSection>
-                                <ExpertizeSection title="Familiar with:">C#, Python, Rust, Go</ExpertizeSection>
+                                <ExpertizeSection title="Expert:">JavaScript, Typescript, C++, HTML, CSS</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">Go, SQL, Java, Lua</ExpertizeSection>
+                                <ExpertizeSection title="Familiar with:">C#, Python, Rust</ExpertizeSection>
                             </Subsection>
                             <Subsection title="Libraries & Frameworks">
-                                <ExpertizeSection title="Expert (over 5 years):">Node.js, React, Express, Next.js, TailwindCSS, Qt</ExpertizeSection>
+                                <ExpertizeSection title="Expert:">Node.js, React, Express, Next.js, TailwindCSS, Qt</ExpertizeSection>
                             </Subsection>
                             <Subsection title="Tools & Platforms & Databases">
-                                <ExpertizeSection title="Expert (over 5 years):">Git, Webpack, Babel, NGINX, Docker, Kubernetes, MongoDB</ExpertizeSection>
-                                <ExpertizeSection title="Familiar with:">Stripe</ExpertizeSection>
+                                <ExpertizeSection title="Expert:">Git, Webpack, Babel, NGINX, Docker, Kubernetes, MongoDB</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">Azure Pipelines</ExpertizeSection>
                             </Subsection>
                             <Subsection title="OSs">
-                                <div>Linux (Debian, Arch, Alpine), Unraid OS</div>
+                                <ExpertizeSection title="Proficient:">Linux, Windows</ExpertizeSection>
                             </Subsection>
                         </Section>
                         <Section title="Work">
@@ -40,15 +40,11 @@ export default function CVPageContent() {
                                 <div className="text-accent font-semibold">2022 - Present</div>
                                 <ul>
                                     <li className="list-disc list-inside">
-                                        Worked on the{' '}
-                                        <a href="https://www.laikado.es" target="_blank" rel="noreferrer noopener" className="underline">
-                                            Laikado.es
-                                        </a>, a spanish real estate and vehicles aggregator portal. My part was implementing the whole design,
-                                        optimizing the backend (written in NodeJS) so we deliver excelent performance when visited by users and
-                                        also by Google;
+                                        Implemented a complex modules system into the project making easier for the whole team to add new features
+                                        and work on them in parallel.
                                     </li>
                                     <li className="list-disc list-inside">
-                                        Working on the company's portals, improving and maintaining them. Assuring that the performance of the
+                                        Working on the company's portals: adding new features and maintaining them. Assuring that the performance of the
                                         websites are maximum in the Google's Lighthouse tool.
                                     </li>
                                 </ul>
@@ -57,7 +53,7 @@ export default function CVPageContent() {
                                 <div className="text-accent font-semibold">2017 - Present</div>
                                 <ul>
                                     <li className="list-disc list-inside">
-                                        Working on{' '}
+                                        Created {' '}
                                         <a href="https://beta.crm.panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
                                             PanoroCRM
                                         </a>
@@ -80,18 +76,13 @@ export default function CVPageContent() {
                                 </ul>
                             </Subsection>
                         </Section>
+                        <Section title="Education">
+                            <Subsection title="Babeș-Bolyai University (UBB)">
+                                <div className="text-accent font-semibold">2017-2019 // Cluj-Napoca, RO</div>
+                                <div>Bachelor's Degree in Computer Science</div>
+                            </Subsection>
+                        </Section>
                     </div>
-                </Page>
-                <Page>
-                    <Section title="Education">
-                        <Subsection title="Babeș-Bolyai University (UBB)">
-                            <div className="text-accent font-semibold">2017-2019 // Cluj-Napoca, RO</div>
-                            <div>Bachelor's Degree in Computer Science</div>
-                        </Subsection>
-                    </Section>
-                    <Section title="Interests">
-                        <div>Audio engineering, hiking, playing ukulele and electric guitar</div>
-                    </Section>
                 </Page>
             </CVPage>
         </>

@@ -3,9 +3,12 @@ export interface Project {
     title: string;
     dirName: string;
     content: string;
-    image: string;
+    coverImage: string;
     tags: string[];
     description: string;
     pinned?: 1;
     url?: string;
+    otherImages?: string[];
+    linkedPosts?: { url: string, title: string }[];
+    useCoverImage?: 1;
 }

@@ -17,7 +17,7 @@ export default function BlogPage({ posts, pagesCount, currentPage }: BlogPagePro
             </Head>
             <div id="BlogPage" className="page">
                 <div className="box">
-                    <Header small useH2 showContacts={false}/>
+                    <Header small useH2 showContacts={false} showHome={true}/>
                     <main className="flex flex-col gap-6">
                         {posts.map((shortPost: any) => {
                             return <ShortPost {...shortPost} />;

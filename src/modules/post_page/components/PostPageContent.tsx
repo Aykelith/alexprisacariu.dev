@@ -29,7 +29,7 @@ export default function PostPage(post: PostPageProps) {
             </Head>
             <div id="PostPage" className="page">
                 <div className="box">
-                    <Header small useH2 showContacts={false}/>
+                    <Header small useH2 showContacts={false} showHome={true}/>
                     <main className="mt-8 flex flex-col">
                         <Link href="/blog/1">{'< See more posts'}</Link>
                         <h1 className="text-4xl mt-1 mb-2">{post.title}</h1>
