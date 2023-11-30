@@ -26,6 +26,7 @@ export default function CVPageContent() {
                             </Subsection>
                             <Subsection title="Libraries & Frameworks">
                                 <ExpertizeSection title="Expert:">Node.js, React, Express, Next.js, TailwindCSS, Qt</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">SolidJS</ExpertizeSection>
                             </Subsection>
                             <Subsection title="Tools & Platforms & Databases">
                                 <ExpertizeSection title="Expert:">Git, Webpack, Babel, NGINX, Docker, Kubernetes, MongoDB</ExpertizeSection>
@@ -54,7 +55,7 @@ export default function CVPageContent() {
                                 <ul>
                                     <li className="list-disc list-inside">
                                         Created {' '}
-                                        <a href="https://beta.crm.panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
+                                        <a href="https://alexprisacariu.dev/project/002_panorocrm" target="_blank" rel="noreferrer noopener" className="underline">
                                             PanoroCRM
                                         </a>
                                         , a CRM application created for real estate agencies with module for managing offers, publishing them to
@@ -64,7 +65,7 @@ export default function CVPageContent() {
                                     <li className="list-disc list-inside">
                                         Created different web applications for real estate agencies providing complete solutions from backend
                                         and frontend to releasing and maintaining the applications like{' '}
-                                        <a href="https://imocentral.ro" target="_blank" rel="noreferrer noopener" className="underline">
+                                        <a href="https://alexprisacariu.dev/project/001_imocentral.ro" target="_blank" rel="noreferrer noopener" className="underline">
                                             imocentral.ro
                                         </a>{' '}
                                         and{' '}

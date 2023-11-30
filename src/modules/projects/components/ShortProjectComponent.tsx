@@ -26,7 +26,7 @@ export default function ShortProjectComponent({ project }: Props) {
                 </div>
                 <div className="flex flex-wrap gap-1">
                     {project.tags.map((tag) => (
-                        <ProjectTag>{tag}</ProjectTag>
+                        <ProjectTag key={tag}>{tag}</ProjectTag>
                     ))}
                 </div>
                 <div className="text-sm mt-1">{project.description}</div>

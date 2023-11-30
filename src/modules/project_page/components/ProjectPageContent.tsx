@@ -23,8 +23,8 @@ export default function ProjectPage({ title, content, coverImage, otherImages, l
                     <main className="flex flex-col">
                         <h1 className="text-4xl mt-1 mb-2">{title}</h1>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                            <div className="overflow-hidden rounded cursor-pointer">
-                                <ImageOnClickFullscreen src={useCoverImage ? coverImage : otherImages[0]} className="w-full object-scale-down h-64 md:h-80 lg:h-min hover:scale-105 transition duration-500" />
+                            <div className="overflow-hidden rounded cursor-pointer h-64 md:h-80 lg:h-min w-full">
+                                <ImageOnClickFullscreen src={useCoverImage ? coverImage : otherImages[0]} className="w-full h-full object-scale-down hover:scale-105 transition duration-500" />
                             </div>
                             <div className="postContent">
                                 <MDXRemote {...content} components={SharedComponents} />
@@ -50,8 +50,8 @@ export default function ProjectPage({ title, content, coverImage, otherImages, l
                                         if (!useCoverImage && index === 0) return null;
 
                                         return (
-                                            <div key={imagePath} className="overflow-hidden cursor-pointer rounded">
-                                                <ImageOnClickFullscreen src={imagePath} className="w-full object-scale-down h-64 md:h-80 lg:h-96 lg:h-min hover:scale-105 transition duration-500" loading="lazy"/>
+                                            <div key={imagePath} className="overflow-hidden cursor-pointer rounded h-64 md:h-80 lg:h-96 w-full border border-gray-500/[0.05]">
+                                                <ImageOnClickFullscreen src={imagePath} className="w-full h-full object-scale-down hover:scale-105 transition duration-500" loading="lazy"/>
                                             </div>
                                         );
                                     })
