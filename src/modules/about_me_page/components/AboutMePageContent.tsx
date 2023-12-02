@@ -17,10 +17,10 @@ export default function AboutMePage() {
             </Head>
             <div id="AboutMePage" className="page">
                 <div className="box">
-                    <Header small useH2 showContacts={false} />
+                    <Header small useH2 showContacts={false} showHome={true} />
                     <main className="flex flex-col gap-6">
                         <div>
-                            My name is <HighlightName>Alex</HighlightName> and I'm an programmer from Romania with a passion for coming out
+                            My name is <HighlightName>Alex</HighlightName> and I'm a programmer from Romania with a passion for coming out
                             with solutions and audio engineering. I also enjoy going hiking and playing my ukulele and electric guitar.
                         </div>
                         <div>

@@ -1,0 +1,797 @@
+---
+title: "Creating an application for my wedding invitations - Launch"
+tags: 
+   - Go
+   - SolidJS
+   - Google Spreadsheet
+   - Bundling
+   - TypeScript
+   - DevOps
+publishedOn: "2023-12-02T13:11:43.054Z"
+---
+And it's done and up-and-running. I finally launched my wedding invitations
+website where my guests will be able to confirm if they are coming or not, but
+also to choose if they need some accommodations (like vegetarian food, or if
+they need a hotel room).
+
+## Overview
+
+In this section we will look at the flow of the application, and in the 
+following sections, we will analyze in more technical depth how I've
+implemented some features of the website.
+
+We have two different screens that a guest can see, depending on how I was able
+to invite him:
+
+1. If the user was invited online without a physical invitation, he will receive
+a link of the following form: `website-link.com/invite/[INVITE_CODE]`. When
+accessed, he will see the next screen:
+
+<ImageOnClickFullscreen src="/imgs/projects/005_and-wedding-invitations/image1.jpeg" className="post-image center medium cursor-pointer"/>
+
+This is a replica of the physical invitation, offering all the information to
+the invited person and, at the bottom of the invitation, a button to go to the
+confirmation screen.
+
+2. If the user was invited with a physical invitation, he will already have the
+`INVITE_CODE` written on the invitation and the QR code to access the website.
+When the invited person accesses the website, he will see the following screen:
+
+<ImageOnClickFullscreen src="/imgs/projects/005_and-wedding-invitations/image2.jpeg" className="post-image center medium cursor-pointer"/>
+
+Introducing the correct code will redirect the invited person to the
+confirmation screen.
+
+Each guest has a unique code.
+
+The confirmation screen that can be seen in the below screenshot is where the 
+user can confirm that they will come to the wedding or tell us that they will
+not be able to attend it.
+
+<ImageOnClickFullscreen src="/imgs/projects/005_and-wedding-invitations/image5.jpeg" className="post-image center medium cursor-pointer"/>
+
+If the user clicks on the button to confirm that they will **not** attend the
+wedding, he will be redirected to the refused screen, where we say that we are
+sad that he will not be able to attend the wedding, but I'm also giving him
+the chance to change his option and confirm that he will attend the wedding.
+
+<ImageOnClickFullscreen src="/imgs/projects/005_and-wedding-invitations/image6.jpeg" className="post-image center medium cursor-pointer"/>
+
+If the user clicks on the button that confirms that they will come to the
+wedding, I show the options screen where the guest can choose some extra
+options:
+
+- if he requires a vegetarian menu (and how many if there are a couple);
+- if he comes with a +1/partner (if alone);
+- if he comes with kids and requires kids' menus (and how many);
+- if he needs a hotel overnight.
+
+<ImageOnClickFullscreen src="/imgs/projects/005_and-wedding-invitations/image3.jpeg" className="post-image center medium cursor-pointer"/>
+
+This is pretty much what an invited person can see and choose on the website.
+But how can I add invite codes and set their settings?
+
+For this, I created a simple dashboard where I can add and edit guest settings
+using the unique invite code.
+
+<ImageOnClickFullscreen src="/imgs/projects/005_and-wedding-invitations/image4.jpeg" className="post-image center medium cursor-pointer"/>
+
+Where's the data stored? The tag `Google Spreadsheet` that I attached to this
+post may give that away. Yes, I'm storing the responses and options chosen by
+the users in a Google Spreadsheet. It is free and works very well.
+
+But I also store the changes in a local JSON file as a backup if something bad
+happens.
+
+This is a short overview of the main parts of the project, and now we will look
+from a technical point of view at how I've done this website.
+
+## The back-end
+
+The backend was done in Go and is my first complete project in Go. Used
+only standard packages, beside the `golang.org/x/oauth2` and
+`google.golang.org/api` required for Google Spreadsheet.
+
+I created 3 sub-packages for this project:
+
+- `api` - to handle all the APIs of the website;
+- `storage` - to handle the storage;
+- `web` - to handle the general pages of the website.
+
+### The `storage` package
+
+I will start by talking about the `storage` package, as I think that is the most
+interesting one.
+
+In `storage/invitation.go` I'm defining the struct for the invitation, but
+I also added a method to the struct called `GetDifference` that receives another
+invitation as a pointer and will return a string with the differences between
+the structs. This function comes in handy as I output to the log file when a
+change is made by the user to see that everything is good and works as
+expected.
+
+```go
+func (e *Invitation) GetDifference(another *Invitation) (string) {
+    var result string = ""
+
+    if e.GSheetRowIndex != another.GSheetRowIndex {
+        result += "$GSheetRowIndex=" + strconv.Itoa(another.GSheetRowIndex) + ";"
+    }
+
+    // ...
+
+    return result
+}
+```
+
+After I've defined the structure of the invitation, I've created
+`storage/invitationsJSONStorage.go` that will just define methods
+for loading and saving the invitations to the JSON file.
+
+And now comes `storage/invitationsGSheetStorage.go`, that is
+responsible for storing and getting the data from Google 
+Spreadsheet.
+
+We start by defining the struct where I store the `spreadsheetID` that I
+receive from a master configuration file and also keep the `instance` we create
+by logging to the Google Spreadsheet.
+
+
+```go
+type InvitationsGSheetStorage struct {
+    spreadsheetID string
+    instance *sheets.Service
+}
+```
+
+To make changes to the spreadsheet, I was required to setup a service account
+on Google Cloud Console. After creating it, we store in the master configuration
+file the email, account key ID and the key of the service account. The last thing
+to do is to invite the service account to the spreadsheet and give him
+the required permissions to make changes to it.
+
+**Tip**: The ID of a spreadsheet is the code that comes after
+`https://docs.google.com/spreadsheets/d/`.
+
+And now I'm defining the `Setup` method that handles the connection to the 
+given spreadsheet. The method receives the data of the service account and the
+ID of the spreadsheet. In this method, I create an instance of Google Spreadsheet
+using the service account credentials.
+
+```go
+func (e *InvitationsGSheetStorage) Setup(serviceAccountEmail string, serviceAccountKeyID string, serviceAccountKey string, spreadsheetID string) {
+    e.spreadsheetID = spreadsheetID
+
+    // Create a JWT configurations object for the Google service account
+    conf := &jwt.Config{
+        Email:        serviceAccountEmail,
+        PrivateKey:   []byte(serviceAccountKey),
+        PrivateKeyID: serviceAccountKeyID,
+        TokenURL:     "https://oauth2.googleapis.com/token",
+        Scopes: []string{
+            "https://www.googleapis.com/auth/spreadsheets",
+        },
+    }
+
+    client := conf.Client(oauth2.NoContext)
+
+    // Create a service object for Google sheets
+    instance, err := sheets.NewService(oauth2.NoContext, option.WithHTTPClient(client))
+    if err != nil {
+        log.Fatalf("[GSheetStorage:Setup][E] Unable to retrieve Sheets client: %v", err)
+    }
+
+    e.instance = instance
+}
+```
+
+I define a private method for reading a single cell. One thing to mention is
+that I am using the default name for the first sheet, `Sheet1`.
+
+```go
+func (e* InvitationsGSheetStorage) readCell(cell string) (string, error) {
+    // Pull the data from the sheet
+    resp, err := e.instance.Spreadsheets.Values.Get(e.spreadsheetID, "Sheet1!" + cell).Do()
+    if err != nil {
+        return "", err
+    }
+
+    // Display pulled data
+    if len(resp.Values) == 0 {
+        return "", errors.New("No value")
+    } else {
+        return resp.Values[0][0].(string), nil
+    }
+}
+```
+While I define more methods in the file, I will only present the method responsible for
+updating an invitation in the spreadsheet. The method creates an `interface`
+with the data for the spreadsheet's row, and then, using the invitation's
+`GSheetRowIndex` (that stores the row index of the invitation in the spreadsheet),
+I update that row.
+
+```go
+func (e *InvitationsGSheetStorage) UpdateInvitation(invitation *Invitation) (error) {
+    data := []interface{}{invitation.Code, invitation.Name, invitation.Coming, invitation.NumberOfPersons, invitation.NumberOfVegMenus, invitation.NumberOfKidsMenus, invitation.LastUpdateTime.String()}
+
+    var vr sheets.ValueRange
+    vr.Values = append(vr.Values, data)
+
+    _, err := e.instance.Spreadsheets.Values.Update(e.spreadsheetID, "A" + strconv.Itoa(invitation.GSheetRowIndex), &vr).ValueInputOption("RAW").Do()
+    if err != nil {
+        log.Println("[GSheetStorage:UpdateInvitation][E] Cannot update the invitation's data with code \"" + invitation.Code + "\". Error:", err)
+        log.Println("[GSheetStorage:UpdateInvitation][E] Invitation data:", data)
+        return err
+    }
+
+    return nil
+}
+```
+
+In the final part of the `storage` package section, I want to talk about the
+main "class" that takes the above storages and uses them for storing the data.
+
+While there are many methods in this structure, I want only to showcase how the
+updating of an invitation is done, which I think is the most interesting part
+of all.
+
+First, we have the method `UpdateInvitation` that takes a pointer to an `Invitation`
+struct, checks if the code of the invitation exists (otherwise throws an error), and
+then updates the invitation and calls the method `startTimerToUpdateChanges` which
+is responsible for saving the changes to the JSON file and the spreadsheet.
+
+```go
+func (e *InvitationsStorage) UpdateInvitation(invitation *Invitation) (error) {
+    var index int = e.GetInvitationIndexByCode(invitation.Code)
+    if index == -1 {
+        return errors.New("Invitation not found")
+    }
+
+    e.invitations[index] = *invitation
+
+    e.startTimerToUpdateChanges(invitation.Code)
+
+    return nil
+}
+```
+
+The method `startTimerToUpdateChanges` will not update straight-forward the 
+changes to the JSON file and the spreadsheet (as the name implies). This is
+because the API for Google Spreadsheet implies some rates, and I did not want
+to exceed those rates, so the method will start a countdown timer that, when
+it expires, will save the changes. While the timer is still not expired, all the
+required invitations that need to be updated are saved in an array of codes of
+invitations.
+
+```go
+func (e *InvitationsStorage) startTimerToUpdateChanges(changedCode string) {
+    {
+        shouldAdd := true
+        for _, invitationCode := range e.changedCodesToSave {
+            if invitationCode == changedCode {
+                shouldAdd = false
+                break;
+            }
+        }
+
+        if shouldAdd {
+            e.changedCodesToSave = append(e.changedCodesToSave, changedCode)
+        }
+    }
+
+    if e.saveChangesTimer == nil {
+        e.saveChangesTimer = time.AfterFunc(1 * time.Minute, e.saveOnTimerEnd)
+    }
+}
+```
+
+The method `saveOnTimerEnd` is the true one responsible for saving the changes.
+The code for it is quite simple:
+
+- calculate the new hash; (read <a href="#sync">here</a> for more about it)
+- clone the array of codes of the invitations that have changes so we can reset
+  it in case new updates come;
+- save the changes to the JSON file using the `InvitationsJSONStorage`
+  structure;
+- go to each code and try to update it in the Google Spreadsheet:
+  - if the update fails, then sleep for 5 seconds before retrying;
+  - try for maximum 3 times;
+- if all the rows were updated successfully, then try to update the hash 
+  with the new one generated for maximum 3 times.
+
+```go
+func (e *InvitationsStorage) saveOnTimerEnd() {
+    log.Println("[InvitationsStorage:saveOnTimerEnd] Saving the changes...")
+
+    newHash := e.CalculateHash()
+
+    changedCodes := make([]string, len(e.changedCodesToSave))
+    copy(changedCodes, e.changedCodesToSave)
+    e.saveChangesTimer = nil
+    e.changedCodesToSave = nil
+
+    err := e.jsonStorage.SaveToJSONFile(&e.invitations)
+    if err != nil {
+        log.Println("[InvitationsStorage:saveOnTimerEnd] Saved the changes to JSON file.")
+    }
+
+    allGood := true
+    for _, invitationCode := range changedCodes {
+        log.Println("[InvitationsStorage:saveOnTimerEnd] Saving the changes for code \"" + invitationCode + "\" on GSheet...")
+
+        invitation, _ := e.GetInvitationByCode(invitationCode)
+
+        invitationGood := false
+        tries := 1
+        maxTries := 3
+
+        for invitationGood == false && tries <= maxTries {
+            err := e.gsheetStorage.UpdateInvitation(invitation) 
+            if err != nil {
+                tries += 1
+
+                if tries <= maxTries {
+                    log.Println("[InvitationsStorage:saveOnTimerEnd][E] Retrying again in 5 seconds to update invitation...")
+                    time.Sleep(5 * time.Second)
+                } else {
+                    log.Println("[InvitationsStorage:saveOnTimerEnd][E] Maximum tries has been reached to update invitation.")
+                    allGood = false
+                }
+            } else {
+                invitationGood = true
+                log.Println("[InvitationsStorage:saveOnTimerEnd] Saved with success the changes for code \"" + invitationCode + "\" on GSheet.")
+            }
+        }
+
+        log.Println("[InvitationsStorage:saveOnTimerEnd] Sleeping for 1 second.")
+        time.Sleep(1 * time.Second)
+    }
+
+    if allGood == true {
+        isGood := false
+        tries := 1
+        maxTries := 3
+        for isGood == false && tries <= maxTries {
+            err = e.gsheetStorage.UpdateHash(newHash)
+            if err != nil {
+                tries += 1
+
+                if tries <= maxTries {
+                    log.Println("[InvitationsStorage:saveOnTimerEnd][E] Retrying again to update the hash in 5 seconds...")
+                    time.Sleep(5 * time.Second)
+                } else {
+                    log.Println("[InvitationsStorage:saveOnTimerEnd][E] Maximum tries has been reached to update the hash.")
+                }
+            } else {
+                isGood = true
+            }
+        }
+
+        if isGood == true {
+            log.Println("[InvitationsStorage:saveOnTimerEnd] Updated the hash on GSheet.")
+            log.Println("[InvitationsStorage:saveOnTimerEnd] New hash: \"" + newHash + "\".")
+        }
+    } else {
+        log.Println("[InvitationsStorage:saveOnTimerEnd][E] Because not all data was uploaded to GSheet not calculating new hash.")
+    }
+}
+```
+
+This is pretty much the `storage` package. While the package still contains
+more functionalities, I will not go over them as they are quite generic and not
+that interesting.
+
+### The `api` package
+
+The `api` package contains all the APIs for the project. Nothing really
+interesting in this package.
+
+I have some admin requests, where in order to check if the requester is
+authorized to do those operations, I created the function `IsAdmin`:
+
+```go
+func IsAdmin(req *http.Request, sessionsStorage *storage.SessionsStorage) (bool) {
+    sessionIDCookie, err := req.Cookie("session_id")
+    if err != nil {
+        return false
+    }
+
+    sessionID := sessionIDCookie.Value
+
+    return sessionsStorage.CheckSession(sessionID) == nil
+}
+```
+
+This function will use the `storage/sessionsStorage` structure, that is a
+simple structure with an array of `Session`s (a structure with an `id` as `string`
+and a `expireTime` as `time.Time`). The method `CheckSession` does the
+following: check if the session exists, if exists check if the time has not
+expired, and, if expired, will delete it and return the error, otherwise, will
+add 10 minutes to the `expireTime`.
+
+```go
+func (e *SessionsStorage) CheckSession(sessionID string) error {
+    for i, session := range e.sessions {
+        if session.id == sessionID {
+            if session.expireTime.Before(time.Now()) {
+                e.sessions[i] = e.sessions[len(e.sessions) - 1]
+                e.sessions = e.sessions[:len(e.sessions) - 1]
+                return errors.New("Session expired")
+            }
+
+            session.expireTime = time.Now().Add(10 * time.Minute)
+            return nil
+        }
+    }
+
+    return errors.New("Not found")
+}
+```
+
+And this is how I've done a simple session authentication mechanism for the
+admin dashboard side of the project.
+
+Another interesting request is the login request, which after checking that
+the password was sent and is correct, will use `SessionsStorage` to create a
+new entry but also set a cookie on the client side with the ID of the session.
+
+```go
+type loginAPI_Body struct {
+    Password string
+}
+
+func LoginAPI(server *http.ServeMux, adminKey string, sessionsStorage *storage.SessionsStorage) {
+	server.HandleFunc("/api/secure/login", func(res http.ResponseWriter, req *http.Request) {
+		if req.Method != "POST" {
+			http.Error(res, "Not found", http.StatusNotFound);
+			return
+		}
+
+		res.Header().Set("Content-Type", "application/json")
+
+        var jsonBody loginAPI_Body
+        err := json.NewDecoder(req.Body).Decode(&jsonBody)
+        if err != nil {
+            res.WriteHeader(http.StatusInternalServerError)
+            res.Write([]byte("{\"status\":false}"))
+            return
+        }
+
+        if jsonBody.Password != adminKey {
+            res.WriteHeader(http.StatusUnauthorized)
+            res.Write([]byte("{\"status\":false}"))
+            return
+        }
+
+        sessionID := sessionsStorage.CreateSession()
+
+        sessionCookie := http.Cookie{
+            Name: "session_id",
+            Value: sessionID,
+            Path: "/",
+            MaxAge: 600,
+        }
+
+        http.SetCookie(res, &sessionCookie)
+
+        res.WriteHeader(http.StatusOK)
+        res.Write([]byte("{\"status\":true}"))
+	})
+}
+```
+
+### The `web` package
+
+The `web` package is responsible for delivering the HTML pages.
+
+For knowing which user should see what, I went on the simple route of having
+the invitation's code in the URL itself. This is how I know if a user is
+"logged" and who that user is.
+
+I created a very simple HTML template file where `<!-- TITLE -->` will be
+replaced by the title of the page, `<!-- SCRIPT_NAME -->` by the name of the
+script, and `<!-- EXTRA_CODE -->` with extra code when needed.
+
+```html
+<!doctype html>
+<html lang="ro-RO">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+        <title><!-- TITLE --></title>
+        <link rel="stylesheet" href="/static/<!-- SCRIPT_NAME -->.css">
+    </head>
+    <body>
+        <div id="root"></div>
+        <!-- EXTRA_CODE -->
+        <script src="/static/<!-- SCRIPT_NAME -->.js"></script>
+    </body>
+</html>
+```
+
+One thing that is done for every route that a guest could reach is saving the
+invitation code in a cookie named `invitation_code`. This way, when a guest 
+comes back to the website, I will check if the cookie exists and redirect 
+the user to the required screen.
+
+Let's look at the `/` route:
+
+```go
+func CreateWelcomeRoute(server *http.ServeMux, utils *Utils) {
+    var template = utils.GetHTMLTemplate("Bine ai venit - Alex&Diana", "welcome", "") 
+
+    server.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
+        if req.URL.Path != "/" {
+			http.NotFound(res, req)
+			return
+		}
+
+        if req.Method != "GET" {
+			http.Error(res, "Not found", http.StatusNotFound);
+			return
+		}
+
+        codeCookie, err := req.Cookie("invitation_code")
+        if err == nil {
+            code := codeCookie.Value
+
+            if len(code) != 0 {
+                log.Println("[/] Found cookie with code: \"" + code + "\". Redirecting to the /c/ page.")
+                http.Redirect(res, req, "/c/" + code, 302)
+                return;
+            }
+        }
+
+
+		res.Header().Set("Content-Type", "text/html; charset=utf-8")
+		res.WriteHeader(http.StatusOK)
+		res.Write([]byte(template))
+	})
+}
+```
+
+The route is very simple: we create the HTML template with the given title and
+script name, and in the request I check if the cookie for the invitation's code
+is set, and if it is, I redirect the user to the "logged" page by redirecting to
+`/c/[INVITE_CODE]`, otherwise serve the welcome page.
+
+A more interesting route would be the `/c/[INVITE_CODE]` route.
+
+For this route, I keep the `<!-- EXTRA_CODE -->` inside the template because for
+each request, I create a template where I inject as a JavaScript script the data
+of the invitation. This way, can serve directly all the data required for
+rendering the page without the need to add an additional request for retrieving
+the invitation data and also without needing to implement a loading screen.
+
+```go
+func generateWithCodeWindowData(invitation *storage.Invitation) (string, error) {
+    var data string = "<script>window.invitation="
+    
+    jsonEncoded, err := json.Marshal(invitation)
+    if err != nil {
+        return "", errors.New("Error encoding")
+    }
+
+    data += string(jsonEncoded) + ";</script>"
+
+    return data, nil
+}
+
+func CreateWithCodeRoute(server *http.ServeMux, utils *Utils, invitationsStorage *storage.InvitationsStorage) {
+    const extraCodeVarName = "<!-- EXTRA_CODE -->"
+    var template = utils.GetHTMLTemplate("Bine ai venit - Alex&Diana", "with_code", extraCodeVarName) 
+
+    path := "/c/"
+    server.HandleFunc(path, func(res http.ResponseWriter, req *http.Request) {
+		if req.Method != "GET" {
+			http.Error(res, "Not found", http.StatusNotFound);
+			return
+		}
+
+        invitation, err := utils.checkRouteInviteCode(res, req, invitationsStorage, path)
+
+        if err != nil {
+            return
+        }
+
+        templateInvitationData, err := generateWithCodeWindowData(invitation)
+
+        if err != nil {
+            log.Println("[/c][E] Something wrong happened at generateWithCodeWindowData:", err)
+            http.Redirect(res, req, "/500", 302)
+            return
+        }
+
+        utils.setInvitationCookie(res, invitation.Code)
+
+        clientTemplate := strings.Replace(template, extraCodeVarName, templateInvitationData, 1)
+
+		res.Header().Set("Content-Type", "text/html; charset=utf-8")
+		res.WriteHeader(http.StatusOK)
+		res.Write([]byte(clientTemplate))
+	})
+}
+```
+
+The method `utils.checkRouteInviteCode` checks the invitation's code on all the
+routes that require it and will automatically redirect the user to the welcome
+screen and display an error about it.
+
+## The front-end
+
+The front-end was done using SolidJS. It has 5 entry points. One for each 
+screen section, the last one being for the admin dashboard.
+
+I also used TailwindCSS for fast styling of the pages and TypeScript for a better
+JavaScript experience.
+
+The design was made to be fully responsible, with a focus on the mobile
+experience, because I'm pretty sure 99% of the invited people will access the 
+website from a mobile device.
+
+For the bundling of the SolidJS code, I used rollup.js as it was simple to use.
+Here is the configuration file I used for bundling using rollup.js. The config
+is able to compile all my entry points, each one in an output name with the
+same name, so the back-end knows how to load it.
+
+```js
+import path from "node:path";
+import { fileURLToPath } from 'url';
+import terser from '@rollup/plugin-terser';
+import { babel } from '@rollup/plugin-babel';
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from '@rollup/plugin-commonjs';
+import postcss from 'rollup-plugin-postcss';
+import tailwindcss from "tailwindcss"
+import autoprefixer from "autoprefixer";
+import tailwindConfig from "./tailwind.config.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const extensions = [".ts", ".tsx"];
+
+function generate(name) {
+    return { 
+        input: `src/${name}/index.tsx`,
+        output: { 
+            format: "iife", 
+            name: name, 
+            file: path.join(__dirname, "dist", `${name}.js`),
+            sourcemap: true,
+        },
+        plugins: [
+            postcss({
+                extensions: ['.scss'],
+                minimize: true,
+                extract: true,
+                plugins: [
+                    autoprefixer(),
+                    tailwindcss(tailwindConfig)
+                ]
+            }),
+            commonjs({ 
+                ignoreGlobal: false,
+                include: [
+                    "node_modules/solid-js/**"
+                ]
+            }),
+            babel({
+                extensions,
+                presets: [
+                    "solid",
+                    "@babel/preset-typescript",
+                    ["@babel/preset-env", { bugfixes: true, targets: "last 2 years" }]
+                ],
+                babelHelpers: 'bundled',
+                exclude: "node_modules/**",
+            }),
+            nodeResolve({ extensions, browser: true, main: true }),
+            terser()
+        ],
+    }
+}
+
+export default [
+    generate("login"),
+    generate("admin"),
+    generate("with_code"),
+    generate("welcome"),
+    generate("classic_invite"),
+];
+```
+
+Beside this, there is nothing that interesting on the front-end side of the
+project.
+
+<h2 id="sync">Synchronization mechanism for the stored data</h2>
+
+While I've already explained how and where I store the data for the invitations,
+I want to talk about how I do the synchronization between the JSON file and the
+spreadsheet. While the JSON file that is stored on the server has fewer changes
+of being modified manually, the spreadsheet is much more easy to be modified
+manually by mistake (I make sure that only the service account has the right
+to make changes to the spreadsheet, but who knows?). So I needed to introduce some
+synchronization mechanisms.
+
+Because of this, I created a simple synchronization mechanism that stores in the
+A1 cell a hash that is calculated from the concatenated data of all the
+settings of the invitations.
+
+Every time a change is made to the invitations, the new hash is calculated and 
+uploaded to the spreadsheet along with the changes.
+
+When the app starts, the hash is checked, and if it does not match the content loaded
+from the JSON file, then the app crashes.
+
+## Hosting the application
+
+The first thing I did when I thought of creating this app was to buy the domain to
+be sure that nobody else would take it until the app was done and ready to be
+published. So I bought it, but RoTLD (because only they can sell .ro domains)
+offers no DNS capabilities.
+
+In the search for a free DNS, I stumbled upon CloudFlare and their free offer.
+It was more than enough and also included some caching features for my website
+to run faster.
+
+Now that I had the domain and a DNS server, I bought a cheap VPS from a local
+company that offered me **1 vCore**, **2 GB RAM** and **20GB ROM** at a 
+maximum bandwidth of **100 Mb/s** for **8.9€ per month**. It's quite a good deal 
+because I know they offer good services with no downtime.
+
+I booted on it **Debian**, and because I didn't want to go the route of
+creating a Docker image for each release, I've gone the route of
+cloning and then pulling the changes from the git repository containing the
+project.
+
+So I created the following script:
+
+```bash
+#!/bin/bash
+cd /home/user/and-wedding-invitations
+git pull
+cd server
+go build -o /home/user/server main/main.go
+sudo systemctl restart and-wedding-invitations
+echo "Done"
+```
+
+The script pulls the changes from git, then I build the `go` application
+and simply restart the created service. The compiled files for the front-end
+are already stored in the git repository.
+
+Because I wanted the app to restart at every crash and to start if the VPS
+would be rebooted for some reason or had any downtime, I created a service:
+
+```toml
+[Unit]
+Description=and-wedding-invitations
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+StartLimitIntervalSec=500
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/home/user/server
+Environment="CONFIG_PATH=/home/user/config.and-wedding-invitations.json"
+Restart=on-failure
+RestartSec=5s
+StandardOutput=append:/home/user/and-wedding-invitations-logs/log.log
+StandardError=append:/home/user/and-wedding-invitations-logs/error.log
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Final word
+
+I'm waiting to see how my guests will react to the application and how
+many of them will be using it.
+
+I will soon publish a link to the repository for anyone who is interested in
+the full code of the project.

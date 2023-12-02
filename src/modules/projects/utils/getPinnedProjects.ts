@@ -1,23 +1,11 @@
 //= Functions & Modules
 // Own
-import { getProjectsDirectories } from './getProjectsDirectories';
-import { getProjectFileData } from './getProjectFileData';
+import { getShortProjects } from './getShortProjects';
 
 //= Structures & Data
 // Own
-import { PinnedProject } from '../data/PinnedProject';
+import { ShortProject } from '../data/ShortProject';
 
-export function getPinnedProjects(): PinnedProject[] {
-    const directories = getProjectsDirectories();
-
-    let projects: PinnedProject[] = [];
-
-    for (const projectDirName of directories) {
-        const projectData = getProjectFileData(projectDirName);
-
-        delete projectData.content;
-        projects.push(projectData);
-    }
-
-    return projects;
+export function getPinnedProjects(): ShortProject[] {
+    return getShortProjects(undefined, project => project.pinned === 1);
 }

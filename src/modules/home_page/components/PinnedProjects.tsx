@@ -1,26 +1,26 @@
 //= Structures & Data
 // Own
-import { PinnedProject } from '../../projects';
+import { ShortProject } from '../../projects';
 
 //= React components
 // Own
 import Section from './Section';
-import { ShortProject } from '../../projects';
+import { ShortProjectComponent } from '../../projects';
 // Others
 import Link from 'next/link';
 
-type Props = { pinnedProjects: PinnedProject[] };
+type Props = { pinnedProjects: ShortProject[] };
 
 export default function PinnedProjects({ pinnedProjects }: Props) {
     return (
         <Section title="Some projects">
             <div className="flex flex-wrap justify-center lg:justify-start gap-5">
                 {pinnedProjects.map((project) => (
-                    <ShortProject key={project.id} project={project} />
+                    <ShortProjectComponent key={project.id} project={project} />
                 ))}
             </div>
             <div>
-                <Link href="#" className="font-bold">
+                <Link href="/projects" className="font-bold">
                     See more projects
                 </Link>
             </div>

@@ -7,7 +7,7 @@ import { getPostFileData } from './getPostFileData';
 // Own
 import { Post } from '../data/Post';
 
-export function getShortPosts(length: number, start: number = 0): Post[] {
+export function getShortPosts(length?: number, start: number = 0): Post[] {
     const directories = getPostsDirectories(length, start);
 
     let posts: Post[] = [];
