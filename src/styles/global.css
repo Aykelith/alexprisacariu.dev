@@ -29,15 +29,44 @@ a {
     @apply hover:underline;
 }
 
+code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.202em 0.5407911001em;
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+}
+
 #PostPage .postContent p {
     @apply my-2;
 }
 
-#ProjectPage .postContent ul {
+#PostPage .postContent h2 {
+    @apply text-2xl;
+    @apply mt-4;
+}
+
+#PostPage .postContent h3 {
+    @apply text-xl;
+    @apply mt-3;
+}
+
+#PostPage .postContent .post-image {
+    @apply rounded;
+}
+
+#PostPage .postContent .post-image.center {
+    @apply self-center;
+}
+
+#PostPage .postContent .post-image.medium {
+    @apply w-96;
+}
+
+#ProjectPage .postContent ul, #ProjectPage .postContent ol, #PostPage .postContent ul, #PostPage .postContent ol {
     padding: revert;
     margin: revert;
 }
 
-#ProjectPage .postContent ul li {
+#ProjectPage .postContent ul li, #PostPage .postContent ul li {
     list-style: disc;
 }

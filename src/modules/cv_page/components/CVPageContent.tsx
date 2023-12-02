@@ -69,7 +69,7 @@ export default function CVPageContent() {
                                             imocentral.ro
                                         </a>{' '}
                                         and{' '}
-                                        <a href="https://panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
+                                        <a href="https://alexprisacariu.dev/project/003_panoro.ro" target="_blank" rel="noreferrer noopener" className="underline">
                                             panoro.ro
                                         </a>
                                         .

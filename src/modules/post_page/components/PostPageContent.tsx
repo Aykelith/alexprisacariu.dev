@@ -33,11 +33,11 @@ export default function PostPage(post: PostPageProps) {
                     <main className="mt-8 flex flex-col">
                         <Link href="/blog/1">{'< See more posts'}</Link>
                         <h1 className="text-4xl mt-1 mb-2">{post.title}</h1>
-                        <div className="flex items-center mb-8 space-x-3">
+                        <div className="flex flex-col md:flex-row md:items-center mb-8 md:space-x-3">
                             <div>{getPublishedDateString(post.publishedOn)}</div>
                             <PostTags tags={post.tags} />
                         </div>
-                        <div className="postContent">
+                        <div className="postContent flex flex-col">
                             <MDXRemote {...post.content} components={SharedComponents} />
                         </div>
                     </main>
