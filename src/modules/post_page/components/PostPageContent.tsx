@@ -8,7 +8,7 @@ import { PostPageProps } from '../data/PostPageProps';
 
 //= React components
 // Own
-import { Link, Header } from '../../general';
+import { Link, Header, ImageOnClickFullscreen } from '../../general';
 import { PostTags } from '../../posts';
 // Others
 import { MDXRemote } from 'next-mdx-remote';
@@ -19,7 +19,9 @@ import Head from 'next/head';
 import 'prismjs/themes/prism-tomorrow.css';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 
-const SharedComponents = {};
+const SharedComponents = {
+    ImageOnClickFullscreen
+};
 
 export default function PostPage(post: PostPageProps) {
     return (

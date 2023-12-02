@@ -1,9 +1,0 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/posts/[dirName]": "pages/posts/[dirName].js",
-  "/project/[id]": "pages/project/[id].js",
-  "/cv": "pages/cv.js",
-  "/": "pages/index.js"
-}
