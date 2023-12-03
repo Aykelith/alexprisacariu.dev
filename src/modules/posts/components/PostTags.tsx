@@ -4,7 +4,7 @@ import { PostTag } from "../../tags";
 
 export default function PostTags({ tags }: { tags: string[] }) {
     return (
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap">
             {tags.map((tagName) => {
                 return (
                     <PostTag key={tagName}>

@@ -17,8 +17,8 @@ export default function ShortPost(post: Post) {
             <Link href={`/posts/${post.dirName}`}>
                 <h3 className="text-xl font-bold">{post.title}</h3>
             </Link>
-            <div className="flex flex-col md:flex-row mb-1 md:items-center">
-                <div className="text-sm mr-3">{getPublishedDateString(post.publishedOn)}</div>
+            <div className="flex flex-col md:flex-row mb-1 items-start">
+                <div className="text-sm mr-3 whitespace-nowrap">{getPublishedDateString(post.publishedOn)}</div>
                 <PostTags tags={post.tags} />
             </div>
             <div>

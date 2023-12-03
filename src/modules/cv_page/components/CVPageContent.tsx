@@ -41,12 +41,13 @@ export default function CVPageContent() {
                                 <div className="text-accent font-semibold">2022 - Present</div>
                                 <ul>
                                     <li className="list-disc list-inside">
-                                        Implemented a complex modules system into the project making easier for the whole team to add new features
-                                        and work on them in parallel.
+                                        Implemented a complex module system into the project, making it easier for the whole team to add new features
+                                        and work on them in parallel; also reduced the complexity and clutter of some files because code was moved to their
+                                        own modules;
                                     </li>
                                     <li className="list-disc list-inside">
                                         Working on the company's portals: adding new features and maintaining them. Assuring that the performance of the
-                                        websites are maximum in the Google's Lighthouse tool.
+                                        websites is maximized in Google's Lighthouse tool.
                                     </li>
                                 </ul>
                             </Subsection>
@@ -58,13 +59,13 @@ export default function CVPageContent() {
                                         <a href="https://alexprisacariu.dev/project/002_panorocrm" target="_blank" rel="noreferrer noopener" className="underline">
                                             PanoroCRM
                                         </a>
-                                        , a CRM application created for real estate agencies with module for managing offers, publishing them to
-                                        different portals, analytics, module for managing contacts and other modules. The application's backend
+                                        , a CRM application created for real estate agencies with modules for managing offers, publishing them to
+                                        different portals, analytics, module for managing contacts, and other modules. The application's backend
                                         is constructed as microservices for easy scaling when required;
                                     </li>
                                     <li className="list-disc list-inside">
-                                        Created different web applications for real estate agencies providing complete solutions from backend
-                                        and frontend to releasing and maintaining the applications like{' '}
+                                        Created different web applications for real estate agenciesm, providing complete solutions from backend
+                                        and frontend to releasing and maintaining applications like{' '}
                                         <a href="https://alexprisacariu.dev/project/001_imocentral.ro" target="_blank" rel="noreferrer noopener" className="underline">
                                             imocentral.ro
                                         </a>{' '}
