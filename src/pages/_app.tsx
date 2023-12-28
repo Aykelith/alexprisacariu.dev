@@ -1,7 +1,7 @@
 //= React components
 // Others
 import Head from 'next/head';
-//import Script from 'next/script';
+import Script from 'next/script';
 import Link from 'next/link';
 import NextNProgress from 'nextjs-progressbar';
 
@@ -19,15 +19,16 @@ function MyApp({ Component, pageProps }) {
                 />
             </Head>
             {/* Global site tag (gtag.js) - Google Analytics */}
-            {/*<Script async src="https://www.googletagmanager.com/gtag/js?id=G-SJG5VB8MFX" strategy="afterInteractive"></Script>
+            <Script async src="https://www.googletagmanager.com/gtag/js?id=G-SJG5VB8MFX" strategy="afterInteractive"></Script>
             <Script id="google-analytics" strategy="afterInteractive">
                 {`window.dataLayer = window.dataLayer || [];
                   function gtag(){window.dataLayer.push(arguments)}
+                  gtag('consent', 'default', { 'analytics_storage': 'denied' });
                   gtag('js', new Date());
 
                   gtag('config', 'G-SJG5VB8MFX');
                 `}
-            </Script>*/}
+            </Script>
             <NextNProgress color="#006ad5" />
             <Component {...pageProps} />
             {!pageProps?.hideFooter && (
