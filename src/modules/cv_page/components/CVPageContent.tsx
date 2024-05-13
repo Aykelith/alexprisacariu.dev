@@ -25,29 +25,30 @@ export default function CVPageContent() {
                                 <ExpertizeSection title="Familiar with:">C#, Python, Rust</ExpertizeSection>
                             </Subsection>
                             <Subsection title="Libraries & Frameworks">
-                                <ExpertizeSection title="Expert:">Node.js, React, Express, Next.js, TailwindCSS, Qt</ExpertizeSection>
-                                <ExpertizeSection title="Proficient:">SolidJS</ExpertizeSection>
+                                <ExpertizeSection title="Expert:">Node.js, React, Express, Next.js, TailwindCSS</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">SolidJS, Qt</ExpertizeSection>
                             </Subsection>
                             <Subsection title="Tools & Platforms & Databases">
                                 <ExpertizeSection title="Expert:">Git, Webpack, Babel, NGINX, Docker, Kubernetes, MongoDB</ExpertizeSection>
-                                <ExpertizeSection title="Proficient:">Azure Pipelines</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">Azure Pipelines, PostgreSQL</ExpertizeSection>
                             </Subsection>
                             <Subsection title="OSs">
-                                <ExpertizeSection title="Proficient:">Linux, Windows</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">Linux (Debian/Ubuntu, RedHat), Windows</ExpertizeSection>
                             </Subsection>
                         </Section>
                         <Section title="Work">
                             <Subsection title="Senior Web Developer" company="Rubrikk Group AS">
-                                <div className="text-accent font-semibold">2022 - Present</div>
+                                <div className="text-accent font-semibold">2022 - 2024</div>
                                 <ul>
+                                    <li className="list-disc list-inside">
+                                        I created an application that worked with ChatGPT to generate texts for various sections of the portals. It 
+                                        had the capability to check for dead links, bad characters, and also to format currencies that ChatGPT would not 
+                                        format according to our instructions;
+                                    </li>
                                     <li className="list-disc list-inside">
                                         Implemented a complex module system into the project, making it easier for the whole team to add new features
                                         and work on them in parallel; also reduced the complexity and clutter of some files because code was moved to their
                                         own modules;
-                                    </li>
-                                    <li className="list-disc list-inside">
-                                        Working on the company's portals: adding new features and maintaining them. Assuring that the performance of the
-                                        websites is maximized in Google's Lighthouse tool.
                                     </li>
                                 </ul>
                             </Subsection>

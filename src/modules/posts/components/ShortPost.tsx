@@ -22,7 +22,7 @@ export default function ShortPost(post: Post) {
                 <PostTags tags={post.tags} />
             </div>
             <div>
-                {post.content}
+                <div dangerouslySetInnerHTML={{ __html: post.content }}></div>
                 <Link href={`/posts/${post.dirName}`} className="whitespace-nowrap">{'Read more >'}</Link>
             </div>
         </div>
