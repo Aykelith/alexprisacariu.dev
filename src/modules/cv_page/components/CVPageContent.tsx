@@ -30,7 +30,7 @@ export default function CVPageContent() {
                             </Subsection>
                             <Subsection title="Tools & Platforms & Databases">
                                 <ExpertizeSection title="Expert:">Git, Webpack, Babel, NGINX, Docker, Kubernetes, MongoDB</ExpertizeSection>
-                                <ExpertizeSection title="Proficient:">Azure Pipelines, PostgreSQL</ExpertizeSection>
+                                <ExpertizeSection title="Proficient:">ChatGPT, Azure Pipelines, PostgreSQL</ExpertizeSection>
                             </Subsection>
                             <Subsection title="OSs">
                                 <ExpertizeSection title="Proficient:">Linux (Debian/Ubuntu, RedHat), Windows</ExpertizeSection>
