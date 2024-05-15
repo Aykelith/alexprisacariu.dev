@@ -18,7 +18,7 @@ export default function ShortProjectComponent({ project }: Props) {
             <Link href={`/project/${project.id}`} className="cursor-pointer overflow-hidden rounded-t">
                 <img src={project.coverImage} className="w-full object-cover h-36 hover:scale-105 transition duration-500" loading="lazy"/>
             </Link>
-            <div className="bg-gray-50 py-2 px-3 rounded-b">
+            <div className="bg-gray-50 py-2 px-3 rounded-b flex-1">
                 <div className="font-bold mr-2">
                     <Link href={`/project/${project.id}`} className="cursor-pointer hover:underline">
                         {project.title}
