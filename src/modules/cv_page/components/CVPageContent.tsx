@@ -81,7 +81,7 @@ export default function CVPageContent() {
                         </Section>
                         <Section title="Education">
                             <Subsection title="Babeș-Bolyai University (UBB)">
-                                <div className="text-accent font-semibold">2017-2019 // Cluj-Napoca, RO</div>
+                                <div className="text-accent font-semibold">2016-2019 // Cluj-Napoca, RO</div>
                                 <div>Bachelor's Degree in Computer Science</div>
                             </Subsection>
                         </Section>
