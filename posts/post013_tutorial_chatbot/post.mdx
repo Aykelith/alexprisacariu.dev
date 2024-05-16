@@ -1,0 +1,485 @@
+---
+title: "Creating an application for my wedding invitations - Launch"
+tags: 
+   - Go
+   - SolidJS
+   - Google Spreadsheet
+   - Bundling
+   - TypeScript
+   - DevOps
+publishedOn: "2023-12-02T13:11:43.054Z"
+---
+In this tutorial I will present how to create a simple popup AI chat
+functionality that can be added to any website. The client will be able to
+reply to the chat using also, beside typing and the answer from the AI will also
+be in a audio format.
+
+We will be using only the tools from the OpenAI for the AI stuff. For the chat
+we will use ChatGPT, for the STT (speech-to-text) [[Willow]] and for TTS 
+(text-to-speech) we will use [[X]].
+
+I will show multiple methods on how to implement the app. From a naive, or 
+basic, method to a better, but also more complex, method.
+
+The application will be implemented in JavaScript (ECMAScript), but I will also
+show how the implementation would look like in Go.
+
+## The basics
+
+In this chapter we will go to the basics of the application: the project 
+structure, the `index.html`, the styling and the packages we will use.
+
+The project will be using the following packages:
+
+| Package name | Description |
+|---|---|
+| `express` | For the HTTP server and routing |
+| `openai` | For all the OpenAI stuff |
+| `sass` | To convert the SASS style files to CSS files |
+
+The project structure is as follows:
+
+| Path | Description |
+|---|---|
+| `public` | The exposed directory to internet under the `static` name |
+| `public/audio` | The directory containing public audio files |
+| `public/img` | The directory containing public images |
+| `public/index.html` | The entrypoint |
+| `style` | The directory containing the style of the page |
+| `version-1` | The naive implementation directory |
+| `version-2` | The better implementation directory |
+| `package.json` | |
+| `README.md` | |
+
+The project can be seen [[here]] and where a code will be listed will also
+contain the relative path to where that code can be found.
+
+Just run `npm install` followed by a `npm run build` to convert the SASS file to
+CSS and you are ready to go.
+
+To start the naive implementation run `npm run start-v1` or to run the better
+implementation do `npm run start-v2`.
+
+This is the page you should see when you access the page:
+
+[[image]]
+
+## The naive implementation
+
+The naive implementation is using HTTP request and responses for sending and
+receiving the data from the server.
+
+We will not go over each functions. All the code can be found in the above
+mentioned link.
+
+Here is an activity diagram on how the app will work:
+
+[[naive_version_activity_diagram.drawio.svg]]
+
+Let's look what happens when the user clicks enter on the text input element:
+
+```js
+// version-1/client.js
+inputTextElement.addEventListener('keydown', async (event) => {
+    if (event.code !== 'Enter') return;
+    if (!inputTextElement.value) return;
+    
+    const message = inputTextElement.value;
+
+    inputTextElement.value = "";
+    inputTextElement.disabled = true;
+    inputSpeechElement.disabled = true;
+
+    await addMessage('user', message);
+
+    inputTextElement.disabled = false;
+    inputSpeechElement.disabled = false;
+});
+```
+
+Once the user hits the enter key and the input is not empty we will disable both
+the text input and the audio button so the user wouldn't send another message 
+while we getting a response to the previous message. Once we get the answer we
+restore the functionality back.
+
+After we disable the input we call the main function, `addMessage`, that does
+the magic. Let's look at it:
+
+```js
+// version-1/client.js
+/**
+ * Add a new message to the chat.
+ * @async
+ * 
+ * @param {MessageType} type the type of message
+ * @param {String|Audio} message the data of the message
+ * @param {Object} [settings] additional settings
+ * @param {Number} [settings.audioLength] the length of the audio in seconds
+ * @returns {Promise} the promise resolved when all is done
+ */
+async function addMessage(type, message, settings = {}) {
+    const newMsg = document.createElement('div');
+    newMsg.classList.add('message');
+
+    if (type === MessageType.User) {
+        newMsg.classList.add('user');
+        newMsg.innerHTML = message;
+    } else if (type === MessageType.UserAudio) {
+        newMsg.classList.add('user', 'audio');
+        newMsg.innerHTML = 'Audio message';
+    } else {
+        newMsg.classList.add(MessageType.Bot);
+    }
+
+    const msgsCnt = document.getElementById('friendly-bot-container-msgs');
+    msgsCnt.appendChild(newMsg);
+
+    // Keeping own history log
+    if (type === MessageType.User || type === MessageType.Bot) {
+        messageHistory.push({ role: type === MessageType.User ? 'user' : 'assistant', content: message });
+    }
+        
+    if (type === MessageType.Bot) {
+        if (Settings.UseWriteEffect) {
+            // Create a write effect when the bot responds
+            let speed = Settings.DefaultTypingSpeed;
+
+            if (settings.audioLength) {
+                const ms = settings.audioLength * 1000 + ((message.match(/,/g) || []).length * 40) + ((message.match(/\./g) || []).length * 70);
+                speed = ms / message.length;
+            }
+            
+            for (let i=0, length=message.length; i < length; i += 1) {
+                newMsg.innerHTML += message.charAt(i);
+                await sleep(speed);
+            }
+        } else {
+            newMsg.innerHTML = message;
+        }
+    } else if (type === MessageType.User || type === MessageType.UserAudio) {
+        let response;
+        if (type === MessageType.User) {
+            response = await sendMessage({ message });
+        } else if (type === MessageType.UserAudio) {
+            response = await sendMessage({ audio: message });        
+        }
+
+        if (response.audio) {
+            const audio = convertBase64ToAudio(response.audio);
+            playAudio(audio);
+        }
+        
+        return addMessage(MessageType.Bot, response.answer);
+    }
+}
+```
+
+The function will create a new `HTMLDivElement` for the new message and add the
+CSS class by the type of the message.
+
+Once that is done we store the message in our client-side chat history.
+
+Next, if the message to be added is from the bot we display it using a "writting
+effect". We try to synchronize the audio, if exists, to the typing speed by
+dividing the length of the audio to the number of characters in the message.
+
+If the message added is from the user then we send it to the server to get the
+answer from AI by calling the function `sendMessage`.
+
+The function `sendMessage` just does a HTTP request using `fetch` to our server.
+Just one thing to mention: we generate for each client a random ID that we send
+with each message so the server knows from where to get the chat history.
+
+> The alternative to sending a identifying ID to the server would be to send
+> each time the whole history, but with each message the data that need to be 
+> sent increase.
+
+```js
+/**
+ * Create a random ID of given length.
+ * Taken from https://stackoverflow.com/a/1349426
+ * 
+ * @param {Number} length the length of the generated ID
+ * @returns {String} the generated ID
+ */
+function makeID(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
+}
+
+const ChatID = makeID(10);
+
+// ...
+
+/**
+ * Send a message to the server and return the JSON back.
+ * @async
+ * 
+ * @param {Object} data the data to send
+ * @returns {Promise<Object>} the result from the server
+ */
+async function sendMessage(data = {}) {
+    try {
+        const response = await fetch(Settings.APISendMessage, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: ChatID, ...data }),
+        });
+
+        return response.json();        
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+```
+
+Before we go to the server side and look how the server is handling the request,
+let's see what happens when the user clicks on the audio button:
+
+```js
+inputSpeechElement.addEventListener('click', async (_event) => {
+    inputTextElement.value = "";
+    inputTextElement.disabled = true;
+    inputSpeechElement.disabled = true;
+
+    const stopRecordButtonElement = document.getElementById('friendly-bot-container-stop-record');
+
+    const base64Audio = await recordUserAudio(stopRecordButtonElement);
+    await addMessage(MessageType.UserAudio, base64Audio.substring(`data:${Settings.ClientAudioMimeType};base64,`.length));
+
+    inputTextElement.disabled = false;
+    inputSpeechElement.disabled = false;
+});
+```
+
+Very similar to the text input handling. The function `recordUserAudio` will
+return back a base64 encoded audio and we just cut the header of it before
+sending it to `addMessage`.
+
+The `recordUserAudio` function will try to get the permissions from the user to
+record audio and, if granted, will create a `MediaRecorder` and start a
+recording. We also will show some UI elements to let know the user we are 
+recording his voice and a button to stop the recording when done recording.
+
+Once the stop button is hit we convert the audio chunks to a `Blob` object and
+the blob to a base64 encoded string and return it.
+
+> Encoding the audio to `base64` is not a very efficient method of sending the
+> audio to the server, but is a very easy method.
+> We will look on another method to send the audio to the server in **[The better
+> implementation](#The-better-implementation)** section.
+
+```js
+/**
+ * Record the user and return it as an base64 encoded audio.
+ * @async
+ * 
+ * @param {HTMLElement} stopRecordButtonElement the stop button element
+ * @returns {Promise<String>} the base64 encoded audio
+ */
+async function recordUserAudio(stopRecordButtonElement) {
+    let stream;
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (error) {
+        console.error(`The following getUserMedia error occurred: ${error}`);
+        return;
+    }
+
+    let chunks = [];
+
+    const mediaRecorder = new MediaRecorder(stream, { mimeType: Settings.ClientAudioMimeType });
+
+    return new Promise((resolve, reject) => {
+        const onStopClick = () => {
+            mediaRecorder.stop();
+            stopRecordButtonElement.classList.remove('show');
+        };
+
+        mediaRecorder.ondataavailable = (event) => {
+            chunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = (_event) => {
+            const blob = new Blob(chunks, { type: Settings.ClientAudioMimeType });
+            chunks = [];
+
+            const base64AudioPromise = blobToBase64(blob);
+
+            stopRecordButtonElement.removeEventListener('click', onStopClick);
+
+            base64AudioPromise.then(resolve).catch(reject);
+        };
+
+        stopRecordButtonElement.classList.add('show');
+
+        mediaRecorder.start();
+
+        stopRecordButtonElement.addEventListener('click', onStopClick);
+    })
+}
+```
+
+Let's look now how the request is handled on the server:
+
+```js
+app.post('/api/message', async (req, res) => {
+    if (!req.body.message && !req.body.audio) {
+        res.status(400).send('Missing "message" or "audio"');
+    }
+
+    if (req.body.message && req.body.audio) {
+        res.status(400).send('Cannot be both "message" and "audio"');
+    }
+
+    if (!req.body.id) {
+        res.status(400).send('Missing "id"');
+    }
+
+    const messages = getChatMessages(chatHistory, req.body.id);
+    
+    if (req.body.message) {
+        messages.push({ role: "user", content: req.body.message });
+    } else {
+        let content;
+        try {
+            content = await stt(openai, req.body.audio);
+        } catch (error) {
+            console.error(error);
+            res.status(500).end();
+            return;
+        }
+
+        messages.push({ role: "user", content });
+    }
+
+    try {
+        const answer = await getAnswer(openai, messages);
+
+        let audio;
+        if (Settings.CreateAudioOfAnswer) audio = await tts(openai, answer);
+
+        messages.push({ role: "assistant", content: answer });
+
+        res.json({ answer, audio });
+    } catch (error) {
+        console.error(error);
+        res.status(500).end();
+        return;
+    }
+});
+```
+
+After we check that the client sent the required data we get the chat history
+for the given ID (or create a new chat history):
+
+```js
+// version-1/server.js
+/**
+ * Get the chat history, or create a new one or the given ID.
+ * 
+ * @param {Object} chatHistory the global chat history object containing all the chats
+ * @param {String} id the ID of the chat to retrieve
+ * @returns {Object} the chat history for the given `id`
+ */
+function getChatMessages(chatHistory, id) {
+    if (!chatHistory[id]) {
+        chatHistory[id] = [
+            { role: "system", content: Settings.AISystemContent },
+            { role: "assistant", content: Settings.WelcomeMessage }
+        ];
+    }
+
+    return chatHistory[id];
+}
+```
+
+Then if the received message is a text, not an audio, we add the message to the
+chat history. If the received message is an audio then we call the function
+`stt` that will perform the speech-to-text action using OpenAI's **whisper**.
+
+The function will use the `openai.audio.transcriptions.create` method. The main
+parameter of this method is `file` that must represent our audio data. We use
+the `toFile` method from the package `openai/uploads` to convert our base64
+encoded audio file to a file that OpenAI will know how to read. The function
+will return the transcription of the given audio.
+
+```js
+/**
+ * Convert speech to text using OpenAI.
+ * @async
+ * 
+ * @param {OpenAI} openai the OpenAI instance
+ * @param {String} audio the base64 encoded audio
+ * @returns {Promise<String>} the text
+ */
+async function stt(openai, audio) {
+    // Documentation https://platform.openai.com/docs/api-reference/audio/createTranscription
+    const transcription = await openai.audio.transcriptions.create({
+        file: await toFile(Buffer.from(audio, 'base64'), `audio.${Settings.ClientAudioExtension}`),
+        model: Settings.STTModel,
+        language: Settings.ClientAudioLanguage, // this is optional but helps the model
+    });
+
+    return transcription.text;
+}
+```
+
+Now that we have the message we just send the chat to ChatGPT and wait for a
+response by calling the `getAnswer` function. 
+
+```js
+/**
+ * 
+ * @param {*} openai 
+ * @param {*} messages 
+ * @returns 
+ */
+async function getAnswer(openai, messages) {
+    // Documentation https://platform.openai.com/docs/api-reference/chat/create
+    const completion = await openai.chat.completions.create({
+        messages,
+        model: Settings.ChatGPTModel,
+    });
+
+    return completion.choices[0].message.content;
+}
+```
+
+```js
+/**
+ * Convert text to speech.
+ * @async
+ * 
+ * @param {*} openai 
+ * @param {*} input 
+ * @returns 
+ */
+async function tts(openai, input) {
+    // Documentation https://platform.openai.com/docs/api-reference/audio/createSpeech
+    const mp3 = await openai.audio.speech.create({
+        model: Settings.TTSModel,
+        voice: Settings.TTSVoice,
+        input,
+        response_format: Settings.TTSFormat
+    });
+
+    return Buffer.from(await mp3.arrayBuffer()).toString('base64');
+}
+```
+
+## The better implementation
+
+But is this bad? Well, not really, but is
+not the most efficient method.
+
+## Go implementation
