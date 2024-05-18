@@ -1,13 +1,12 @@
 ---
-title: "Creating an application for my wedding invitations - Launch"
+title: "Creating a simple popup chatbot using OpenAI"
 tags: 
-   - Go
-   - SolidJS
-   - Google Spreadsheet
-   - Bundling
-   - TypeScript
-   - DevOps
-publishedOn: "2023-12-02T13:11:43.054Z"
+   - JavaScript/JS
+   - OpenAI
+   - ChatGPT
+   - WebSockets
+   - Audio
+publishedOn: "2024-05-16T13:11:43.054Z"
 ---
 In this tutorial I will present how to create a simple popup AI chat
 functionality that can be added to any website. The client will be able to
@@ -15,14 +14,12 @@ reply to the chat using also, beside typing and the answer from the AI will also
 be in a audio format.
 
 We will be using only the tools from the OpenAI for the AI stuff. For the chat
-we will use ChatGPT, for the STT (speech-to-text) [[Willow]] and for TTS 
-(text-to-speech) we will use [[X]].
+we will use ChatGPT, for the STT (speech-to-text) Whisper.
 
 I will show multiple methods on how to implement the app. From a naive, or 
 basic, method to a better, but also more complex, method.
 
-The application will be implemented in JavaScript (ECMAScript), but I will also
-show how the implementation would look like in Go.
+The application will be implemented in JavaScript (ECMAScript).
 
 ## The basics
 
@@ -36,6 +33,7 @@ The project will be using the following packages:
 | `express` | For the HTTP server and routing |
 | `openai` | For all the OpenAI stuff |
 | `sass` | To convert the SASS style files to CSS files |
+| `ws` | |
 
 The project structure is as follows:
 
@@ -58,7 +56,8 @@ Just run `npm install` followed by a `npm run build` to convert the SASS file to
 CSS and you are ready to go.
 
 To start the naive implementation run `npm run start-v1` or to run the better
-implementation do `npm run start-v2`.
+implementation do `npm run start-v2`. Don't forget to define the evironemnt
+variable `OPENAI_API_KEY`.
 
 This is the page you should see when you access the page:
 
@@ -74,11 +73,11 @@ mentioned link.
 
 Here is an activity diagram on how the app will work:
 
-[[naive_version_activity_diagram.drawio.svg]]
+<center><img src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg"/></center>
 
 Let's look what happens when the user clicks enter on the text input element:
 
-```js
+```js[class="line-numbers"]
 // version-1/client.js
 inputTextElement.addEventListener('keydown', async (event) => {
     if (event.code !== 'Enter') return;
@@ -105,7 +104,7 @@ restore the functionality back.
 After we disable the input we call the main function, `addMessage`, that does
 the magic. Let's look at it:
 
-```js
+```js[class="line-numbers"]
 // version-1/client.js
 /**
  * Add a new message to the chat.
@@ -194,7 +193,7 @@ with each message so the server knows from where to get the chat history.
 > each time the whole history, but with each message the data that need to be 
 > sent increase.
 
-```js
+```js[class="line-numbers"]
 /**
  * Create a random ID of given length.
  * Taken from https://stackoverflow.com/a/1349426
@@ -245,7 +244,7 @@ async function sendMessage(data = {}) {
 Before we go to the server side and look how the server is handling the request,
 let's see what happens when the user clicks on the audio button:
 
-```js
+```js[class="line-numbers"]
 inputSpeechElement.addEventListener('click', async (_event) => {
     inputTextElement.value = "";
     inputTextElement.disabled = true;
@@ -278,7 +277,7 @@ the blob to a base64 encoded string and return it.
 > We will look on another method to send the audio to the server in **[The better
 > implementation](#The-better-implementation)** section.
 
-```js
+```js[class="line-numbers"]
 /**
  * Record the user and return it as an base64 encoded audio.
  * @async
@@ -331,7 +330,7 @@ async function recordUserAudio(stopRecordButtonElement) {
 
 Let's look now how the request is handled on the server:
 
-```js
+```js[class="line-numbers"]
 app.post('/api/message', async (req, res) => {
     if (!req.body.message && !req.body.audio) {
         res.status(400).send('Missing "message" or "audio"');
@@ -354,6 +353,7 @@ app.post('/api/message', async (req, res) => {
         try {
             content = await stt(openai, req.body.audio);
         } catch (error) {
+            console.error(`(ChatID: ${req.body.id}) Error when trying to convert the user's audio to text:`);
             console.error(error);
             res.status(500).end();
             return;
@@ -362,27 +362,38 @@ app.post('/api/message', async (req, res) => {
         messages.push({ role: "user", content });
     }
 
+    let answer;
     try {
-        const answer = await getAnswer(openai, messages);
-
-        let audio;
-        if (Settings.CreateAudioOfAnswer) audio = await tts(openai, answer);
-
-        messages.push({ role: "assistant", content: answer });
-
-        res.json({ answer, audio });
+        answer = await getAnswer(openai, messages);
     } catch (error) {
+        console.error(`(ChatID: ${req.body.id}) Error when trying to get an answer from ChatGPT:`);
         console.error(error);
         res.status(500).end();
         return;
     }
+
+    let audio;
+    if (Settings.CreateAudioOfAnswer) {
+        try {
+            audio = await tts(openai, answer);
+        } catch (error) {
+            console.error(`(ChatID: ${req.body.id}) Error when trying to convert the ChatGPT's answer to audio:`);
+            console.error(error);
+            res.status(500).end();
+            return;
+        }
+    }
+
+    messages.push({ role: "assistant", content: answer });
+
+    res.json({ answer, audio });
 });
 ```
 
 After we check that the client sent the required data we get the chat history
 for the given ID (or create a new chat history):
 
-```js
+```js[class="line-numbers"]
 // version-1/server.js
 /**
  * Get the chat history, or create a new one or the given ID.
@@ -413,7 +424,7 @@ the `toFile` method from the package `openai/uploads` to convert our base64
 encoded audio file to a file that OpenAI will know how to read. The function
 will return the transcription of the given audio.
 
-```js
+```js[class="line-numbers"]
 /**
  * Convert speech to text using OpenAI.
  * @async
@@ -437,7 +448,7 @@ async function stt(openai, audio) {
 Now that we have the message we just send the chat to ChatGPT and wait for a
 response by calling the `getAnswer` function. 
 
-```js
+```js[class="line-numbers"]
 /**
  * 
  * @param {*} openai 
@@ -455,7 +466,10 @@ async function getAnswer(openai, messages) {
 }
 ```
 
-```js
+Last part is about converting the response from the AI to an audio using the 
+method `tts` that uses the method `openai.audio.speech.create` to 
+
+```js[class="line-numbers"]
 /**
  * Convert text to speech.
  * @async
