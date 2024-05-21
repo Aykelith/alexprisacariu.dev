@@ -17,11 +17,11 @@ In this tutorial, I will present how to create a simple popup AI chat that can
 be added to any website. The client will be able to reply to the chat by typing
 and speaking to the bot.
 
-<center><img src="/imgs/posts/post013/presentation.gif" style={{width:'24rem'}}/></center>
+<ImageOnClickFullscreen src="/imgs/posts/post013/presentation.gif" style={{width:'24rem'}} className="post-image center"/>
 
 We will be using tools from OpenAI for the AI functionalities. For the chat, we
 will use ChatGPT, for the STT (speech-to-text), Whisper, and for the TTS
-(text-to-speech).
+(text-to-speech) their TTS.
 
 I will show multiple methods to implement the app, starting from a naive, or
 basic, method to a better, but also more complex, method.
@@ -83,7 +83,7 @@ variable `OPENAI_API_KEY`.
 
 This is the page you should see when you access the page:
 
-<center><img src="/imgs/posts/post013/first-look.png" style={{width:'31rem',border:'1px solid #c9c9c9'}}/></center>
+<ImageOnClickFullscreen src="/imgs/posts/post013/first-look.png" style={{width:'31rem',border:'1px solid #c9c9c9'}} className="post-image center"/>
 
 ## The naive/simple implementation
 
@@ -95,7 +95,7 @@ above mentioned link.
 
 Here is an activity diagram of how the app will work:
 
-<div style={{overflowX: 'auto'}}><center><img src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg" style={{width:'44rem', maxWidth: 'none'}}/></center></div>
+<div style={{overflowX: 'auto'}}><ImageOnClickFullscreen src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg" style={{width:'44rem', maxWidth: 'none'}} className="post-image center"/></div>
 
 Let's look what happens when the user presses enter on the text input element:
 
@@ -573,7 +573,7 @@ knows who we are.
 The structure of the data/messages sent between the client and the server
 follows this format:
 
-<center><img src="/imgs/posts/post013/websocket_message_structure.drawio.svg" style={{width:'31rem'}}/></center>
+<ImageOnClickFullscreen src="/imgs/posts/post013/websocket_message_structure.drawio.svg" style={{width:'31rem'}} className="post-image center"/>
 
 The first byte represents the type of the message we are sending, allowing the
 server to know how to handle the payload represented by the following bytes in
