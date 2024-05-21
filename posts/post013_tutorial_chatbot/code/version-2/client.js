@@ -1,7 +1,7 @@
+/* The main settings of the application */
 const Settings = {
     ClientAudioMimeType: 'audio/webm;codecs=opus',
     ServerAudioMimeType: 'audio/mp3',
-    WelcomeAudioPath: '/static/audio/welcome-ro.mp3',
     WelcomeMessage: "Hello. How can I help you today?",
     DefaultTypingSpeed: 40,
     UseWriteEffect: true,
@@ -37,7 +37,7 @@ const ServerMessageID = {
  * @async
  * 
  * @param {Number} ms how much to sleep for
- * @returns {Promise<void>} the promise
+ * @returns {Promise} the promise
  */
 const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -165,7 +165,7 @@ async function addContentToMessage(msgElement, content) {
  * Add bot message in chunks. The functions returns another function that when called with
  * the argument will add that argument to the bot message.
  * 
- * @returns {Function}
+ * @returns {Function} the function accept a parameter `content`; when called the `content` is added to the message
  */
 function addBotMessageInChunks() {
     const newMsg = createMessageHTMLElement(MessageType.Bot);
@@ -194,8 +194,10 @@ function addBotMessageInChunks() {
 }
 
 /**
+ * Add bot message.
+ * @async
  * 
- * @param {*} content 
+ * @param {String} content the message's content
  */
 async function addBotMessage(content) {
     const newMsg = createMessageHTMLElement(MessageType.Bot);
@@ -233,15 +235,7 @@ async function addUserMessage(ws, type, message) {
  * @returns {Promise} the promise that is resolved when the welcome writing is done
  */
 async function writeWelcomeMessage() {
-    let audio;
-    if (Settings.PlayWelcomeAudio) {
-        audio = new Audio(Settings.WelcomeAudioPath);
-        audioLength = await getAudioLength(audio);
-    }
-
-    const response = addBotMessage(Settings.WelcomeMessage);
-
-    await response;
+    return addBotMessage(Settings.WelcomeMessage);
 }
 
 let isChatVisible = false;
@@ -256,9 +250,9 @@ const subscriptionsToWSMessages = [];
 
 const ws = new WebSocket(Settings.WSAddress);
 
+// When the connection to the server is made send the chat ID
 ws.addEventListener('open', () => {
-    // Send the chat ID to server
-    const idMessage = new Uint8Array([Client.SetClientID, ...new TextEncoder().encode(ChatID)]);
+    const idMessage = new Uint8Array([ClientMessageID.SetClientID, ...new TextEncoder().encode(ChatID)]);
     ws.send(idMessage);
 });
 
@@ -292,56 +286,82 @@ ws.addEventListener('message', async (event) => {
     }
 });
 
+/**
+ * Add a function to the list of functions to be called when the socket receives
+ * a new message. The function must return a boolean: if `true` is returned then
+ * is considered that the message was handled and will stop the exection of the
+ * rest of the subscribers in the list.
+ * 
+ * @param {Function} fn the function to be added
+ */
 ws.subscribeToWSMessage = (fn) => {
     subscriptionsToWSMessages.push(fn);
 }
 
+/**
+ * Remove an added function from the list of subscribers.
+ * 
+ * @param {Function} fn the function to be removed
+ */
 ws.unsubscribeToWSMessage = (fn) => {
     subscriptionsToWSMessages.splice(subscriptionsToWSMessages.indexOf(fn), 1);
 }
 
+/**
+ * Create and add a subscription to listen for the response of the bot to our sent message
+ * 
+ * @param {Function} onNewMessageContent the function to be called with the new answer from bot as it sent from the server
+ */
+ws.createSubscriptionForBotResponse = (onNewMessageContent) => {
+    const wsMessagesHandler = (messageType, content) => {
+        if (messageType === ServerMessageID.TextChunk) {
+            onNewMessageContent(content);
+            return true;
+        } else if (messageType === ServerMessageID.TextEnd) {
+            ws.unsubscribeToWSMessage(wsMessagesHandler);
+            return true;
+        }
+
+        return false;
+    }
+
+    ws.subscribeToWSMessage(wsMessagesHandler);
+}
+
+/**
+ * Send a text message to the server.
+ * @async
+ * 
+ * @param {String} message the message to send
+ * @param {Function} onNewMessageContent the function to be called with the new answer from bot as it sent from the server
+ */
 ws.sendTextMessage = async (message, onNewMessageContent) => {
-    const wsMessagesHandler = (messageType, content) => {
-        console.log(messageType, content);
-        if (messageType === 0x11) {
-            onNewMessageContent(content);
-            return true;
-        } else if (messageType === 0x12) {
-            ws.unsubscribeToWSMessage(wsMessagesHandler);
-            return true;
-        }
+    ws.createSubscriptionForBotResponse(onNewMessageContent);
 
-        return false;
-    }
-
-    ws.subscribeToWSMessage(wsMessagesHandler);
-
-    const wsMessage = new Uint8Array([Client.UserTextMessage, ...new TextEncoder().encode(message)]);
+    const wsMessage = new Uint8Array([ClientMessageID.UserTextMessage, ...new TextEncoder().encode(message)]);
     ws.send(wsMessage);
 };
 
+/**
+ * Send an audio chunk to the server.
+ * @async
+ * 
+ * @param {Blob} blobChunk the audio blob chunk
+ */
 ws.sendAudioChunk = async (blobChunk) => {
-    const wsMessage = new Uint8Array([Client.UserAudioChunk, ...new Uint8Array(await blobChunk.arrayBuffer())]);
+    const wsMessage = new Uint8Array([ClientMessageID.UserAudioChunk, ...new Uint8Array(await blobChunk.arrayBuffer())]);
     ws.send(wsMessage);
 };
 
+/**
+ * Tell the server that the audio is done.
+ * 
+ * @param {Function} onNewMessageContent the function to be called with the new answer from bot as it sent from the server
+ */
 ws.sendAudioEnd = (onNewMessageContent) => {
-    const wsMessagesHandler = (messageType, content) => {
-        console.log(messageType, content);
-        if (messageType === 0x11) {
-            onNewMessageContent(content);
-            return true;
-        } else if (messageType === 0x12) {
-            ws.unsubscribeToWSMessage(wsMessagesHandler);
-            return true;
-        }
+    ws.createSubscriptionForBotResponse(onNewMessageContent);
 
-        return false;
-    }
-
-    ws.subscribeToWSMessage(wsMessagesHandler);
-
-    ws.send(new Uint8Array([Client.UserAudioEnd]));
+    ws.send(new Uint8Array([ClientMessageID.UserAudioEnd]));
 };
 
 chatButtonElement.addEventListener('click', async () => {

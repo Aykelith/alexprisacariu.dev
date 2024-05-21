@@ -1,8 +1,9 @@
+/* The main settings of the application */
 const Settings = {
     ClientAudioMimeType: 'audio/webm;codecs=opus',
     ServerAudioMimeType: 'audio/mp3',
     PlayWelcomeAudio: true,
-    WelcomeAudioPath: '/static/audio/welcome-ro.mp3',
+    WelcomeAudioPath: '/static/audio/welcome-en.mp3',
     WelcomeMessage: "Hello. How can I help you today?",
     DefaultTypingSpeed: 40,
     APISendMessage: '/api/message',

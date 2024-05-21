@@ -7,24 +7,31 @@ tags:
    - WebSockets
    - Audio
 publishedOn: "2024-05-16T13:11:43.054Z"
+skip: true
 ---
-In this tutorial I will present how to create a simple popup AI chat
-functionality that can be added to any website. The client will be able to
-reply to the chat using also, beside typing and the answer from the AI will also
-be in a audio format.
+<center><img src="/imgs/posts/post013/presentation.gif" style={{width:'24rem'}}/></center>
+
+In this tutorial I will present how to create a simple popup AI chat that can be
+added to any website. The client will be able to reply to the chat by typing but
+also by speaking to the bot.
 
 We will be using only the tools from the OpenAI for the AI stuff. For the chat
-we will use ChatGPT, for the STT (speech-to-text) Whisper.
+we will use ChatGPT, for the STT (speech-to-text) Whisper and their TTS
+(text-to-speech).
 
 I will show multiple methods on how to implement the app. From a naive, or 
 basic, method to a better, but also more complex, method.
 
-The application will be implemented in JavaScript (ECMAScript).
+The application will be implemented in JavaScript (ECMAScript), but read the
+final chapter if you are interested of implementations in other languages.
+
+All the code is available
+[in my GitHub repository](https://github.com/Aykelith/alexprisacariu.dev/tree/master/posts/post013_tutorial_chatbot/code).
 
 ## The basics
 
 In this chapter we will go to the basics of the application: the project 
-structure, the `index.html`, the styling and the packages we will use.
+structure and packages we used.
 
 The project will be using the following packages:
 
@@ -33,7 +40,7 @@ The project will be using the following packages:
 | `express` | For the HTTP server and routing |
 | `openai` | For all the OpenAI stuff |
 | `sass` | To convert the SASS style files to CSS files |
-| `ws` | |
+| `ws` | For the WebSockets |
 
 The project structure is as follows:
 
@@ -44,12 +51,12 @@ The project structure is as follows:
 | `public/img` | The directory containing public images |
 | `public/index.html` | The entrypoint |
 | `style` | The directory containing the style of the page |
-| `version-1` | The naive implementation directory |
-| `version-2` | The better implementation directory |
-| `package.json` | |
-| `README.md` | |
+| `version-1` | The naive implementation source code directory |
+| `version-2` | The better implementation source code directory |
 
-The project can be seen [[here]] and where a code will be listed will also
+The project can be seen
+[here](https://github.com/Aykelith/alexprisacariu.dev/tree/master/posts/post013_tutorial_chatbot/code)
+and where a code will be listed will also
 contain the relative path to where that code can be found.
 
 Just run `npm install` followed by a `npm run build` to convert the SASS file to
@@ -59,26 +66,37 @@ To start the naive implementation run `npm run start-v1` or to run the better
 implementation do `npm run start-v2`. Don't forget to define the evironemnt
 variable `OPENAI_API_KEY`.
 
+> On UNIX systems you can run:
+> ```shell
+> OPENAI_API_KEY=YOU_API_KEY npm run start-v1`
+> ```
+>
+> And on Windows:
+> ```powershell
+> set OPENAI_API_KEY=YOU_API_KEY
+> npm run start-v1
+> ```
+
 This is the page you should see when you access the page:
 
-[[image]]
+<center><img src="/imgs/posts/post013/first-look.png" style={{width:'31rem',border:'1px solid #c9c9c9'}}/></center>
 
-## The naive implementation
+## The naive/simple implementation
 
-The naive implementation is using HTTP request and responses for sending and
+The naive implementation is using HTTP requests and responses for sending and
 receiving the data from the server.
 
-We will not go over each functions. All the code can be found in the above
+We will look over each functions. All the code can be found in the above
 mentioned link.
 
 Here is an activity diagram on how the app will work:
 
-<center><img src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg"/></center>
+<div style={{overflowX: 'auto'}}><center><img src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg" style={{width:'44rem', maxWidth: 'none'}}/></center></div>
 
-Let's look what happens when the user clicks enter on the text input element:
+Let's look what happens when the user press enter on the text input element:
 
 ```js[class="line-numbers"]
-// version-1/client.js
+/* version-1/client.js */
 inputTextElement.addEventListener('keydown', async (event) => {
     if (event.code !== 'Enter') return;
     if (!inputTextElement.value) return;
@@ -105,7 +123,7 @@ After we disable the input we call the main function, `addMessage`, that does
 the magic. Let's look at it:
 
 ```js[class="line-numbers"]
-// version-1/client.js
+/* version-1/client.js */
 /**
  * Add a new message to the chat.
  * @async
@@ -194,6 +212,7 @@ with each message so the server knows from where to get the chat history.
 > sent increase.
 
 ```js[class="line-numbers"]
+/* version-1/client.js */
 /**
  * Create a random ID of given length.
  * Taken from https://stackoverflow.com/a/1349426
@@ -245,6 +264,7 @@ Before we go to the server side and look how the server is handling the request,
 let's see what happens when the user clicks on the audio button:
 
 ```js[class="line-numbers"]
+/* version-1/client.js */
 inputSpeechElement.addEventListener('click', async (_event) => {
     inputTextElement.value = "";
     inputTextElement.disabled = true;
@@ -272,12 +292,17 @@ recording his voice and a button to stop the recording when done recording.
 Once the stop button is hit we convert the audio chunks to a `Blob` object and
 the blob to a base64 encoded string and return it.
 
+We also go through each audio track and stop them then remove them. This is
+necesarry because, at least on Chrome, calling `mediaRecorder.stop()` will not
+stop the "listening" state of the microphone.
+
 > Encoding the audio to `base64` is not a very efficient method of sending the
 > audio to the server, but is a very easy method.
 > We will look on another method to send the audio to the server in **[The better
 > implementation](#The-better-implementation)** section.
 
 ```js[class="line-numbers"]
+/* version-1/client.js */
 /**
  * Record the user and return it as an base64 encoded audio.
  * @async
@@ -304,11 +329,11 @@ async function recordUserAudio(stopRecordButtonElement) {
             stopRecordButtonElement.classList.remove('show');
         };
 
-        mediaRecorder.ondataavailable = (event) => {
+        mediaRecorder.addEventListener('dataavailable', (event) => {
             chunks.push(event.data);
-        };
+        });
 
-        mediaRecorder.onstop = (_event) => {
+        mediaRecorder.addEventListener('stop', (_event) => {
             const blob = new Blob(chunks, { type: Settings.ClientAudioMimeType });
             chunks = [];
 
@@ -316,8 +341,14 @@ async function recordUserAudio(stopRecordButtonElement) {
 
             stopRecordButtonElement.removeEventListener('click', onStopClick);
 
+            // Stop the audio listening
+            stream.getAudioTracks().forEach((track) => {
+                track.stop()
+                stream.removeTrack(track);
+            });
+
             base64AudioPromise.then(resolve).catch(reject);
-        };
+        });
 
         stopRecordButtonElement.classList.add('show');
 
@@ -331,6 +362,7 @@ async function recordUserAudio(stopRecordButtonElement) {
 Let's look now how the request is handled on the server:
 
 ```js[class="line-numbers"]
+/* version-1/server.js */
 app.post('/api/message', async (req, res) => {
     if (!req.body.message && !req.body.audio) {
         res.status(400).send('Missing "message" or "audio"');
@@ -394,7 +426,7 @@ After we check that the client sent the required data we get the chat history
 for the given ID (or create a new chat history):
 
 ```js[class="line-numbers"]
-// version-1/server.js
+/* version-1/server.js */
 /**
  * Get the chat history, or create a new one or the given ID.
  * 
@@ -425,6 +457,7 @@ encoded audio file to a file that OpenAI will know how to read. The function
 will return the transcription of the given audio.
 
 ```js[class="line-numbers"]
+/* version-1/server.js */
 /**
  * Convert speech to text using OpenAI.
  * @async
@@ -449,6 +482,7 @@ Now that we have the message we just send the chat to ChatGPT and wait for a
 response by calling the `getAnswer` function. 
 
 ```js[class="line-numbers"]
+/* version-1/server.js */
 /**
  * 
  * @param {*} openai 
@@ -470,6 +504,7 @@ Last part is about converting the response from the AI to an audio using the
 method `tts` that uses the method `openai.audio.speech.create` to 
 
 ```js[class="line-numbers"]
+/* version-1/server.js */
 /**
  * Convert text to speech.
  * @async
@@ -493,7 +528,571 @@ async function tts(openai, input) {
 
 ## The better implementation
 
-But is this bad? Well, not really, but is
-not the most efficient method.
+But can we make it better? Well, yes. Instead of using HTTP requests we can
+instead use WebSockets to communicate between the client and the server and
+tell ChatGPT to return the results as a stream. In this way we can create
+a real time writting effect because we will stream in real time the result from
+ChatGPT to the client.
 
-## Go implementation
+This implementation has a drawback, but only because we are using OpenAI's TTS
+that accepts a maximum of 3 requests per minut so for this implementation we
+will drop the text-to-speech feature [but I will give tips on how it should be
+implemented and what to look for when implementing it](#tips-for-adding-the-tts-functionality-back).
+
+So let's look at some code. I started it from the previous implementation and
+changed was is needed to support WebSockets.
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+const ws = new WebSocket(Settings.WSAddress);
+const ChatID = makeID(10);
+
+// When the connection to the server is made send the chat ID
+ws.addEventListener('open', () => {
+    const idMessage = new Uint8Array([ClientMessageID.SetClientID, ...new TextEncoder().encode(ChatID)]);
+    ws.send(idMessage);
+});
+```
+
+In this section of the client code we are connecting to the WebSocket server and
+when the connection is opened we send as the first message the chat ID so the
+server knows who we are.
+
+The structure of the data/messages sent between the client and the server are
+having the following structure:
+
+<center><img src="/imgs/posts/post013/websocket_message_structure.drawio.svg" style={{width:'31rem'}}/></center>
+
+The first byte will be represented by the type of the message we are sending in
+order for the server to know how to handle the payload represented by the next
+bytes in the data that was sent.
+
+> To be noted that we configured the WebSocket server to accept and send only
+> binary data. This is why we will always send, from the client side a
+> `Uint8Array` and from the server side a `Buffer`.
+> We are sending only in binary because is more efficient as we will transform
+> to text only what we need and remain in binary, like the audio chunks, what
+> need to remain in binary.
+
+In the following code we handle the message received from the server side:
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+const subscriptionsToWSMessages = [];
+
+ws.addEventListener('message', async (event) => {
+    const data = new Uint8Array(await event.data.arrayBuffer());
+    const messageType = data[0];
+
+    // Because we know all the possible messages are all strings we can convert all the payloads to string
+    const content = new TextDecoder().decode(data.slice(1));
+
+    if (!ws.allGood && messageType !== ServerMessageID.OK) {
+        if (messageType === ServerMessageID.Error) {
+            console.error('Something wrong sending the chat ID:', content);
+        }
+    } else if (messageType === ServerMessageID.OK) {
+        ws.allGood = true;
+    } else {
+        let done;
+        for (let i=0, length=subscriptionsToWSMessages.length; i < length; i += 1) {
+            done = await subscriptionsToWSMessages[i](messageType, content);
+            if (done === true) return;
+        }
+
+        if (!done) {
+            if (messageType === ServerMessageID.Error) {
+                console.error('Unhandled error received from server:', content);
+            } else {
+                console.log(`Unknown message type "${messageType}" received.`);
+            }
+        }
+    }
+});
+```
+
+Because we know all the messages that we receive from the server side are texts
+we can safetly convert all the payload to a `String` using `TextDecoder`:
+`new TextDecoder().decode(data.slice(1));`.
+
+First we will wait for the first `ServerMessageID.OK` from the server that
+represent that the sent chat ID is valid.
+
+Then, in order to be flexible, we are using an array of functions that represent
+subscriptions to the messages received from the server side. This way we can be
+modular in our approach. The function must return a `true` or `false`: when
+`true` it means that the message was processed and it is not needed to continue
+to call the rest of the subscribers.
+
+In order to be easy to add and remove subscribers we extend our `ws` object with
+the following:
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+/**
+ * Add a function to the list of functions to be called when the socket receives
+ * a new message. The function must return a boolean: if `true` is returned then
+ * is considered that the message was handled and will stop the exection of the
+ * rest of the subscribers in the list.
+ * 
+ * @param {Function} fn the function to be added
+ */
+ws.subscribeToWSMessage = (fn) => {
+    subscriptionsToWSMessages.push(fn);
+}
+
+/**
+ * Remove an added function from the list of subscribers.
+ * 
+ * @param {Function} fn the function to be removed
+ */
+ws.unsubscribeToWSMessage = (fn) => {
+    subscriptionsToWSMessages.splice(subscriptionsToWSMessages.indexOf(fn), 1);
+}
+```
+
+Next we extend again the `ws` object with 3 more methods:
+
+- `sendTextMessage` for sending the user's text message;
+- `sendAudioChunk` for sending an audio chunk from the user's voice recording;
+- `sendAudioEnd` for telling the server that the audio is done.
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+/**
+ * Send a text message to the server.
+ * @async
+ * 
+ * @param {String} message the message to send
+ * @param {Function} onNewMessageContent the function to be called with the new answer from bot as it sent from the server
+ */
+ws.sendTextMessage = async (message, onNewMessageContent) => {
+    ws.createSubscriptionForBotResponse(onNewMessageContent);
+
+    const wsMessage = new Uint8Array([ClientMessageID.UserTextMessage, ...new TextEncoder().encode(message)]);
+    ws.send(wsMessage);
+};
+```
+
+The method `sendTextMessage` will accept the message that need to sent to the
+server and a function that will be called multiple times with the stream of data
+received from ChatGPT.
+
+In this method, before sending the message to the server we are calling the
+method `createSubscriptionForBotResponse` that will handle the creation and
+adding of a subscription to listen for new messages in order to handle the
+response from the bot.
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+/**
+ * Create and add a subscription to listen for the response of the bot to our sent message
+ * 
+ * @param {Function} onNewMessageContent the function to be called with the new answer from bot as it sent from the server
+ */
+ws.createSubscriptionForBotResponse = (onNewMessageContent) => {
+    const wsMessagesHandler = (messageType, content) => {
+        if (messageType === ServerMessageID.TextChunk) {
+            onNewMessageContent(content);
+            return true;
+        } else if (messageType === ServerMessageID.TextEnd) {
+            ws.unsubscribeToWSMessage(wsMessagesHandler);
+            return true;
+        }
+
+        return false;
+    }
+
+    ws.subscribeToWSMessage(wsMessagesHandler);
+}
+```
+
+The subscribed function will check if the received message from the server has
+the required ID for the response of the bot (`ServerMessageID.TextChunk`) and 
+if yes then we call the received function with the text chunk that will add the
+chunk to the current bot response in the chat.
+
+When the bot is done with the response the server will send us the message with
+ID `ServerMessageID.TextEnd` representing that we can stop also in which we will
+just unsubscribe from listening to new messages.
+
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+/**
+ * Send an audio chunk to the server.
+ * @async
+ * 
+ * @param {Blob} blobChunk the audio blob chunk
+ */
+ws.sendAudioChunk = async (blobChunk) => {
+    const wsMessage = new Uint8Array([ClientMessageID.UserAudioChunk, ...new Uint8Array(await blobChunk.arrayBuffer())]);
+    ws.send(wsMessage);
+};
+
+/**
+ * Tell the server that the audio is done.
+ * 
+ * @param {Function} onNewMessageContent the function to be called with the new answer from bot as it sent from the server
+ */
+ws.sendAudioEnd = (onNewMessageContent) => {
+    ws.createSubscriptionForBotResponse(onNewMessageContent);
+
+    ws.send(new Uint8Array([ClientMessageID.UserAudioEnd]));
+};
+```
+
+The next 2 methods, `sendAudioChunk` and `sendAudioEnd`, are for sending the
+recorded voice of the user to the server. The first one, `sendAudioChunk`, will
+send the received bytes to the server while the other one, `sendAudioEnd`, will
+send a message to the server telling that the audio is done and, like the method
+`sendTextMessage` will call `createSubscriptionForBotResponse` to listen for the
+response from the bot.
+
+Next we will look at how the parameter `onNewMessageContent` from the methods
+`sendTextMessage` and `sendAudioEnd` is sent.
+
+We modified a bit the function `addMessage` by splitting it into
+`addUserMessage` and `addBotMessage`. We will just look at `addUserMessage`:
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+/**
+ * Add a new message to the chat.
+ * @async
+ * 
+ * @param {WebSocket} ws the WebSocket
+ * @param {MessageType} type the type of message
+ * @param {String|Audio} message the data of the message
+ * @returns {Promise} the promise resolved when all is done
+ */
+async function addUserMessage(ws, type, message) {
+    createMessageHTMLElement(type, type === MessageType.User ? message : 'Audio message');
+
+    // Keeping own history log
+    if (type === MessageType.User) {
+        messageHistory.push({ role: type === MessageType.User ? 'user' : 'assistant', content: message });
+    }
+        
+    if (type === MessageType.User) {
+        await ws.sendTextMessage(message, addBotMessageInChunks());
+    } else {
+        await ws.sendAudioEnd(addBotMessageInChunks());
+    }
+}
+
+/**
+ * Add bot message in chunks. The functions returns another function that when called with
+ * the argument will add that argument to the bot message.
+ * 
+ * @returns {Function} the function accept a parameter `content`; when called the `content` is added to the message
+ */
+function addBotMessageInChunks() {
+    const newMsg = createMessageHTMLElement(MessageType.Bot);
+
+    let nextContentIndex = 0;
+    let currentContentIndex = 0;
+    let currentContentPromise;
+
+    const onNewMessageContent = async (content) => {
+        const thisContentIndex = nextContentIndex;
+        nextContentIndex += 1;
+
+        while (thisContentIndex !== currentContentIndex) {
+            await currentContentPromise;
+        }
+
+        currentContentPromise = new Promise(async resolve => {
+            await addContentToMessage(newMsg, content);
+
+            currentContentIndex += 1;
+            resolve();
+        });
+    }
+
+    return onNewMessageContent;
+}
+```
+
+The function `addBotMessageInChunks` responsability is to create and return the
+function that will append the given text/content to the current bot message.
+
+Because we want to have a writting effect to the bot message as it comes we need
+to have a method to synchronize everything. The server will send the text as it
+comes and the function `addContentToMessage`, that is responsible for creating
+the writting effect, may not be ready in time to handle the next received text.
+
+So we came with a very easy synchronization mechanism: we create a variable that
+will hold a promise and 2 counters. Each time the function that is returned is
+called we assign to that call the next index (line 39) and then increase the
+counter. The function will wait for its turn by waiting for the promise to be
+done and when it is its turn will overwrite the promise variable with a new
+promise that will just wait for the writting effect to be done (line 47) and 
+increase the counter.
+
+```js[class="line-numbers"]
+/* version-2/client.js */
+/**
+ * Record the user and send the chunks to the server and on end wait for all the chunks to be sent.
+ * @async
+ * 
+ * @param {WebSocket} ws the WebSocket
+ * @param {HTMLElement} stopRecordButtonElement the stop button element
+ * @returns {Promise}
+ */
+async function recordUserAudio(ws, stopRecordButtonElement) {
+    let stream;
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (error) {
+        console.error(`The following getUserMedia error occurred: ${error}`);
+        return;
+    }
+
+    const mediaRecorder = new MediaRecorder(stream, { mimeType: Settings.ClientAudioMimeType });
+
+    return new Promise((resolve, _reject) => {
+        const onStopClick = () => {
+            mediaRecorder.stop();
+            stopRecordButtonElement.classList.remove('show');
+        };
+
+        // Create an array to store the promises of the sent audio chunks so we can make sure that
+        // when the user hit the stop button all the audio chunks are sent
+        const sentAudioChunksPromises = [];
+
+        mediaRecorder.addEventListener('dataavailable', (event) => {
+            sentAudioChunksPromises.push(ws.sendAudioChunk(event.data));
+        });
+
+        mediaRecorder.addEventListener('stop', async (_event) => {
+            await Promise.all(sentAudioChunksPromises);
+
+            // Stop the audio listening
+            stream.getAudioTracks().forEach((track) => {
+                track.stop()
+                stream.removeTrack(track);
+            });
+
+            resolve();
+        });
+
+        stopRecordButtonElement.classList.add('show');
+
+        // The parameter of `start` is called `timeslice` and define how often, in milliseconds,
+        // to fire the `dataavailable` event with the audio chunk
+        mediaRecorder.start(1000);
+
+        stopRecordButtonElement.addEventListener('click', onStopClick);
+    })
+}
+```
+
+The function `recordUserAudio` was changed sightly:
+
+- calling `mediaRecorder.start()` with the argument `1000` will slice the audio
+  of the user by chunks of **1 seconds** that will be received in the handler for
+  the event `dataavailable`;
+- the handler for the event `dataavailable` will add the promise returned by the
+  calling of `ws.sendAudioChunk` into an array so we can wait for all of them to
+  be finished in the handler for the `stop` event of our instance of
+  `MediaRecorder`.
+
+This is pretty much it for the client-side.
+
+Now let's switch to the service-side to see what was added:
+
+```js[class="line-numbers"]
+/* version-2/server.js */
+const webSocketServer = new WebSocketServer({ port: Settings.WSPort });
+
+webSocketServer.on('connection', function connection(clientWS) {
+    // Array to keep all the audio chunks until the user is done talking
+    clientWS.audioChunks = [];
+
+    clientWS.on('error', console.error);
+    
+    clientWS.on('message', async (data, isBinary) => {
+        // ...
+    });
+});
+```
+
+We are creating the WebSocket server (using the `ws` package) with our defined
+port. Once we have a connection we add to the client socket an empty array
+called `audioChunks` that will hold the audio buffer chunks.
+
+When the user send a message we do the following:
+
+```js[class="line-numbers"]
+/* version-2/server.js */
+// ...
+
+// If the message is non-binary then reject it.
+// If the user did not already set the chatID then we close the socket.
+if (!isBinary) {
+    const errorMsg = 'Only binary messages are supported.';
+    clientWS.send(Buffer.from([ServerMessageID.Error, errorMsg]));
+    console.error(`(ChatID: ${clientWS.chatID}) Non-binary message received.`);
+
+    if (!clientWS.chatID) {
+        clientWS.close(1003, errorMsg);
+    }
+
+    return;
+}
+
+const messageType = data[0];
+const payload = data.slice(1);
+
+if (!clientWS.chatID && messageType !== ClientMessageID.SetClientID) {
+    clientWS.send(Buffer.from('Error! Please send first your ID'));
+} else if (messageType === ClientMessageID.SetClientID) {
+    const id = payload.toString('utf8');
+
+    if (typeof id === 'string' && id.trim() !== '') {
+        clientWS.chatID = id;
+        clientWS.send(Buffer.from([ServerMessageID.OK]));
+    } else {
+        clientWS.send(Buffer.from([ServerMessageID.Error, ...Buffer.from('Error! Invalid ID. Please send a valid string ID.')]));
+    }
+}
+
+// ...
+```
+
+We are first checking if the received message is in binary. After that we
+separate the message type (`messageType`) from the rest of the data (`payload`).
+If the client didn't sent already the chat ID and the message type is not for
+this then return an error, otherwise we store the chat ID if is correct inside
+the client socket.
+
+```js[class="line-numbers"]
+/* version-2/server.js */
+// ...
+} else if (messageType === ClientMessageID.UserTextMessage || messageType === ClientMessageID.UserAudioEnd) {
+    const messages = getChatMessages(chatHistory, clientWS.chatID);
+
+    let messageContent;
+    if (messageType === ClientMessageID.UserTextMessage) {
+        messageContent = payload.toString('utf8');
+    } else if (messageType === ClientMessageID.UserAudioEnd) {
+        // When the client send the `ClientMessageID.UserAudioEnd` message type it means it clicked the STOP button
+        
+        // Concat all the buffers into a single one
+        const buffer = Buffer.concat(clientWS.audioChunks);
+
+        // Reset the chunks array
+        clientWS.audioChunks = [];
+
+        // Send audio to OpenAI to perform the speech-to-text
+        messageContent = await stt(openai, buffer);
+    }
+
+    messages.push({ role: "user", content: messageContent });
+
+    try {
+        await getAnswer(openai, messages, clientWS);
+    } catch (error) {
+        console.error(`(ChatID: ${clientWS.chatID}) Error when trying to get an answer from ChatGPT:`);
+        console.error(error);
+        clientWS.send(Buffer.from([ServerMessageID.Error, ...Buffer.from('Error!')]));
+        return;
+    }
+}
+// ...
+```
+
+Once the client send a message of type `ClientMessageID.UserTextMessage` or
+`ClientMessageID.UserAudioEnd` we  retrieve, as previous, the chat's messages
+and, if the message is of type `ClientMessageID.UserTextMessage` we will convert
+the received data (`payload`) to `String`, or, if the message is of type 
+`ClientMessageID.UserAudioEnd`, we will combine all the audio buffer chunks into
+a single chunk, reset the array of chunks and perform the speech-to-text action
+on the audio that will return the text.
+
+Next step is to create the new message in the format accepted by ChatGPT and
+query ChatGPT for a response.
+
+```js[class="line-numbers"]
+/* version-2/server.js */
+// ...
+} else if (messageType === ClientMessageID.UserAudioChunk) {
+    clientWS.audioChunks.push(payload);
+}
+// ...
+```
+
+Last message type we handle is the one for the audio chunks that just add the
+received data to the audio chunks.
+
+Now lets look over how the `getAnswer` was changed in order to support streams:
+
+```js[class="line-numbers"]
+/* version-2/server.js */
+/**
+ * Get the next message in the conversation
+ * @async
+ * 
+ * @param {OpenAI} openai the OpenAI instance
+ * @param {String[]} messages the messages in the OpenAI format
+ * @returns {String} the response from ChatGPT
+ */
+async function getAnswer(openai, messages, clientWS) {
+    // Documentation https://platform.openai.com/docs/api-reference/chat/create
+    const stream = await openai.chat.completions.create({
+        model: Settings.ChatGPTModel,
+        messages,
+        stream: true,
+    });
+
+    for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content;
+        if (!content) continue;
+
+        clientWS.send(Buffer.from([ServerMessageID.TextChunk, ...Buffer.from(content || "")]));
+    }
+
+    clientWS.send(Buffer.from([ServerMessageID.TextEnd]));
+}
+```
+
+By just adding `stream: true` to the object that is sent as argument to ChatGPT
+will return a stream object that we can loop through it and for each chunk of
+data that is not empty we will send it back to the client. After the stream is
+done what remains is to notify the client that the response is done.
+
+<h3 id="tips-for-adding-the-tts-functionality-back">Tips for adding the TTS functionality back</h3>
+
+Ok. But what we would have a TTS service that support stream or many requests
+fast?
+
+No problem: we just need to adjust some things on the server side and client
+side.
+
+On the server side, once we got a chunk of answer from the AI (in the function
+`getAnswer`) we just need to call our TTS service and send the audio data to the
+client side.
+
+On the client side there are more changes that need to be done:
+
+- we cannot no more always transform the received data to text because now
+  we can receive audio data;
+- because we can receive the next audio data before the previous audio is done 
+  playing we need to introduce a synchronization method to keep track of which
+  audio need to be played next.
+
+## Final words
+
+There are aspects that were ommited in this post/implemention like the error
+handling for different parts of the code.
+
+If you would like to see an implementation of the server in Go or Rust please
+write to me at [alex@alexprisacariu.dev](mailto:alex@alexprisacariu.dev).
+
+Diagrams generated using Draw.io and grammar check done by ChatGPT.
+
+Resources:
+
+- [OpenAI Documentation](https://platform.openai.com/docs/api-reference);
+- [MDN Web Docs](https://developer.mozilla.org/en-US/).

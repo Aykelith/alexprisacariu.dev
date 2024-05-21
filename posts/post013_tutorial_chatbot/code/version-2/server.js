@@ -7,7 +7,7 @@ import { WebSocketServer } from 'ws';
 /* The main settings of the application */
 const Settings = {
     /* The port to run on */
-    Port: 3001,
+    Port: 3000,
 
     /* The port to start the WebSocket server */
     WSPort: 3002,

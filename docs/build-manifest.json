@@ -27,6 +27,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/blog/[pageNumber]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/blog/[pageNumber].js"
+    ],
     "/posts/[dirName]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
