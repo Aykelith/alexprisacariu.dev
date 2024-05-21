@@ -24,12 +24,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
     const post = getPost(params.dirName as string);
 
+    const remarkGfm = (await import('remark-gfm')).default;
+
     return {
         props: {
             ...post,
             content: await serialize(post.content, {
                 mdxOptions: {
-                    remarkPlugins: [[require('remark-prism'), { plugins: ['line-numbers'] }]],
+                    remarkPlugins: [[require('remark-prism'), { plugins: ['line-numbers', 'autolinker'] }], remarkGfm],
                 },
             }),
         },
