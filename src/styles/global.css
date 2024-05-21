@@ -29,6 +29,10 @@ a {
     @apply hover:underline;
 }
 
+header > div a, #PostPage .postContent a {
+    @apply !text-indigo-700;
+}
+
 code {
     background-color: rgba(0, 0, 0, 0.05);
     padding: 0.202em 0.5407911001em;
