@@ -1,5 +1,4 @@
 module.exports = {
-    fastRefresh: true,
     output: 'export',
     distDir: 'docs',
     serverRuntimeConfig: {

@@ -5,9 +5,6 @@ module.exports = {
             fontFamily: {
                 accent: ['Lato', 'sans-serif'],
                 normal: ['Roboto', 'sans-serif'],
-            },
-            colors: {
-
             }
         },
     },

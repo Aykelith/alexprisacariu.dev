@@ -1,6 +1,7 @@
 # Simple chatbot
 
-This is the code for the tutorial that can be found [here](TODO).
+This is the code for the tutorial that can be found
+[here](https://alexprisacariu.dev/posts/post013_tutorial_chatbot).
 
 Run `npm install` or `yarn` to install the packages required.
 
