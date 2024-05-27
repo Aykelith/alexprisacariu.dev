@@ -18,7 +18,7 @@ export default function HomePageContent({ shortPosts, pinnedProjects }: HomePage
                 <meta name="description" content="Place of Alexandru Prisacariu" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="page">
+            <div id="HomePage" className="page">
                 <div className="box">
                     <div className="flex flex-col font-normal">
                         <Header/>

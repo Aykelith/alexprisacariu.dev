@@ -29,7 +29,7 @@ a {
     @apply hover:underline;
 }
 
-header > div a, #PostPage .postContent a {
+header > div a, #PostPage .postContent a, #HomePage main > div > div > a {
     @apply !text-indigo-700;
 }
 
