@@ -1,5 +1,6 @@
 //= Functions
 // Own
+export * from "./utils/createShortPostFromPost";
 export * from "./utils/getPost";
 export * from "./utils/getPostFileData";
 export * from "./utils/getPostsDirectories";

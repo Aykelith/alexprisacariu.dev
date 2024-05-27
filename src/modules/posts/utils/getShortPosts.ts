@@ -2,6 +2,7 @@
 // Own
 import { getPostsDirectories } from './getPostsDirectories';
 import { getPostFileData } from './getPostFileData';
+import { createShortPostFromPost } from './createShortPostFromPost';
 
 //= Structures & Data
 // Own
@@ -17,8 +18,7 @@ export function getShortPosts(length?: number, start: number = 0): Post[] {
 
         if (postData.skip) continue;
 
-        postData.content = postData.content.substring(0, postData.content.search(/^$/gm));
-        posts.push(postData);
+        posts.push(createShortPostFromPost(postData));
     }
 
     return posts;

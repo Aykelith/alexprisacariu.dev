@@ -1,14 +1,18 @@
+//= Structures & Data
+// Own
+import { Post } from "../../posts";
+
 export interface Project {
     id: string;
     title: string;
     dirName: string;
     content: string;
-    coverImage: string;
+    coverShortProjectImage: string;
+    coverProjectImage: string;
     tags: string[];
     description: string;
     pinned?: 1;
     url?: string;
     otherImages?: string[];
-    linkedPosts?: { url: string, title: string }[];
-    useCoverImage?: 1;
+    linkedPosts?: Post[];
 }
