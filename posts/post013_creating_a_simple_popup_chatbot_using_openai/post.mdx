@@ -63,7 +63,7 @@ The project can be seen
 and where a code will be listed will also
 contain the relative path to where that code can be found.
 
-Eun `npm install` followed by a `npm run build` to convert the SASS file to
+Run `npm install` followed by a `npm run build` to convert the SASS file to
 CSS and you are ready to go.
 
 To start the naive implementation run `npm run start-v1` or to run the better
@@ -201,7 +201,7 @@ CSS class based on the type of the message.
 Once that is done we store the message in our client-side chat history.
 
 Next, if the message to be added is from the bot, we display it using a 
-"writting effect". We try to synchronize the audio, if it exists, to the typing
+"writing effect". We try to synchronize the audio, if it exists, to the typing
 speed by dividing the length of the audio to the number of characters in the
 message.
 
@@ -543,7 +543,7 @@ async function tts(openai, input) {
 But can we make it better? Well, yes. Instead of using HTTP requests, we can
 instead use WebSockets to communicate between the client and the server and
 tell ChatGPT to return the results as a stream. In this way, we can create
-a real-time writting effect because we will stream the result from ChatGPT to
+a real-time writing effect because we will stream the result from ChatGPT to
 the client in real time.
 
 This implementation has a drawback, but only because we are using OpenAI's TTS,
@@ -827,10 +827,10 @@ function addBotMessageInChunks() {
 The `addBotMessageInChunks` function is responsible for creating and returning
 the function that will append the given text/content to the current bot message.
 
-Because we want to have a writting effect to the bot message as it comes in, we
+Because we want to have a writing effect to the bot message as it comes in, we
 need to have a method to synchronize everything. The server will send the text
 as it comes, and the `addContentToMessage` function, which is responsible for
-creating the writting effect, may not be ready in time to handle the next
+creating the writing effect, may not be ready in time to handle the next
 received text.
 
 So, we came up with a simple synchronization mechanism: we create 2 counters and
@@ -838,7 +838,7 @@ a variable that will hold a promise. Each time the returned function is
 called we assign to that call the next index (line 39) and then increase the
 counter. The function will wait for its turn by waiting for the promise to be
 resolved, and when it is its turn, it will overwrite the promise variable with a
-new promise that will just wait for the writting effect to be done (line 47) and
+new promise that will just wait for the writing effect to be done (line 47) and
 then increase the counter.
 
 ```js[class="line-numbers"]
@@ -1095,7 +1095,7 @@ On the client side, more changes are needed:
 
 ## Final words
 
-There are aspects that were ommited in this post/implemention, such as error
+There are aspects that were omitted in this post/implementation, such as error
 handling for different parts of the code.
 
 If you would like to see an implementation of the server in Go or Rust please
