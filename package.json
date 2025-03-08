@@ -8,22 +8,23 @@
     "dependencies": {
         "classnames": "^2.5.1",
         "gray-matter": "^4.0.3",
-        "next": "^14.2.3",
-        "next-mdx-remote": "^4.4.1",
+        "next": "^15.2.1",
+        "next-mdx-remote": "^5.0.0",
         "nextjs-progressbar": "^0.0.16",
         "prismjs": "^1.29.0",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "remark-gfm": "^3.0.1",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "remark-gfm": "^4.0.1",
         "remark-prism": "^1.3.6"
     },
     "devDependencies": {
         "@svgr/webpack": "^8.1.0",
-        "@types/node": "^20.12.12",
-        "@types/react": "^18.3.2",
-        "autoprefixer": "^10.4.16",
-        "postcss": "^8.4.38",
-        "tailwindcss": "^3.4.3",
-        "typescript": "^4.9.5"
+        "@tailwindcss/postcss": "^4.0.12",
+        "@types/node": "^22.13.10",
+        "@types/react": "^19.0.10",
+        "autoprefixer": "^10.4.20",
+        "postcss": "^8.5.3",
+        "tailwindcss": "^4.0.12",
+        "typescript": "^5.8.2"
     }
 }
