@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import classNames from "classnames";
+import { ProgressBarLink } from "@/components/ProgressBar";
 
 const NavLinks = [
     ["Home", "/"],
@@ -28,7 +29,7 @@ export default function NavLinksDesktop() {
                         : pathname.startsWith(item[1]);
 
                 return (
-                    <Link
+                    <ProgressBarLink
                         key={item[0]}
                         href={item[1]}
                         className={classNames({
@@ -36,7 +37,7 @@ export default function NavLinksDesktop() {
                         })}
                     >
                         {item[0]}
-                    </Link>
+                    </ProgressBarLink>
                 );
             })}
         </div>
