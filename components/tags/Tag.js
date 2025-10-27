@@ -1,7 +1,7 @@
 //= Functions
 // Others
 import React from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 //= Types & Enums & Consts
 // Own

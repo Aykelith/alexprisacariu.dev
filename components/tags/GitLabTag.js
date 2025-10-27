@@ -1,6 +1,6 @@
 //= Functions
 // Others
-import classNames from "classnames";
+import classNames from "clsx";
 
 //= Types & Enums & Consts
 // Own

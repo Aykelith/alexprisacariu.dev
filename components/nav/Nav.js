@@ -1,17 +1,14 @@
 import Link from "next/link";
 import NavLinksDesktop from "./NavLinksDesktop";
+import NavPartMobile from "./NavPartMobile";
 
 export default function Nav() {
     return (
-        <>
-            <nav className="hidden flex-col md:flex md:flex-row md:items-center md:justify-between w-full h-full border-b">
-                <Logo />
-                <NavLinksDesktop />
-            </nav>
-            <div className="w-full flex md:hidden justify-between">
-                <Logo />
-            </div>
-        </>
+        <nav className="flex flex-row items-center justify-between w-full h-full md:border-b">
+            <Logo />
+            <NavLinksDesktop />
+            <NavPartMobile />
+        </nav>
     );
 }
 

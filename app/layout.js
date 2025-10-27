@@ -2,6 +2,7 @@ import { Lato, Roboto } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/nav/Nav";
 import { ProgressBar } from "@/components/ProgressBar";
+import { ThemeColorSchemeProvider } from "@/components/ThemeColorScheme";
 
 const lato = Lato({
     variable: "--font-lato",
@@ -22,13 +23,38 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
+            <head>
+                <script id="load-theme">{`
+                (function() {
+                                function getInitialTheme() {
+                                  const stored = localStorage.getItem("theme-color-scheme");
+                                  if (stored) {
+                                    return stored;
+                                  }
+                                  const userMedia = window.matchMedia('(prefers-color-scheme: dark)');
+                                  if (userMedia.matches) {
+                                    return 'dark';
+                                  }
+                                  return 'light';
+                                }
+                                const theme = getInitialTheme();
+                                if (theme === 'dark') {
+                                  document.documentElement.classList.add('dark');
+                                } else {
+                                  document.documentElement.classList.remove('dark');
+                                }
+                              })();
+            `}</script>
+            </head>
             <body className={`${lato.variable} ${roboto.variable} antialiased`}>
                 <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 inset-0 z-9999">
-                    <header className="print:hidden sticky top-0 flex h-16 items-center gap-4 bg-background mx-auto w-full max-w-screen-xl px-6 md:px-20 z-50">
-                        <Nav />
-                    </header>
-                    {children}
+                    <ThemeColorSchemeProvider>
+                        <header className="print:hidden sticky top-0 flex h-16 items-center gap-4 bg-background mx-auto w-full max-w-screen-xl px-6 md:px-20 z-50">
+                            <Nav />
+                        </header>
+                        {children}
+                    </ThemeColorSchemeProvider>
                 </ProgressBar>
             </body>
         </html>

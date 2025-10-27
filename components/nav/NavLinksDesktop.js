@@ -2,17 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import classNames from "classnames";
+import clsx from "clsx";
 import { ProgressBarLink } from "@/components/ProgressBar";
+import Button from "@/components/Button";
+import Menu from "@/constants/Menu";
 
-const NavLinks = [
-    ["Home", "/"],
-    ["Projects", "/projects"],
-    ["Blog", "/blog"],
-    ["About", "/about"],
-    ["Resume/CV", "/cv"],
-    ["Contact", "/contact"],
-];
+import { ThemeColorSchemeToggleButton } from "@/components/ThemeColorScheme";
 
 export default function NavLinksDesktop() {
     const pathname = usePathname();
@@ -22,7 +17,7 @@ export default function NavLinksDesktop() {
             id="nav-links"
             className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:justify-between md:gap-5 md:text-sm lg:gap-6"
         >
-            {NavLinks.map((item) => {
+            {Menu.map((item) => {
                 const active =
                     item[1] === "/"
                         ? pathname === item[1]
@@ -32,7 +27,7 @@ export default function NavLinksDesktop() {
                     <ProgressBarLink
                         key={item[0]}
                         href={item[1]}
-                        className={classNames({
+                        className={clsx({
                             "text-foreground!": active,
                         })}
                     >
@@ -40,6 +35,7 @@ export default function NavLinksDesktop() {
                     </ProgressBarLink>
                 );
             })}
+            <ThemeColorSchemeToggleButton />
         </div>
     );
 }

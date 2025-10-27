@@ -83,6 +83,7 @@ export function ProgressBar({ className, children }) {
                         }}
                         exit={{ opacity: 0 }}
                         className={className}
+                        suppressHydrationWarning={true}
                     />
                 )}
             </AnimatePresence>
