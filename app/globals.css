@@ -47,6 +47,28 @@
     --page-color: oklch(20.5% 0 0);
 }
 
+@media print {
+    :root {
+        --background: oklch(97% 0.001 106.424);
+        --foreground: #171717;
+        --primary: 0 0% 9%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 0 0% 96.1%;
+        --secondary-foreground: 0 0% 9%;
+        --muted: 0 0% 96.1%;
+        --muted-foreground: 0 0% 45.1%;
+        --accent: 0 0% 96.1%;
+        --accent-foreground: 0 0% 9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 0 0% 89.8%;
+        --input: 0 0% 89.8%;
+        --ring: 0 0% 3.9%;
+        --radius: 0.5rem;
+        --page-color: #fff;
+    }
+}
+
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -100,13 +122,25 @@ a.no-link {
     @apply hover:no-underline;
 }
 
-nav #nav-links > a {
+nav .nav-links > a {
     @apply hover:text-foreground hover:no-underline font-bold text-muted-foreground;
 }
 
-#PostPage .postContent a,
-#HomePage main > div > div > a {
-    @apply !text-indigo-700;
+#HomePage {
+    h2 {
+        @apply text-4xl;
+        @apply font-bold;
+        @apply font-accent;
+    }
+
+    h2 + div {
+        @apply mt-2;
+    }
+
+    .box {
+        @apply flex flex-col;
+        @apply gap-30;
+    }
 }
 
 code {

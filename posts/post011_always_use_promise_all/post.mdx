@@ -1,0 +1,86 @@
+---
+title: "Always use Promise.all() (or any other Promise's method) for array of promises"
+tags: 
+   - JavaScript/JS
+publishedOn: "2023-09-16T16:01:00.000Z"
+---
+At my job one of our services was crashing from time to time, but quite rarely.
+Because it crashed only at a large interval of a few days it was not given that
+much attention to it. The pod would crash and another pod would immediately be
+created and ready to serve the requests.
+
+But one day our internal DNS failed and all the pods of the service crashed.
+After investigation we have seen that the DNS failed, but the service should
+have not crashed, but in return it should serve a 500 to the clients.
+
+After analyzing the service's code I found this: our service was calling other
+services to retrieve the required data. All of the requests to the other
+services were handled inside a try/catch block, but something else was going
+bad. Very bad. Very bad because the thrown exception was that the service's
+code was not handling a promise inside a try/catch block. But how?
+
+Let see the next code:
+
+```javascript[class="line-numbers"]
+const streams = {
+    firstStepStream: (req, res) => {
+        res.streams = [];
+    },
+    intermediateStep1Stream: (req, res) => {
+        res.streams.push((async () => {
+            const response = await doRequestToSomeService(req);
+            // Do things
+            // ...
+        })());
+    },
+    intermediateStep2Stream: (req, res) => {
+        res.streams.push((async () => {
+            const response2 = await doRequestToSomeService2(req);
+            // Do things
+            // ...
+        })());
+    },
+    finalStepStream: async (req, res) => {
+        for (const stream in res.streams) {
+            try {
+                await stream;
+            } catch (error) {
+                res.status(500);
+                res.end();
+                return;
+            }
+        }
+
+        // ...
+    }
+};
+```
+
+What is wrong here? Well, without much knowledge of JavaScript everything looks
+fine. But then why the code fails in some situations?
+
+If only one promise from `res.streams` fails then our code handle it very fine 
+and will respond to the client with the 500 status code.
+
+But if both promises fails then our code will crash.
+
+Why? Because we are not handling the second failed promise. When the first
+promise get rejected it triggers the `catch` block and in our `catch` block of
+code we have a `return` that will break the loop and our second promise will
+not have the change to be checked thus crashing the service with the proper
+error (that we are not handling a promise).
+
+Yes, we can done it correctly using the foor loop (or any loop) as long as we
+check every single promise we have. But why? We already have special methods
+inside the `Promise` object for handling all the cases we would want:
+
+- `Promise.all()` for when we want for all the promises to succeed;
+- `Promise.allSettled()` for when we just want for all the promises to be done; will never reject;
+- `Promise.any()` for when we want at least one promise to succeed; first one to succeed will be returned; if all fails when the method fails;
+- `Promise.race()` for when we want the fastest promise to succeed.
+
+And using the methods inside the `Promise` object allow us the benefit of
+better internal engine optimizations.
+
+Read more about the Promise object here:
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" rel="noopener noreferrer" target="_blank">MDN Web Docs: Promise</a>

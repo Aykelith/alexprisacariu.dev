@@ -1,8 +1,8 @@
 import { Lato, Roboto } from "next/font/google";
 import "./globals.css";
-import Nav from "@/components/nav/Nav";
-import { ProgressBar } from "@/components/ProgressBar";
-import { ThemeColorSchemeProvider } from "@/components/ThemeColorScheme";
+import Nav from "@/components/nav";
+import { ProgressBar } from "@/components/progress_bar";
+import { ThemeColorSchemeProvider } from "@/components/theme_color_scheme";
 
 const lato = Lato({
     variable: "--font-lato",
@@ -50,7 +50,7 @@ export default function RootLayout({ children }) {
             <body className={`${lato.variable} ${roboto.variable} antialiased`}>
                 <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 inset-0 z-9999">
                     <ThemeColorSchemeProvider>
-                        <header className="print:hidden sticky top-0 flex h-16 items-center gap-4 bg-background mx-auto w-full max-w-screen-xl px-6 md:px-20 z-50">
+                        <header className="print:hidden sticky top-0 flex h-16 items-center gap-4 bg-background z-50 box">
                             <Nav />
                         </header>
                         {children}

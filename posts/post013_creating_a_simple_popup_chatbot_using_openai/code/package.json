@@ -1,0 +1,20 @@
+{
+  "name": "friendly-bot-searcher-demo",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "src/run.js",
+  "scripts": {
+    "build": "sass style/base.scss public/base.css",
+    "start-v1": "node version-1/server.js",
+    "start-v2": "node version-2/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "openai": "^4.44.0",
+    "sass": "^1.77.1",
+    "ws": "^8.17.0"
+  }
+}

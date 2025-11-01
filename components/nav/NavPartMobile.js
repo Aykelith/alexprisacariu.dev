@@ -1,17 +1,21 @@
 "use client";
 
-import Button from "@/components/Button";
-import { ThemeColorSchemeToggleButton } from "@/components/ThemeColorScheme";
+// Methods
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
+// Components
+import Button from "@/components/Button";
+import { ThemeColorSchemeToggleButton } from "@/components/theme_color_scheme";
+import { ProgressBarLink } from "@/components/progress_bar";
+
+// Constants
 import Menu from "@/constants/Menu";
 
-//= Assets
-// Own
+// Assets
 import MenuSVG from "@/components/icons/menu.svg";
-import { usePathname } from "next/navigation";
-import { ProgressBarLink } from "../ProgressBar";
-import { clsx } from "clsx";
+import XSVG from "@/components/icons/x.svg";
 
 export default function NavPartMobile() {
     const pathname = usePathname();
@@ -36,7 +40,7 @@ export default function NavPartMobile() {
                         }
                     }}
                 >
-                    <div className="w-4/5 max-w-72 fixed top-0 right-0 h-full bg-red-500 flex flex-col gap-4 px-2 py-6">
+                    <div className="nav-links w-4/5 max-w-72 fixed top-0 right-0 h-full bg-background border-l flex flex-col gap-4 px-6 py-6 text-lg">
                         {Menu.map((item) => {
                             const active =
                                 item[1] === "/"
@@ -59,6 +63,12 @@ export default function NavPartMobile() {
                             );
                         })}
                     </div>
+                    <button
+                        className="fixed top-1 right-1 p-3"
+                        onClick={() => setShowMenu(false)}
+                    >
+                        <XSVG className="w-5 h-5" />
+                    </button>
                 </div>
             )}
         </div>

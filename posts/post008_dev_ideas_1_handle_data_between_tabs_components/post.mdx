@@ -1,0 +1,151 @@
+---
+title: "Dev Ideas #1: Handle data between tabs components"
+tags: 
+   - ReactJS
+   - DevIdeas
+publishedOn: "2021-08-28T12:36:45.620Z"
+---
+Developing a CRM I ran into the next problem: what is the best way (at least
+for me) to handle the data between multiple components that can be accessed in
+any order because they are tabs?  Each component receive the same data the
+parent component.
+
+<center><img src="/imgs/posts/post1/tabs.gif" width="300" height="81"/></center>
+
+The main problem is that the components sometimes must perform long operations
+and in this time the user should be able to switch between tabs. A specific
+example is a tab that allow the user to upload images and it take some time
+until the server process the image/s. In this time the  user should be allowed
+to switch to another tab and then come back to see if the images are done
+processing, or, maybe even display a notification in any tab the user is that
+the images are done.
+
+The most straightforward way is to send as an prop the data, but this creates a
+big problem: the data can't be edited because a prop is immutable.
+
+I came with 2 possible solutions:
+
+1. Store the data in the parent's state object and send as props to the
+   children the data from `state` and a function to update the state;
+2. Store the data in the parent's class as a variable and send as props to the
+   children a function to get the variable that holds the data.
+
+The first possible solution would look like this:
+
+```ts[class="line-numbers"]
+type SharedData = { clientName: string };
+type ParentState = { sharedData: SharedData };
+
+class ParentComponent extends React.PureComponent<{}, ParentState> {
+    constructor(props: {}) {
+        this.state = {
+            sharedData: { clientName: "A" }
+        }
+    }
+
+    render() {
+        return (
+            <div id="tabs">
+                <TabAComponent
+                    getData={() => this.state.sharedData}
+                    updateData={(newData: SharedData) => this.setState({ sharedData: newData })}
+                />
+            </div>
+        );
+    }
+}
+
+type TabAComponentProps = {
+    getData: () => Readonly<SharedData>;
+    updateData: (newData: SharedData) => void;
+}
+
+class TabAComponent extends React.PureComponent<TabAComponentProps> {
+    render() {
+        return (
+            <div>
+                <input
+                    value={this.props.getData().clientName}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = event.target.value;
+                        this.props.updateData({ clientName: value });
+                    }}
+                />
+            </div>
+        );
+    }
+}
+```
+
+The pros of this solution is that we don't need to copy any data to any
+component because calling the update function will actually make the
+component's `render` function to be called, but as a downside we may pollute
+the parent's state with data that may not be drawn.
+
+The second solution is the winner (for me) because I can store in the variable
+even data that is not called (like a `promise` that announce when the images
+are uploaded to the server).
+
+Yes, I need to copy some part of the data each time a component is constructed
+and to update it in both places (in the actual data variable and in the
+component's state) but I don't handle much data so it will not be a bottleneck
+for my use case.
+
+```ts[class="line-numbers"]
+type SharedData = { clientName: string };
+
+class ParentComponent extends React.PureComponent<> {
+    private sharedData: SharedData;
+
+    constructor(props: {}) {
+        this.sharedData = { clientName: "B" };
+    }
+
+    render() {
+        return (
+            <div id="tabs">
+                <TabBComponent getData={() => this.state.sharedData}/>
+            </div>
+        );
+    }
+}
+
+type SpecificTabBComponentSharedData = {
+    longOperationPromise?: Promise;
+};
+
+type TabBComponentProps = {
+    getData: () => SharedData & SpecificTabBComponentSharedData;
+};
+
+type TabBComponentState = {
+    clientName: string;
+};
+
+class TabBComponent extends React.PureComponent<TabBComponentProps> {
+    constructor(props: TabBComponentProps) {
+        this.state = {
+            clientName: this.props.getData().clientName;
+        };
+    }
+
+    render() {
+        return (
+            <div>
+                <input
+                    value={this.state.clientName}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = event.target.value;
+                        this.setState({ clientName: value });
+                    }}
+                />
+                <button
+                    onClick={() => {
+                        this.props.getData().longOperationPromise = new Promise(...);
+                    }}
+                />
+            </div>
+        );
+    }
+}
+```

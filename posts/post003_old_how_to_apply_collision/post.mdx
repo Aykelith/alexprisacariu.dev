@@ -1,0 +1,201 @@
+---
+title: "OLD: How to apply collision"
+tags: 
+   - Old
+   - SFML
+   - C++
+   - Tutorial
+publishedOn: "2014-04-15T12:36:45.620Z"
+---
+One of my biggest problems when creating games was not collision detection, it was how to apply collision. In this tutorial I will show you how to detect and apply collision on AABB objects.
+
+First, we create a simple code that creates a window, a player sprite and some terrain sprites. We then add gravity and move functions for the player.
+
+```ts[class="line-numbers"]
+#include <SFML/Graphics.hpp>
+
+#include <vector>
+
+const int gravity = 500;
+
+void move(sf::Vector2f &playerVelocity)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		playerVelocity.x = -gravity;
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		playerVelocity.x = gravity;
+	}
+	else if (playerVelocity.x != 0)
+	{
+		playerVelocity.x = 0;
+	}
+}
+
+int main()
+{
+	sf::RenderWindow window(sf::VideoMode(800,600), "How to apply collision?");
+
+	// Loading player texture
+	sf::Texture playerTexture;
+	if (!playerTexture.loadFromFile("player.png")) return 0;
+
+	// Creating player sprite
+	sf::Sprite player;
+	player.setTexture(playerTexture);
+
+	// Loading grass texture
+	sf::Texture grassTexture;
+	if (!grassTexture.loadFromFile("grass.png")) return 0;
+
+	// Creating a vector because we have more blocks and we will need them into a container
+	std::vector<sf::Sprite> grass;
+
+	// Add 4 grass blocks to the container
+	grass.resize(4);
+	for (std::size_t i=0; i<3; ++i)
+	{
+		grass[i].setTexture(grassTexture);
+		grass[i].setPosition(128 * i, 384);
+	}
+
+	// Last grass block will bo above the first one
+	grass[3].setTexture(grassTexture);
+	grass[3].setPosition(0,256);
+
+	// Create a sf::Vector2f for player velocity and add to the y variable value gravity
+	sf::Vector2f playerVelocity(0, gravity);
+
+	sf::Clock clock;
+	while (window.isOpen())
+	{
+		// Get the frame elapsed time and restart the clock
+		float dt = clock.restart().asSeconds();
+
+		sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        // Apply physics to player
+        player.setPosition(player.getPosition().x + playerVelocity.x * dt, player.getPosition().y + playerVelocity.y * dt);
+
+        move(playerVelocity);
+
+        window.clear();
+
+        // Draw the grass
+        for (std::size_t i=0; i<grass.size(); ++i)
+        {
+        	window.draw(grass[i]);
+        }
+
+        // Draw the player
+        window.draw(player);
+
+        window.display();
+	}	
+
+	return 0;
+}
+```
+
+<center><img src="/imgs/posts/post003/result.png"/></center>
+
+For physics we use a constant variable named gravity and we multiply it by the elapsed time in seconds of the frame. You can find more about game physics in <a href="https://gafferongames.com/game-physics/" rel="noopener noreferrer" target="_blank">these tutorials</a>.
+
+These are the texture images I used: <a href="https://github.com/Aykelith/AlexanderX.net/blob/master/Tutorials/How%20to%20apply%20collision/player.png" rel="noopener noreferrer" target="_blank">player.png</a> and <a href="https://github.com/Aykelith/AlexanderX.net/blob/master/Tutorials/How%20to%20apply%20collision/grass.png" rel="noopener noreferrer" target="_blank">grass.png</a>.
+
+Now we need to detect the collision and after we detect it, we resolve it; but first, you need to know that objects which can be moved or destroyed are called ‘dynamic objects’ and other objects like terrain (grass) are called ‘static objects’. Because in our code we only have one dynamic object (the player) and 4 static objects (grass) we will verify the collision between the player and the grass blocks. If we had 2 dynamic objects and 4 static objects then we would have verified the collision between first dynamic objects and all 4 static objects and between second dynamic objects and all 4 static objects. And with that being said lets see how to detect collision:
+
+```ts[class="line-numbers"]
+int main()
+{
+	// ...
+
+	while (window.isOpen())
+	{
+		// ...
+
+		// Apply physics to player
+        player.setPosition(player.getPosition().x + playerVelocity.x * dt, player.getPosition().y + playerVelocity.y * dt);
+
+		for (std::size_t i=0; i<grass.size(); ++i)
+        {
+        	if (player.getGlobalBounds().intersects(grass[i].getGlobalBounds()))
+        	{
+        		// apply collision
+        	}
+        }
+
+        move(playerVelocity);
+
+        // ...
+	}
+}
+```
+
+From what you can see we only call the intersects function of class `sf::Rect` which is returned by the `getGlobalBounds()` function.
+
+The above code can be translated into pseudo code:
+
+```ts[class="line-numbers"]
+for every dynamic object
+	for every static object && (dynamic object - actual dynamic object)
+		if is collision
+			apply collision
+```
+
+For applying collision we need to know the affected area or the collision area so we will use the intersects function but with the second argument which returns the affected area. After we get the affected area we will verify from which side comes the collision and apply it:
+
+```ts[class="line-numbers"]
+// Affected area
+sf::FloatRect area;
+
+if (player.getGlobalBounds().intersects(grass[i].getGlobalBounds(), area))
+{
+	// Verifying if we need to apply collision to the vertical axis, else we apply to horizontal axis
+	if (area.width > area.height)
+	{
+		if (area.contains({ area.left, player.getPosition().y }))
+		{
+			// Up side crash
+			player.setPosition({ player.getPosition().x, player.getPosition().y + area.height });
+		}
+		else
+		{
+			// Down side crash
+			player.setPosition({ player.getPosition().x, player.getPosition().y - area.height });
+		}
+	}
+	else if (area.width < area.height)
+	{
+		if (area.contains({ player.getPosition().x + player.getGlobalBounds().width - 1.f, area.top + 1.f }))
+		{
+			//Right side crash
+			player.setPosition({ player.getPosition().x - area.width, player.getPosition().y });
+		}
+		else
+		{
+			//Left side crash
+			player.setPosition({ player.getPosition().x + area.width, player.getPosition().y });
+		}
+	}
+}
+```
+
+What we do is to compare the area width and height to see what axis is affected. Then we check the direction on what we need to apply collision to by verifying if the affected area contains a specified point which is by case the top point of sprite, down point of sprite, the right point of sprite and the left point of sprite.
+
+Here is a demonstrative image of affected area:
+
+<center><img src="/imgs/posts/post003/demonstration.png"/></center>
+
+And that’s all for applying collision for AABB objects.
+
+I want to thank **AlexAUT** and his SFML Game Jam sources.
+
+You can find the source code and the resources on <a href="https://github.com/Aykelith/AlexanderX.net/tree/master/Tutorials/How%20to%20apply%20collision" rel="noopener noreferrer" target="_blank">GitHub</a>.
