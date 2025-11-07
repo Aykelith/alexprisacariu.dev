@@ -6,14 +6,16 @@ const ProjectsDataVariablesNames = [
     "description",
     "coverShortProjectImage",
     "tags",
-    "pinned",
+    "yearsActive",
     "urlPart",
 ];
 
-export default async function getHomeProjects(includeIgnoredProjects = false) {
+export default async function getListingProjects(
+    includeIgnoredProjects = false,
+) {
     return getProjects(
         ProjectsDataVariablesNames,
-        (projectSettings) => !!projectSettings.pinned,
+        null,
         includeIgnoredProjects,
     );
 }

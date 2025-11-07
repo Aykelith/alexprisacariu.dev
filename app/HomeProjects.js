@@ -10,8 +10,8 @@ export default async function HomeProjects() {
                 return (
                     <ProgressBarLink
                         key={project.title}
-                        className="home-project"
-                        href={`/projects/${project.id}`}
+                        className="project-card"
+                        href={`/projects/${project.urlPart}`}
                     >
                         <div className="project-img">
                             <img src={project.coverShortProjectImage} />
@@ -23,7 +23,19 @@ export default async function HomeProjects() {
                             </div>
                             <div className="flex-1 min-h-2"></div>
                             <div className="project-tags">
-                                {project.tags.map((tag) => {
+                                {project.tags.map((tag, index) => {
+                                    if (index >= 2) {
+                                        if (index == 2) {
+                                            return (
+                                                <div key="more" className="tag">
+                                                    ...
+                                                </div>
+                                            );
+                                        }
+
+                                        return null;
+                                    }
+
                                     return (
                                         <div key={tag} className="tag">
                                             {tag}
@@ -37,7 +49,7 @@ export default async function HomeProjects() {
             })}
             <ProgressBarLink
                 href="/projects"
-                className="home-project-base flex justify-center items-center"
+                className="project-card-base flex justify-center items-center"
             >
                 See more
             </ProgressBarLink>

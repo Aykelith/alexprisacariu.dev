@@ -1,3 +1,4 @@
+// Methods
 import clsx from "clsx";
 
 export default function Button({

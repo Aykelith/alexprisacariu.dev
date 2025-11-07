@@ -1,70 +1,48 @@
 @import "tailwindcss";
 
 /*
+    --background: the website background
+    --foreground: text color
+    --card: cards background colors
     --page-color: the A4 page color used in CV
 */
 
 :root {
     --background: oklch(97% 0.001 106.424);
     --foreground: #171717;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
+    --card-background: 0 0% 100%;
+    --card-hover-background: 0 0% 7%;
+    --tag-background: 0 0% 9%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
     --page-color: #fff;
+    --foreground-accent: oklch(0.55 0.24 262.88);
+    --button-background: oklch(0.55 0.24 262.88);
 }
 
 .dark {
     --background: #0a0a0a;
-    --foreground: #ededed;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
+    --foreground: #fff;
+    --card-background: 0 0% 5%;
+    --card-hover-background: 0 0% 6%;
+    --tag-background: 0 0% 7%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
     --page-color: oklch(20.5% 0 0);
+    --foreground-accent: oklch(0.55 0.24 262.88);
+    --button-background: oklch(0.55 0.24 262.88);
 }
 
 @media print {
     :root {
         --background: oklch(97% 0.001 106.424);
         --foreground: #171717;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
         --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
-        --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
         --border: 0 0% 89.8%;
         --input: 0 0% 89.8%;
         --ring: 0 0% 3.9%;
@@ -77,8 +55,12 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-muted-foreground: hsl(var(--muted-foreground));
-    --color-card: var(--card);
+    --color-card: hsl(var(--card-background));
+    --color-card-hover: hsl(var(--card-hover-background));
+    --color-tag: hsl(var(--tag-background));
     --color-page: var(--page-color);
+    --color-foreground-accent: var(--foreground-accent);
+    --color-button-background: var(--button-background);
     --font-normal: var(--font-roboto);
     --font-accent: var(--font-lato);
 }
@@ -115,20 +97,97 @@ li {
 
 a {
     @apply text-indigo-700;
-    @apply hover:underline;
-}
-
-a.black {
-    @apply text-foreground;
-}
-
-a.no-link {
-    @apply text-foreground;
     @apply hover:no-underline;
+
+    &.black {
+        @apply text-foreground;
+    }
+
+    &.no-link {
+        @apply text-foreground;
+        @apply hover:no-underline;
+    }
+}
+
+.accent-button {
+    @apply bg-button-background text-foreground p-2 rounded cursor-pointer;
 }
 
 nav .nav-links > a {
     @apply hover:text-foreground hover:no-underline font-bold text-muted-foreground;
+}
+
+.clickable-img,
+.project-card,
+.project-card-base {
+    @apply border rounded-lg;
+    @apply bg-card;
+    @apply cursor-pointer;
+    @apply text-foreground no-underline;
+
+    &:hover {
+        @apply bg-card-hover;
+    }
+}
+
+.clickable-img {
+    @apply flex justify-center items-center overflow-hidden;
+
+    > img {
+        @apply object-contain;
+        @apply transition-transform duration-300 transform;
+    }
+
+    &:hover {
+        > img {
+            @apply scale-110;
+        }
+    }
+}
+
+.project-card {
+    @apply flex flex-col overflow-hidden;
+
+    > .project-img {
+        @apply w-full overflow-hidden px-2 pt-2;
+
+        > img {
+            @apply w-full h-38;
+            @apply rounded-lg;
+            @apply object-cover;
+            @apply transition-transform duration-300 transform;
+        }
+    }
+
+    > .project-body {
+        @apply flex-1 flex flex-col;
+        @apply px-3 py-2;
+
+        > .project-title {
+            @apply font-accent font-bold;
+        }
+
+        > .project-desc {
+            @apply text-sm text-muted-foreground;
+        }
+
+        > .project-tags {
+            @apply flex gap-2;
+
+            > div {
+                @apply bg-tag px-1 py-0.5 rounded;
+                @apply text-sm;
+            }
+        }
+    }
+
+    &:hover {
+        > .project-img {
+            > img {
+                @apply scale-110;
+            }
+        }
+    }
 }
 
 #HomePage {
@@ -145,62 +204,6 @@ nav .nav-links > a {
     .box {
         @apply flex flex-col;
         @apply gap-30;
-    }
-
-    .home-project,
-    .home-project-base {
-        @apply border rounded-lg;
-        @apply bg-card;
-        @apply cursor-pointer;
-        @apply text-foreground no-underline;
-
-        &:hover {
-            @apply bg-red-500;
-        }
-    }
-
-    .home-project {
-        @apply flex flex-col overflow-hidden;
-
-        > .project-img {
-            @apply w-full overflow-hidden px-2 pt-2;
-
-            > img {
-                @apply w-full h-38;
-                @apply rounded-lg;
-                @apply object-cover;
-                @apply transition-transform duration-300 transform;
-            }
-        }
-
-        > .project-body {
-            @apply flex-1 flex flex-col;
-            @apply px-3 py-2;
-
-            > .project-title {
-                @apply font-accent font-bold;
-            }
-
-            > .project-desc {
-                @apply text-sm;
-            }
-
-            > .project-tags {
-                @apply flex gap-2;
-
-                > div {
-                    @apply text-sm;
-                }
-            }
-        }
-
-        &:hover {
-            > .project-img {
-                > img {
-                    @apply scale-110;
-                }
-            }
-        }
     }
 }
 
@@ -255,4 +258,46 @@ code {
 #ProjectPage .postContent ul li,
 #PostPage .postContent ul li {
     list-style: disc;
+}
+
+#ProjectsPage {
+    > .box > .timeline {
+        @apply flex flex-col gap-16 relative;
+        @apply py-12;
+
+        &::after {
+            @apply absolute;
+            background-color: #ededed;
+            content: "";
+            width: 6px;
+            top: 0;
+            bottom: 0;
+            left: 2rem;
+            margin-left: -3px;
+        }
+
+        > div {
+            position: relative;
+            left: 4rem;
+            top: 0;
+
+            &::after {
+                @apply absolute;
+                @apply bg-white;
+                @apply border-4 border-foreground-accent;
+                content: "";
+                width: 25px;
+                height: 25px;
+                left: -2.75rem;
+                top: 3px;
+                border-radius: 50%;
+                z-index: 1;
+            }
+
+            > h2 {
+                @apply font-accent text-2xl;
+                @apply mb-4;
+            }
+        }
+    }
 }

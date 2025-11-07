@@ -190,7 +190,7 @@ function Section({ className, title, children }) {
     return (
         <div className={classNames("flex flex-col gap-2", className)}>
             {title !== null && (
-                <div className="font-bold text-blue-600 font-accent text-lg">
+                <div className="font-bold text-foreground-accent font-accent text-lg">
                     {title}
                 </div>
             )}

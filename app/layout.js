@@ -3,6 +3,7 @@ import "./globals.css";
 import Nav from "@/components/nav";
 import { ProgressBar } from "@/components/progress_bar";
 import { ThemeColorSchemeProvider } from "@/components/theme_color_scheme";
+import { Footer } from "@/components/footer";
 
 const lato = Lato({
     variable: "--font-lato",
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
                             <Nav />
                         </header>
                         {children}
+                        <Footer className="print:hidden" />
                     </ThemeColorSchemeProvider>
                 </ProgressBar>
             </body>
