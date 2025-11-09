@@ -3,7 +3,6 @@ import fs from "fs/promises";
 
 // Constants
 import ProjectsDirectoryPath from "@/constants/server/ProjectsDirectoryPath";
-import ProjectsByUrlPartFileName from "@/constants/server/ProjectsByUrlPartFileName";
 
 export default async function getProjectsDirNames(
     includeIgnoredProjects = false,
@@ -18,9 +17,6 @@ export default async function getProjectsDirNames(
     }
 
     return projectsDirectoriesNames.filter((projectDirectoryName) => {
-        return (
-            (includeIgnoredProjects || !projectDirectoryName.startsWith("_")) &&
-            projectDirectoryName !== ProjectsByUrlPartFileName
-        );
+        return includeIgnoredProjects || !projectDirectoryName.startsWith("_");
     });
 }

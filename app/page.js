@@ -1,5 +1,6 @@
 import Title from "./Title";
 import HomeProjects from "./HomeProjects";
+import HomeBlogPosts from "./HomeBlogPosts";
 
 export default async function Home() {
     return (
@@ -23,10 +24,30 @@ export default async function Home() {
                 <div>
                     <h2>Blog</h2>
                     <div>Sometimes I like to write</div>
+                    <HomeBlogPosts />
                 </div>
-                <div>
+                <div className="mb-12">
                     <h2>About me</h2>
                     <div>Short info about me</div>
+                    <div className="flex gap-8">
+                        <div className="card flex-1">
+                            <div>Connect with me</div>
+                        </div>
+                        <div className="flex-1 flex flex-col gap-6">
+                            <div className="flex gap-6">
+                                <div className="flex-1 card">
+                                    <div>Available for work</div>
+                                </div>
+                                <div className="flex-1 card">
+                                    <div>Location</div>
+                                    <div>Cluj-Napoca, Romania</div>
+                                </div>
+                            </div>
+                            <div className="card">
+                                <div>Techstack</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <span

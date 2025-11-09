@@ -1,34 +1,32 @@
 // Methods
-import getHomeProjects from "@/utilities/server/projects/getHomeProjects";
+import getHomePosts from "@/utilities/server/blog/getHomePosts";
 
 // Components
 import { ProgressBarLink } from "@/components/progress_bar";
 
-export default async function HomeProjects() {
-    const projects = await getHomeProjects();
+export default async function HomeBlogPosts() {
+    const posts = await getHomePosts();
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 lg:gap-4">
-            {projects.map((project) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 lg:gap-4">
+            {posts.map((post) => {
                 return (
                     <ProgressBarLink
-                        key={project.title}
-                        className="project-card"
-                        href={`/projects/${project.urlPart}`}
+                        key={post.title}
+                        className="post-card"
+                        href={`/blog/${post.id}`}
                     >
-                        <div className="project-img">
-                            <img src={project.coverShortProjectImage} />
+                        <div className="post-img">
+                            <img src={post.coverSmall} />
                         </div>
-                        <div className="project-body">
-                            <div className="project-title">{project.title}</div>
-                            <div className="project-desc">
-                                {project.description}
-                            </div>
+                        <div className="post-body">
+                            <div className="post-title">{post.title}</div>
+                            <div className="post-desc">{post.description}</div>
                             <div className="flex-1 min-h-2"></div>
-                            <div className="project-tags">
-                                {project.tags.map((tag, index) => {
-                                    if (index >= 2) {
-                                        if (index == 2) {
+                            <div className="post-tags">
+                                {post.tags.map((tag, index) => {
+                                    if (index >= 5) {
+                                        if (index == 5) {
                                             return (
                                                 <div key="more" className="tag">
                                                     ...
@@ -51,8 +49,8 @@ export default async function HomeProjects() {
                 );
             })}
             <ProgressBarLink
-                href="/projects"
-                className="project-card-base flex justify-center items-center"
+                href="/blog"
+                className="post-card-base flex justify-center items-center"
             >
                 See more
             </ProgressBarLink>

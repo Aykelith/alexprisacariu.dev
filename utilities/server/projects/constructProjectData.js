@@ -1,3 +1,6 @@
+// Methods
+import transformProjectData from "./transformProjectData";
+
 export default function constructProjectData(
     projectSettings,
     variablesNames = [],
@@ -10,5 +13,6 @@ export default function constructProjectData(
     for (const variableName of variablesNames) {
         data[variableName] = projectSettings[variableName];
     }
-    return data;
+
+    return transformProjectData(data);
 }

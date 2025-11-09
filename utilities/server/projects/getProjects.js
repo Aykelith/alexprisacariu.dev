@@ -37,9 +37,10 @@ export default async function getProjects(
             }
         }
 
-        data.push(
-            constructProjectData(projectSettings, projectsVariablesNames),
-        );
+        data.push({
+            ...constructProjectData(projectSettings, projectsVariablesNames),
+            urlPart: projectDirectoryName,
+        });
     }
 
     return data;

@@ -1,6 +1,6 @@
 // Method
 import { ProgressBarLink } from "@/components/progress_bar";
-import getListingProjects from "@/utilities/server/getListingProjects";
+import getListingProjects from "@/utilities/server/projects/getListingProjects";
 
 async function constructData() {
     const projects = await getListingProjects();
@@ -50,9 +50,15 @@ export default async function ProjectsPage() {
         <div id="ProjectsPage" className="page">
             <div className="box">
                 <div className="timeline">
+                    <div>
+                        <h1 className="text-4xl font-bold">Projects</h1>
+                        <div className="text-muted-foreground">
+                            List of projects I created or contributed to
+                        </div>
+                    </div>
                     {list.map(({ year, projects }) => {
                         return (
-                            <div key={year}>
+                            <div key={year} className="with-bullet">
                                 <h2>
                                     {year === currentYear
                                         ? `Present / ${year}`

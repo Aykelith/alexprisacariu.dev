@@ -4,6 +4,7 @@ import Nav from "@/components/nav";
 import { ProgressBar } from "@/components/progress_bar";
 import { ThemeColorSchemeProvider } from "@/components/theme_color_scheme";
 import { Footer } from "@/components/footer";
+import { ModalsSystem } from "@/components/modals_system";
 
 const lato = Lato({
     variable: "--font-lato",
@@ -56,6 +57,7 @@ export default function RootLayout({ children }) {
                         </header>
                         {children}
                         <Footer className="print:hidden" />
+                        <ModalsSystem />
                     </ThemeColorSchemeProvider>
                 </ProgressBar>
             </body>
