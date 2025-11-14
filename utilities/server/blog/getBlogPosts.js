@@ -18,6 +18,7 @@ export default async function getBlogPosts(page, includeIgnoredPosts = false) {
         posts.push(
             constructPostData(
                 await readPostSettings(dirName),
+                dirName,
                 PostsDataVariablesNames,
             ),
         );

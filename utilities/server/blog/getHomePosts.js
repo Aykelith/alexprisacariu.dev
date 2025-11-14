@@ -15,6 +15,7 @@ export default async function getHomePosts(includeIgnoredPosts = false) {
         posts.push(
             constructPostData(
                 await readPostSettings(dirName),
+                dirName,
                 PostsDataVariablesNames,
             ),
         );

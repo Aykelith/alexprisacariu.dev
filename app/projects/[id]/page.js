@@ -2,12 +2,12 @@
 import matter from "gray-matter";
 import getProjectSourceByUrlPart from "@/utilities/server/projects/getProjectSourceByUrlPart";
 import getProjectsUrlParts from "@/utilities/server/projects/getProjectsUrlParts";
+import transformProjectData from "@/utilities/server/projects/transformProjectData";
 
 // Components
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import ClickableImage from "@/components/ClickableImage";
 import BlurredSidesImg from "@/components/BlurredSidesImg";
-import transformProjectData from "@/utilities/server/projects/transformProjectData";
 
 const StatisticsRows = [
     {

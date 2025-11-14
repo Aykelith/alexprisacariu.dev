@@ -18,7 +18,7 @@ In this tutorial, I will present how to create a simple popup AI chat that can
 be added to any website. The client will be able to reply to the chat by typing
 and speaking to the bot.
 
-<ImageOnClickFullscreen src="/imgs/posts/post013/presentation.gif" style={{width:'24rem'}} className="post-image center"/>
+<ClickableImage src="/imgs/posts/post013/presentation.gif" style={{width:'24rem'}} className="post-image center"/>
 
 We will be using tools from OpenAI for the AI functionalities. For the chat, we
 will use ChatGPT, for the STT (speech-to-text), Whisper, and for the TTS
@@ -84,7 +84,7 @@ variable `OPENAI_API_KEY`.
 
 This is the page you should see when you access the page:
 
-<ImageOnClickFullscreen src="/imgs/posts/post013/first-look.png" style={{width:'31rem',border:'1px solid #c9c9c9'}} className="post-image center"/>
+<ClickableImage src="/imgs/posts/post013/first-look.png" style={{width:'31rem',border:'1px solid #c9c9c9'}} className="post-image center"/>
 
 ## The naive/simple implementation
 
@@ -96,11 +96,11 @@ above mentioned link.
 
 Here is an activity diagram of how the app will work:
 
-<div style={{overflowX: 'auto'}}><ImageOnClickFullscreen src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg" style={{width:'44rem', maxWidth: 'none'}} className="post-image center"/></div>
+<div style={{overflowX: 'auto'}}><ClickableImage src="/imgs/posts/post013/naive_version_activity_diagram.drawio.svg" style={{width:'44rem', maxWidth: 'none'}} className="post-image center"/></div>
 
 Let's look what happens when the user presses enter on the text input element:
 
-```js[class="line-numbers"]
+```js
 /* version-1/client.js */
 inputTextElement.addEventListener('keydown', async (event) => {
     if (event.code !== 'Enter') return;
@@ -127,7 +127,7 @@ answer we restore the functionality.
 After we disable the input, we call the main function, `addMessage`, which does
 the magic. Let's look at it:
 
-```js[class="line-numbers"]
+```js
 /* version-1/client.js */
 /**
  * Add a new message to the chat.
@@ -219,7 +219,7 @@ each message so the server knows from where to get the chat history.
 > the whole history each time, but with each message the data that needs to be
 > sent increase.
 
-```js[class="line-numbers"]
+```js
 /* version-1/client.js */
 /**
  * Create a random ID of given length.
@@ -271,7 +271,7 @@ async function sendMessage(data = {}) {
 Before we go to the server side to see how it handles the request, let's see
 what happens when the user clicks on the audio button:
 
-```js[class="line-numbers"]
+```js
 /* version-1/client.js */
 inputSpeechElement.addEventListener('click', async (_event) => {
     inputTextElement.value = "";
@@ -309,7 +309,7 @@ stop the "listening" state of the microphone.
 > We will look on another method to send the audio to the server in
 > **[The better implementation](#the-better-implementation)** section.
 
-```js[class="line-numbers"]
+```js
 /* version-1/client.js */
 /**
  * Record the user and return it as an base64 encoded audio.
@@ -369,7 +369,7 @@ async function recordUserAudio(stopRecordButtonElement) {
 
 Let's look now how the request is handled on the server:
 
-```js[class="line-numbers"]
+```js
 /* version-1/server.js */
 app.post('/api/message', async (req, res) => {
     if (!req.body.message && !req.body.audio) {
@@ -433,7 +433,7 @@ app.post('/api/message', async (req, res) => {
 After we check that the client sent the required data, we get the chat history
 for the given ID (or create a new chat history):
 
-```js[class="line-numbers"]
+```js
 /* version-1/server.js */
 /**
  * Get the chat history, or create a new one or the given ID.
@@ -464,7 +464,7 @@ the `toFile` function from the package `openai/uploads` to convert our base64
 encoded audio file to a file that OpenAI can read. The function will return the
 transcription of the given audio.
 
-```js[class="line-numbers"]
+```js
 /* version-1/server.js */
 /**
  * Convert speech to text using OpenAI.
@@ -489,7 +489,7 @@ async function stt(openai, audio) {
 Now that we have the message, we send the chat to ChatGPT and wait for a
 response by calling the `getAnswer` function.
 
-```js[class="line-numbers"]
+```js
 /* version-1/server.js */
 /**
  *
@@ -516,7 +516,7 @@ for this tutorial.
 Once the audio data is got we convert it into a `Buffer` and from there to a
 base64 encoded audio string to send back to the client.
 
-```js[class="line-numbers"]
+```js
 /* version-1/server.js */
 /**
  * Convert text to speech.
@@ -555,7 +555,7 @@ how to reimplement it and what to look for when doing so](#tips-for-adding-the-t
 So let's look at some code. We started from the previous implementation and
 changed what was needed to support WebSockets.
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 const ws = new WebSocket(Settings.WSAddress);
 const ChatID = makeID(10);
@@ -574,7 +574,7 @@ knows who we are.
 The structure of the data/messages sent between the client and the server
 follows this format:
 
-<ImageOnClickFullscreen src="/imgs/posts/post013/websocket_message_structure.drawio.svg" style={{width:'31rem'}} className="post-image center"/>
+<ClickableImage src="/imgs/posts/post013/websocket_message_structure.drawio.svg" style={{width:'31rem'}} className="post-image center"/>
 
 The first byte represents the type of the message we are sending, allowing the
 server to know how to handle the payload represented by the following bytes in
@@ -589,7 +589,7 @@ the data sent.
 
 In the following code, we handle the messages received from the server side:
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 const subscriptionsToWSMessages = [];
 
@@ -639,7 +639,7 @@ processed, and it is not necessary to call the rest of the subscribed functions.
 To make it easy to add and remove subscribers, we extend our `ws` object with
 the following:
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 /**
  * Add a function to the list of functions to be called when the socket receives
@@ -669,7 +669,7 @@ Next, we extend again the `ws` object with 3 more methods:
 - `sendAudioChunk` for sending an audio chunk from the user's voice recording;
 - `sendAudioEnd` for telling the server that the audio is done.
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 /**
  * Send a text message to the server.
@@ -694,7 +694,7 @@ In this method, before sending the message to the server, we call the
 `createSubscriptionForBotResponse` method, which handles creating and adding a
 subscription to listen for new messages to handle the response from the bot.
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 /**
  * Create and add a subscription to listen for the response of the bot to our sent message
@@ -728,7 +728,7 @@ type `ServerMessageID.TextEnd`, indicating that we can stop listening, at which
 point we will unsubscribe from listening to new messages.
 
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 /**
  * Send an audio chunk to the server.
@@ -766,7 +766,7 @@ Next we will look at how the `onNewMessageContent` parameter from the
 We slightly modified the `addMessage` function by splitting it into
 `addUserMessage` and `addBotMessage`. We will just look at `addUserMessage`:
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 /**
  * Add a new message to the chat.
@@ -842,7 +842,7 @@ resolved, and when it is its turn, it will overwrite the promise variable with a
 new promise that will just wait for the writing effect to be done (line 47) and
 then increase the counter.
 
-```js[class="line-numbers"]
+```js
 /* version-2/client.js */
 /**
  * Record the user and send the chunks to the server and on end wait for all the chunks to be sent.
@@ -913,7 +913,7 @@ This is pretty much it for the client-side.
 
 Now let's switch to the server side to see what was added:
 
-```js[class="line-numbers"]
+```js
 /* version-2/server.js */
 const webSocketServer = new WebSocketServer({ port: Settings.WSPort });
 
@@ -935,7 +935,7 @@ the client socket, which will hold the audio buffer chunks.
 
 When the user send a message, we do the following:
 
-```js[class="line-numbers"]
+```js
 /* version-2/server.js */
 // ...
 
@@ -978,7 +978,7 @@ If the client hasn't sent the chat ID yet and the message type is not for
 this, then return an error. Otherwise, we store the chat ID if is correct inside
 the client socket.
 
-```js[class="line-numbers"]
+```js
 /* version-2/server.js */
 // ...
 } else if (messageType === ClientMessageID.UserTextMessage || messageType === ClientMessageID.UserAudioEnd) {
@@ -1025,7 +1025,7 @@ on the audio, which will return the text.
 Next step is to create the new message in the format accepted by ChatGPT and
 query ChatGPT for a response.
 
-```js[class="line-numbers"]
+```js
 /* version-2/server.js */
 // ...
 } else if (messageType === ClientMessageID.UserAudioChunk) {
@@ -1040,7 +1040,7 @@ received data to the audio chunks array of the client socket.
 Now lets look over how the `getAnswer` function was changed in order to support
 streams:
 
-```js[class="line-numbers"]
+```js
 /* version-2/server.js */
 /**
  * Get the next message in the conversation

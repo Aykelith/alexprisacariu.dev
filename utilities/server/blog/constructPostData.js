@@ -1,4 +1,8 @@
-export default function constructPostData(blogSettings, variablesNames = []) {
+export default function constructPostData(
+    blogSettings,
+    postDirectoryName,
+    variablesNames = [],
+) {
     if (variablesNames.length === 0) {
         return blogSettings;
     }
@@ -7,6 +11,8 @@ export default function constructPostData(blogSettings, variablesNames = []) {
     for (const variableName of variablesNames) {
         data[variableName] = blogSettings[variableName];
     }
+
+    data.urlPart = postDirectoryName;
 
     return data;
 }
