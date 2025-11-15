@@ -1,16 +1,12 @@
 // Method
 import matter from "gray-matter";
-import rehypeShiki from "@shikijs/rehype";
 import { transformerMetaHighlight } from "@shikijs/transformers";
 import remarkGfm from "remark-gfm";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import getPostSourceByUrlPart from "@/utilities/server/blog/getPostSourceByUrlPart";
 import getPostsUrlParts from "@/utilities/server/blog/getPostsUrlParts";
-import {
-    transformerLineNumbers,
-    transformerAutoLink,
-} from "@/utilities/rehypeTransformers";
+import rehypePrettyCode from "rehype-pretty-code";
 
 // Components
 import { MDXRemote } from "next-mdx-remote-client/rsc";
@@ -26,17 +22,10 @@ const MDXOptions = {
         remarkPlugins: [remarkGfm],
         rehypePlugins: [
             [
-                rehypeShiki,
+                rehypePrettyCode,
                 {
-                    themes: {
-                        light: "github-light",
-                        dark: "github-dark",
-                    },
-                    transformers: [
-                        transformerMetaHighlight(), // highlight lines like {2,4-6}
-                        transformerLineNumbers(),
-                        // transformerAutoLink(),
-                    ],
+                    theme: { light: "github-light", dark: "github-dark" },
+                    transformers: [transformerMetaHighlight()],
                 },
             ],
             rehypeSlug,
@@ -51,12 +40,12 @@ export default async function Post({ params }) {
     const { data: postSettings, content } = matter(postSource);
 
     return (
-        <div id="ProjectPage">
+        <div id="PostPage">
             <div className="box py-12">
                 <div className="flex flex-col">
                     <BlurredSidesImg
                         className="mb-8"
-                        src={postSettings.coverProjectImage}
+                        src={postSettings.coverSmall}
                         alt={`Cover image for project "${postSettings.title}"`}
                         imgClassName="max-h-[200px]"
                     />

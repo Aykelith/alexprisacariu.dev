@@ -9,16 +9,26 @@ export function transformerLineNumbers() {
                     n.properties = n.properties || {};
                     n.properties.className = [
                         ...(n.properties.className || []),
-                        "shiki-pre", // optional custom class
+                        "shiki-pre",
                     ];
 
-                    // Add line numbers to each <code> child
                     const codeNode = n.children.find(
                         (c) => c.tagName === "code",
                     );
-                    if (codeNode && codeNode.children) {
-                        codeNode.children = codeNode.children.map(
-                            (line, i) => ({
+
+                    if (codeNode?.children) {
+                        codeNode.children = codeNode.children.map((line, i) => {
+                            // If Shiki already wrapped the line
+                            if (
+                                line.type === "element" &&
+                                line.properties?.className?.includes("line")
+                            ) {
+                                line.properties["data-line-number"] = i + 1;
+                                return line; // don't wrap again
+                            }
+
+                            // Otherwise wrap it
+                            return {
                                 type: "element",
                                 tagName: "span",
                                 properties: {
@@ -26,8 +36,8 @@ export function transformerLineNumbers() {
                                     "data-line-number": i + 1,
                                 },
                                 children: [line],
-                            }),
-                        );
+                            };
+                        });
                     }
                 }
             });

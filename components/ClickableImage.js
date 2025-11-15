@@ -23,7 +23,7 @@ export default function ClickableImage({
                                 <div className="flex items-center justify-center w-10/12">
                                     <img className="h-auto" {...otherProps} />
                                     <button
-                                        className="fixed top-1 right-1 p-3 rounded-full bg-background cursor-pointer"
+                                        className="fixed top-1 right-1 p-3 rounded-full bg-foreground-accent cursor-pointer"
                                         onClick={onClose}
                                     >
                                         <XSVG className="w-5 h-5" />

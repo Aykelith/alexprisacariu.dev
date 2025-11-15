@@ -28,14 +28,14 @@ export default function CVPage({ id, pdfHref, children }) {
                     href={pdfHref}
                     className="flex gap-1 items-center"
                 >
-                    <PDFSVG className="w-4 h-4 text-foreground" />
+                    <PDFSVG className="w-4 h-4 text-white" />
                     PDF
                 </AccentButton>
                 <AccentButton
                     onClick={() => window?.print()}
                     className="flex gap-1 items-center"
                 >
-                    <PrintSVG className="w-4 h-4 text-foreground" />
+                    <PrintSVG className="w-4 h-4 text-white" />
                     Print
                 </AccentButton>
             </div>

@@ -369,7 +369,7 @@ async function recordUserAudio(stopRecordButtonElement) {
 
 Let's look now how the request is handled on the server:
 
-```js
+```js showLineNumbers
 /* version-1/server.js */
 app.post('/api/message', async (req, res) => {
     if (!req.body.message && !req.body.audio) {

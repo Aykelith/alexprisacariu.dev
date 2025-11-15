@@ -10,7 +10,7 @@ export default function Button({
     return (
         <button
             className={clsx(
-                "hover:bg-gray-600 hover:cursor-pointer p-2 rounded",
+                "hover:bg-card-hover hover:cursor-pointer p-2 rounded",
                 className,
             )}
             {...otherProps}

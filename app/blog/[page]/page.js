@@ -23,7 +23,7 @@ export default async function BlogPage({ params }) {
                             <ProgressBarLink
                                 key={post.title}
                                 className="post-card"
-                                href={`/post/${post.urlPart}`}
+                                href={`/posts/${post.urlPart}`}
                             >
                                 <div className="post-img">
                                     <img src={post.coverSmall} />
