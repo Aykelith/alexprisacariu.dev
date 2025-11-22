@@ -52,9 +52,9 @@ export default async function HomeProjects() {
             })}
             <ProgressBarLink
                 href="/projects"
-                className="project-card-base flex justify-center items-center"
+                className="project-card-base flex justify-center items-center font-bold text-center"
             >
-                See more
+                See more<br />projects
             </ProgressBarLink>
         </div>
     );

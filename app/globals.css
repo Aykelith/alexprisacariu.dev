@@ -22,6 +22,7 @@
     --foreground-light-accent: oklch(0.73 0.15 266.67);
     --foreground-accent: oklch(0.55 0.24 262.88);
     --button-background: oklch(0.55 0.24 262.88);
+    --link-color: lab(32.4486% 49.2217 -84.6695);
 }
 
 .dark {
@@ -35,6 +36,7 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
     --page-color: oklch(20.5% 0 0);
+    --link-color: lab(57 30.11 -62.04);
 }
 
 @media print {
@@ -63,9 +65,11 @@
     --color-button-background: var(--button-background);
     --font-normal: var(--font-roboto);
     --font-accent: var(--font-lato);
+    --color-link: var(--link-color);
 }
 
 @layer base {
+
     *,
     :after,
     :before {
@@ -86,7 +90,7 @@ body {
     max-width: 900px;
 }
 
-.page > .box > main {
+.page>.box>main {
     @apply mt-8;
 }
 
@@ -96,7 +100,7 @@ li {
 }
 
 a {
-    @apply text-indigo-700;
+    @apply text-link;
     @apply hover:no-underline;
 
     &.black {
@@ -113,16 +117,17 @@ a {
     @apply bg-button-background text-white p-2 rounded cursor-pointer;
 }
 
-nav .nav-links > a {
+nav .nav-links>a {
     @apply hover:text-foreground hover:no-underline font-bold text-muted-foreground;
 }
 
 .card {
     @apply flex rounded bg-card;
     @apply px-3 py-2;
+    @apply border rounded-lg;
 }
 
-.clickable-img > .img,
+.clickable-img>.img,
 .project-card,
 .project-card-base,
 .post-card,
@@ -137,19 +142,41 @@ nav .nav-links > a {
     }
 }
 
+.social-links-card {
+
+    >div,
+    >a {
+        @apply flex items-center gap-2;
+    }
+
+    >a {
+        @apply text-muted-foreground;
+    }
+}
+
+.techstack-card {
+    >div>a {
+        @apply inline-flex items-center bg-tag hover:bg-tag/80;
+        @apply rounded-full border border-transparent;
+        @apply px-2.5 py-0.5;
+        @apply text-xs text-foreground;
+        @apply transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+    }
+}
+
 .clickable-img {
     @apply flex flex-col;
 
-    > .img {
+    >.img {
         @apply flex justify-center items-center overflow-hidden;
 
-        > img {
+        >img {
             @apply object-contain;
             @apply transition-transform duration-500 transform;
         }
 
         &:hover {
-            > img {
+            >img {
                 @apply scale-103;
             }
         }
@@ -160,11 +187,11 @@ nav .nav-links > a {
 .post-card {
     @apply flex flex-col overflow-hidden;
 
-    > .project-img,
-    > .post-img {
+    >.project-img,
+    >.post-img {
         @apply w-full overflow-hidden px-2 pt-2;
 
-        > img {
+        >img {
             @apply w-full h-38;
             @apply rounded-lg;
             @apply object-cover;
@@ -172,26 +199,26 @@ nav .nav-links > a {
         }
     }
 
-    > .project-body,
-    > .post-body {
+    >.project-body,
+    >.post-body {
         @apply flex-1 flex flex-col;
         @apply px-3 py-2;
 
-        > .project-title,
-        > .post-title {
+        >.project-title,
+        >.post-title {
             @apply font-accent font-bold;
         }
 
-        > .project-desc,
-        > .post-desc {
+        >.project-desc,
+        >.post-desc {
             @apply text-sm text-muted-foreground;
         }
 
-        > .project-tags,
-        > .post-tags {
+        >.project-tags,
+        >.post-tags {
             @apply flex gap-2;
 
-            > div {
+            >div {
                 @apply bg-tag px-1 py-0.5 rounded;
                 @apply text-sm text-nowrap;
             }
@@ -199,9 +226,10 @@ nav .nav-links > a {
     }
 
     &:hover {
-        > .project-img,
-        > .post-img {
-            > img {
+
+        >.project-img,
+        >.post-img {
+            >img {
                 @apply scale-110;
             }
         }
@@ -209,22 +237,22 @@ nav .nav-links > a {
 }
 
 .post-card {
-    > .post-img {
-        > img {
+    >.post-img {
+        >img {
             @apply h-50;
         }
     }
 }
 
-.blurred-sides-img > .alt,
-.clickable-img > .alt {
+.blurred-sides-img>.alt,
+.clickable-img>.alt {
     @apply text-muted-foreground self-center text-sm mt-0.5;
 }
 
 .blurred-sides-img {
     @apply flex flex-col;
 
-    > .img {
+    >.img {
         @apply relative inline-flex items-center justify-center;
         @apply rounded;
         overflow: hidden;
@@ -236,13 +264,17 @@ nav .nav-links > a {
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 40%; /* adjust how wide the blurred sides are */
+            width: 40%;
+            /* adjust how wide the blurred sides are */
             z-index: 1;
             background-image: var(--bg-img);
             background-repeat: no-repeat;
-            background-size: cover; /* fill area with the image */
-            filter: blur(7px); /* blur amount */
-            transform: scale(1.05); /* slightly enlarge to hide blur edges */
+            background-size: cover;
+            /* fill area with the image */
+            filter: blur(7px);
+            /* blur amount */
+            transform: scale(1.05);
+            /* slightly enlarge to hide blur edges */
             pointer-events: none;
         }
 
@@ -251,12 +283,13 @@ nav .nav-links > a {
             left: 0;
             background-position: left center;
         }
+
         &::after {
             right: 0;
             background-position: right center;
         }
 
-        > img {
+        >img {
             position: relative;
             z-index: 2;
         }
@@ -280,7 +313,7 @@ pre {
             counter-reset: line;
         }
 
-        &[data-line-numbers] > [data-line]::before {
+        &[data-line-numbers]>[data-line]::before {
             counter-increment: line;
             content: counter(line);
 
@@ -292,15 +325,15 @@ pre {
             color: gray;
         }
 
-        &[data-line-numbers-max-digits="2"] > [data-line]::before {
+        &[data-line-numbers-max-digits="2"]>[data-line]::before {
             width: 1.25rem;
         }
 
-        &[data-line-numbers-max-digits="3"] > [data-line]::before {
+        &[data-line-numbers-max-digits="3"]>[data-line]::before {
             width: 1.75rem;
         }
 
-        &[data-line-numbers-max-digits="4"] > [data-line]::before {
+        &[data-line-numbers-max-digits="4"]>[data-line]::before {
             width: 2.25rem;
         }
 
@@ -311,6 +344,7 @@ pre {
         }
 
         @media (prefers-color-scheme: dark) {
+
             &[data-theme*=" "],
             &[data-theme*=" "] span {
                 color: var(--shiki-dark);
@@ -327,7 +361,7 @@ pre {
         @apply font-accent;
     }
 
-    h2 + div {
+    h2+div {
         @apply mt-2 mb-4;
     }
 
@@ -365,10 +399,10 @@ pre {
     }
 
     blockquote {
-        padding: 0.5rem;
-        background-color: #f9f9f9;
-        border: 1px solid #e9e9e9;
-        margin-top: 0.5rem;
+        @apply bg-card;
+        @apply p-2;
+        @apply rounded;
+        @apply my-2;
     }
 }
 
@@ -386,7 +420,7 @@ pre {
 }
 
 #ProjectsPage {
-    > .box > .timeline {
+    >.box>.timeline {
         @apply flex flex-col gap-16 relative;
         @apply py-12;
 
@@ -400,7 +434,7 @@ pre {
             margin-left: -3px;
         }
 
-        > div {
+        >div {
             position: relative;
             left: 4rem;
             top: 0;
@@ -419,7 +453,7 @@ pre {
                 z-index: 1;
             }
 
-            > h2 {
+            >h2 {
                 @apply font-accent text-2xl;
                 @apply mb-4;
             }
@@ -431,15 +465,14 @@ pre {
     .statistics {
         @apply p-2 rounded bg-card mb-4;
 
-        > div {
+        >div {
             @apply flex flex-wrap gap-2;
 
-            > div:first-child {
+            >div:first-child {
                 @apply text-muted-foreground font-bold;
             }
 
-            > div:last-child {
-            }
+            >div:last-child {}
         }
     }
 

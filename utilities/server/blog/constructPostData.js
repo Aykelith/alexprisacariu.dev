@@ -1,10 +1,13 @@
+// Methods
+import addPostDataDefaults from "./addPostDataDefaults";
+
 export default function constructPostData(
     blogSettings,
     postDirectoryName,
     variablesNames = [],
 ) {
     if (variablesNames.length === 0) {
-        return blogSettings;
+        return addPostDataDefaults(blogSettings, variablesNames);
     }
 
     const data = {};
@@ -12,6 +15,7 @@ export default function constructPostData(
         data[variableName] = blogSettings[variableName];
     }
 
+    addPostDataDefaults(data, variablesNames);
     data.urlPart = postDirectoryName;
 
     return data;

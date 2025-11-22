@@ -3,11 +3,17 @@ import matter from "gray-matter";
 import getProjectSourceByUrlPart from "@/utilities/server/projects/getProjectSourceByUrlPart";
 import getProjectsUrlParts from "@/utilities/server/projects/getProjectsUrlParts";
 import transformProjectData from "@/utilities/server/projects/transformProjectData";
+import readPostSettings from "@/utilities/server/blog/readPostSettings";
+import constructPostData from "@/utilities/server/blog/constructPostData";
 
 // Components
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import ClickableImage from "@/components/ClickableImage";
 import BlurredSidesImg from "@/components/BlurredSidesImg";
+import BlogPostsList from "@/components/BlogPostsList";
+
+// Constants
+import { HomePostsDataVariablesNames } from "@/utilities/server/blog/getHomePosts";
 
 const StatisticsRows = [
     {
@@ -33,6 +39,14 @@ export default async function Project({ params }) {
     const projectSource = await getProjectSourceByUrlPart(id);
     const { data: projectSettings, content } = matter(projectSource);
     transformProjectData(projectSettings);
+
+    const linkedPosts = projectSettings.linkedPosts?.length > 0 ? await Promise.all(projectSettings.linkedPosts.map(async (postId) => {
+        return constructPostData(
+            await readPostSettings(postId),
+            postId,
+            HomePostsDataVariablesNames,
+        );
+    })) : [];
 
     return (
         <div id="ProjectPage">
@@ -60,6 +74,19 @@ export default async function Project({ params }) {
                     <div className="post-content">
                         <MDXRemote source={content} />
                     </div>
+                    {linkedPosts.length > 0 && (
+                        <>
+                            <h2 className="text-2xl font-accent mb-6">
+                                Blog posts
+                            </h2>
+                            <BlogPostsList
+                                posts={linkedPosts}
+                                addSeeMore={false}
+                                className="mb-6"
+                            />
+                        </>
+                    )}
+                    <h2 className="text-2xl font-accent mb-6">Images</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {projectSettings.otherImages?.map(
                             (imageData, index) => {

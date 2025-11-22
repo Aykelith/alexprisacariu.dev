@@ -3,7 +3,7 @@ import getPostsDirNames from "./getPostsDirNames";
 import readPostSettings from "./readPostSettings";
 import constructPostData from "./constructPostData";
 
-const PostsDataVariablesNames = ["title", "tags", "publishedOn", "coverSmall"];
+export const HomePostsDataVariablesNames = ["title", "tags", "publishedOn", "coverSmall"];
 
 export default async function getHomePosts(includeIgnoredPosts = false) {
     let dirNames = await getPostsDirNames(includeIgnoredPosts);
@@ -16,7 +16,7 @@ export default async function getHomePosts(includeIgnoredPosts = false) {
             constructPostData(
                 await readPostSettings(dirName),
                 dirName,
-                PostsDataVariablesNames,
+                HomePostsDataVariablesNames,
             ),
         );
     }

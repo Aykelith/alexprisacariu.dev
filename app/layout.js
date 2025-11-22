@@ -7,27 +7,27 @@ import { Footer } from "@/components/footer";
 import { ModalsSystem } from "@/components/modals_system";
 
 const lato = Lato({
-    variable: "--font-lato",
-    subsets: ["latin"],
-    weight: "700",
+  variable: "--font-lato",
+  subsets: ["latin"],
+  weight: "700",
 });
 
 const roboto = Roboto({
-    variable: "--font-roboto",
-    subsets: ["latin"],
-    weight: ["400", "700"],
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata = {
-    title: "Alexandru Priscariu: The Website",
-    description: "Place where Alexandru Prisacariu post things",
+  title: "Alexandru Priscariu: The Website",
+  description: "Place where Alexandru Prisacariu post things",
 };
 
 export default function RootLayout({ children }) {
-    return (
-        <html lang="en" suppressHydrationWarning>
-            <head>
-                <script id="load-theme">{`
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script id="load-theme">{`
                 (function() {
                                 function getInitialTheme() {
                                   const stored = localStorage.getItem("theme-color-scheme");
@@ -48,19 +48,19 @@ export default function RootLayout({ children }) {
                                 }
                               })();
             `}</script>
-            </head>
-            <body className={`${lato.variable} ${roboto.variable} antialiased`}>
-                <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 inset-0 z-9999">
-                    <ThemeColorSchemeProvider>
-                        <header className="print:hidden sticky top-0 flex h-16 items-center gap-4 bg-background z-50 box">
-                            <Nav />
-                        </header>
-                        {children}
-                        <Footer className="print:hidden" />
-                        <ModalsSystem />
-                    </ThemeColorSchemeProvider>
-                </ProgressBar>
-            </body>
-        </html>
-    );
+      </head>
+      <body className={`${lato.variable} ${roboto.variable} antialiased`}>
+        <ProgressBar className="fixed h-1 shadow-lg shadow-sky-500/20 inset-0 z-9999">
+          <ThemeColorSchemeProvider>
+            <header className="print:hidden sticky top-0 flex h-16 items-center gap-4 bg-background z-50 box">
+              <Nav />
+            </header>
+            {children}
+            <Footer className="print:hidden" />
+            <ModalsSystem />
+          </ThemeColorSchemeProvider>
+        </ProgressBar>
+      </body>
+    </html>
+  );
 }
