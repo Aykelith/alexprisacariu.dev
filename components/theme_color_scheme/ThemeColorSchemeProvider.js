@@ -7,6 +7,13 @@ import getThemeColorScheme from "./getThemeColorScheme";
 // Constants
 import ThemeColorScheme from "./ThemeColorScheme";
 
+/**
+ * The theme color scheme provider
+ * 
+ * @param {Object} props - the props of the component
+ * @param {JSX.Element} props.children - the children of the component
+ * @returns {JSX.Element} the theme color scheme provider
+ */
 export default function ThemeColorSchemeProvider({ children }) {
     const [themeColorScheme, setThemeColorScheme] = useState("light");
 

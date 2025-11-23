@@ -1,6 +1,7 @@
 // Methods
 import getProjects from "./getProjects";
 
+/** @type {String[]} */
 const ProjectsDataVariablesNames = [
     "title",
     "description",
@@ -10,6 +11,12 @@ const ProjectsDataVariablesNames = [
     "urlPart",
 ];
 
+/**
+ * Gets the home projects
+ * 
+ * @param {boolean} includeIgnoredProjects - whether to include ignored projects
+ * @returns {Promise<Project[]>} the home projects
+ */
 export default async function getHomeProjects(includeIgnoredProjects = false) {
     return getProjects(
         ProjectsDataVariablesNames,

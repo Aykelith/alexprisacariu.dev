@@ -4,6 +4,14 @@ import constructPostData from "./constructPostData";
 import readPostSource from "./readPostSource";
 import getPostsDirNames from "./getPostsDirNames";
 
+/**
+ * Gets the posts
+ * 
+ * @param {String[]} postsVariablesNames - the names of the variables to be checked
+ * @param {function} extraCheckPost - the function to check the post
+ * @param {boolean} includeIgnoredPosts - whether to include ignored posts
+ * @returns {Promise<Post[]>} the posts
+ */
 export default async function getPosts(
     postsVariablesNames,
     extraCheckPost,

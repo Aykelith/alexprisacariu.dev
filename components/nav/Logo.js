@@ -1,6 +1,11 @@
 //= Components
 import Link from "next/link";
 
+/**
+ * The logo component
+ * 
+ * @returns {JSX.Element} the logo component
+ */
 export default function Logo() {
     return (
         <Link href="/" className="font-accent font-bold text-lg no-link">

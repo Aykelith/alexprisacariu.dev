@@ -14,6 +14,13 @@ import TagWithSVG from "./TagWithSVG";
 // Own
 import GitHubSVG from "@/components/icons/github.svg";
 
+/**
+ * The GitHub tag component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the GitHub tag component
+ */
 export default function GitHubTag({ className, ...otherProps }) {
     return (
         <a

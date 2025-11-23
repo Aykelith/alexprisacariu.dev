@@ -12,6 +12,13 @@ import Tag from "./Tag";
 // Others
 import Link from "next/link";
 
+/**
+ * The post tag component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the post tag component
+ */
 export default function PostTag({ className, ...otherProps }) {
     return (
         <Link href="#" className="hover:no-underline cursor-pointer">

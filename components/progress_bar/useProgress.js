@@ -4,6 +4,11 @@ import { useSpring } from "motion/react";
 import useInterval from "@/utilities/useInterval";
 import randMaxIncluded from "@/utilities/randMaxIncluded";
 
+/**
+ * The use progress hook
+ * 
+ * @returns {Object} the use progress hook
+ */
 export default function useProgress() {
     const [state, setState] = useState("initial");
 

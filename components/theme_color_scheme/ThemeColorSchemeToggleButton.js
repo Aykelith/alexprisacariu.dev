@@ -8,6 +8,11 @@ import Button from "@/components/Button";
 import MoonSVG from "@/components/icons/moon.svg";
 import SunSVG from "@/components/icons/sun.svg";
 
+/**
+ * The theme color scheme toggle button
+ * 
+ * @returns {JSX.Element} the theme color scheme toggle button
+ */
 export default function ThemeColorSchemeToggleButton() {
     const { themeColorScheme, toggleThemeColorScheme } = useThemeColorScheme();
 

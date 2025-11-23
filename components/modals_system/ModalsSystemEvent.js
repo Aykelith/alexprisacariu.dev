@@ -1,6 +1,9 @@
 // Constants
 import { EventName } from "./constants";
 
+/**
+ * The modals system event
+ */
 export default class ModalsSystemEvent extends Event {
     #type;
     #modalID;

@@ -11,6 +11,11 @@ import { ThemeColorSchemeToggleButton } from "@/components/theme_color_scheme";
 // Constants
 import Menu from "@/constants/Menu";
 
+/**
+ * The navigation part desktop component
+ * 
+ * @returns {JSX.Element} the navigation part desktop component
+ */
 export default function NavPartDesktop() {
     const pathname = usePathname();
 

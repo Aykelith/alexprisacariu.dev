@@ -4,6 +4,15 @@ import clsx from "clsx";
 // Components
 import { ProgressBarLink } from "@/components/progress_bar";
 
+/**
+ * The blog posts list component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {Array} props.posts - the posts to display
+ * @param {Boolean} [props.addSeeMore] - whether to add a see more link
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the blog posts list component
+ */
 export default function BlogPostsList({ posts, addSeeMore, className }) {
     return (
         <div className={clsx("grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 lg:gap-4", className)}>

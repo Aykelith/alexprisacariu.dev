@@ -14,6 +14,13 @@ import TagWithSVG from "./TagWithSVG";
 // Own
 import MailSVG from "@/components/icons/mail.svg";
 
+/**
+ * The my email tag component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the my email tag component
+ */
 export default function MyEmailTag({ className, ...otherProps }) {
     return (
         <a

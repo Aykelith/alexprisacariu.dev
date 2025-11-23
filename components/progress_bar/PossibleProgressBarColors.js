@@ -1,3 +1,6 @@
+/**
+ * The possible progress bar colors
+ */
 export default [
     "oklch(48.8% 0.243 264.376)",
     "oklch(66.7% 0.295 322.15)",

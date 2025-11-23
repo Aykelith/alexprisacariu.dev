@@ -6,6 +6,12 @@ import path from "node:path";
 import BlogPostsDirectoryPath from "@/constants/server/BlogPostsDirectoryPath";
 import BlogPostMDXFileName from "@/constants/server/BlogPostMDXFileName";
 
+/**
+ * Reads the post source
+ * 
+ * @param {String} postDirectoryName - the directory name of the post
+ * @returns {Promise<String>} the post source
+ */
 export default async function readPostSource(postDirectoryName) {
     const postMdxFilePath = path.join(
         BlogPostsDirectoryPath,

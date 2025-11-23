@@ -14,8 +14,11 @@ import { EventName, EventType, StorageGlobalVariableName } from "./constants";
 import ModalsSystemEvent from "./ModalsSystemEvent";
 
 /**
- * @param {Object} props
- * @param {String} [props.className]
+ * The modals system component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the modals system component
  */
 export default function ModalsSystem({ className }) {
     const [modalsIDs, setModalsIDs] = useState([]);

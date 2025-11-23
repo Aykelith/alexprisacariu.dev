@@ -10,6 +10,14 @@ import { getBarColor, setBarColor } from "./setGetBarColor";
 // Components
 import Link from "next/link";
 
+/**
+ * The progress bar link component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} props.href - the href of the link
+ * @param {JSX.Element} props.children - the children of the component
+ * @returns {JSX.Element} the progress bar link component
+ */
 export default function ProgressBarLink({ href, children, ...rest }) {
     let progress = useProgressBar();
     let router = useRouter();

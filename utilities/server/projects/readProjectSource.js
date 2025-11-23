@@ -6,6 +6,12 @@ import path from "node:path";
 import ProjectsDirectoryPath from "@/constants/server/ProjectsDirectoryPath";
 import ProjectMDXFileName from "@/constants/server/ProjectMDXFileName";
 
+/**
+ * Reads the project source
+ * 
+ * @param {String} projectDirectoryName - the directory name of the project
+ * @returns {Promise<String>} the project source
+ */
 export default async function readProjectSource(projectDirectoryName) {
     const projectMdxFilePath = path.join(
         ProjectsDirectoryPath,

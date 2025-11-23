@@ -4,6 +4,12 @@ import fs from "fs/promises";
 // Constants
 import ProjectsDirectoryPath from "@/constants/server/ProjectsDirectoryPath";
 
+/**
+ * Gets the projects directories names
+ * 
+ * @param {boolean} includeIgnoredProjects - whether to include ignored projects
+ * @returns {Promise<String[]>} the projects directories names
+ */
 export default async function getProjectsDirNames(
     includeIgnoredProjects = false,
 ) {

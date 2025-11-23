@@ -10,6 +10,13 @@ import TagSizes from "../../constants/TagSizes";
 // Own
 import Tag from "./Tag";
 
+/**
+ * The project tag component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the project tag component
+ */
 export default function ProjectTag({ className, ...otherProps }) {
     return (
         <Tag

@@ -12,6 +12,14 @@ import { AnimatePresence } from "motion/react";
 import ProgressBarContext from "./ProgressBarContext";
 import { getBarColor } from "./setGetBarColor";
 
+/**
+ * The progress bar component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} props.className - the class name of the component
+ * @param {JSX.Element} props.children - the children of the component
+ * @returns {JSX.Element} the progress bar component
+ */
 export default function ProgressBar({ className, children }) {
     let progress = useProgress();
     let width = useMotionTemplate`${progress.value}%`;

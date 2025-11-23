@@ -3,6 +3,11 @@ import { startTransition, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import useProgressBar from "./useProgressBar";
 
+/**
+ * The global progress for browser navigation component
+ * 
+ * @returns {JSX.Element} the global progress for browser navigation component
+ */
 export default function GlobalProgressForBrowserNavigation() {
     let progress = useProgressBar();
     let pathname = usePathname();

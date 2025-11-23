@@ -4,6 +4,12 @@ import randMaxExcluded from "@/utilities/randMaxExcluded";
 // Constants
 import PossibleProgressBarColors from "./PossibleProgressBarColors";
 
+/**
+ * Calculates a random progress bar color
+ * 
+ * @param {String} previousColor - the previous color
+ * @returns {String} the random progress bar color
+ */
 export default function calculateRandomProgressBarColor(previousColor) {
     let index = randMaxExcluded(0, PossibleProgressBarColors.length);
     let randomProgressBarColor = PossibleProgressBarColors[index];

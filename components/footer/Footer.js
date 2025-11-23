@@ -1,6 +1,13 @@
 // Methods
 import clsx from "clsx";
 
+/**
+ * The footer component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the footer component
+ */
 export default function Footer({ className }) {
     return (
         <div className={clsx("box", className)}>

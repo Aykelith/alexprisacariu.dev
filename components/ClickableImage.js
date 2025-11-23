@@ -6,6 +6,14 @@ import { openModal } from "./modals_system";
 // Assets
 import XSVG from "@/components/icons/x.svg";
 
+/**
+ * The clickable image component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @param {String} [props.visibleAlt] - the visible alt text
+ * @returns {JSX.Element} the clickable image component
+ */
 export default function ClickableImage({
     className,
     visibleAlt,

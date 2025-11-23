@@ -1,3 +1,8 @@
+/**
+ * Gets the theme color scheme
+ * 
+ * @returns {String} the theme color scheme
+ */
 export default function getThemeColorScheme() {
     const stored = localStorage.getItem("theme-color-scheme");
     if (stored) return stored;

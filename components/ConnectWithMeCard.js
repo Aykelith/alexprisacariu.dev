@@ -13,6 +13,11 @@ import GitLabAddress from "../constants/GitLabAddress";
 import LinkedInAddress from "../constants/LinkedInAddress";
 import TwitterAddress from "../constants/TwitterAddress";
 
+/**
+ * The connect with me card component
+ * 
+ * @returns {Promise<JSX.Element>} the connect with me card component
+ */
 export default async function ConnectWithMeCard() {
     return (
         <div className="card flex flex-col gap-3 social-links-card">

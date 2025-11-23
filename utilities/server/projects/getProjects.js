@@ -4,6 +4,14 @@ import getProjectsDirNames from "./getProjectsDirNames";
 import readProjectSource from "./readProjectSource";
 import constructProjectData from "./constructProjectData";
 
+/**
+ * Gets the projects
+ * 
+ * @param {String[]} projectsVariablesNames - the names of the variables to be checked
+ * @param {function} extraCheckProject - the function to check the project
+ * @param {boolean} includeIgnoredProjects - whether to include ignored projects
+ * @returns {Promise<Project[]>} the projects
+ */
 export default async function getProjects(
     projectsVariablesNames,
     extraCheckProject,

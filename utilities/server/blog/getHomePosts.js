@@ -5,6 +5,12 @@ import constructPostData from "./constructPostData";
 
 export const HomePostsDataVariablesNames = ["title", "tags", "publishedOn", "coverSmall"];
 
+/**
+ * Gets the home posts
+ * 
+ * @param {boolean} includeIgnoredPosts - whether to include ignored posts
+ * @returns {Promise<Post[]>} the home posts
+ */
 export default async function getHomePosts(includeIgnoredPosts = false) {
     let dirNames = await getPostsDirNames(includeIgnoredPosts);
     dirNames.reverse();

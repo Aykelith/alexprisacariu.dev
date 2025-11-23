@@ -1,3 +1,8 @@
+/**
+ * Generates a random ID
+ * 
+ * @returns {string} the generated ID
+ */
 export default function generateID() {
     return (
         Date.now().toString(36) +

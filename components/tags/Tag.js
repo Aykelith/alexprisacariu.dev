@@ -13,6 +13,14 @@ const SizesClasses = {
     [TagSizes.Large]: "text-lg",
 };
 
+/**
+ * The tag component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {import("../../constants/TagSizes").TagSizes} [props.size] - the size of the tag
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the tag component
+ */
 export default function Tag({
     size = TagSizes.Medium,
     className,

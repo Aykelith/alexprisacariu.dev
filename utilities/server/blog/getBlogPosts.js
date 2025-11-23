@@ -9,6 +9,14 @@ import PostsPerPage from "@/constants/PostsPerPage";
 
 const PostsDataVariablesNames = ["title", "tags", "publishedOn", "coverSmall", "coverLarge"];
 
+/**
+ * Gets the blog posts
+ * 
+ * @param {number} page - the page number
+ * @param {boolean} includeIgnoredPosts - whether to include ignored posts
+ * @param {boolean} addFirstParagraph - whether to add the first paragraph
+ * @returns {Promise<Post[]>} the blog posts
+ */
 export default async function getBlogPosts(page, includeIgnoredPosts = false, addFirstParagraph = false) {
     const dirNames = (await getPostsDirNames(includeIgnoredPosts))
         .reverse()

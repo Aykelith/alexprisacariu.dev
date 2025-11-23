@@ -14,6 +14,13 @@ import TagWithSVG from "./TagWithSVG";
 // Own
 import GitLabSVG from "@/components/icons/gitlab.svg";
 
+/**
+ * The GitLab tag component
+ * 
+ * @param {Object} props - the props of the component
+ * @param {String} [props.className] - the class name of the component
+ * @returns {JSX.Element} the GitLab tag component
+ */
 export default function GitLabTag({ className, ...otherProps }) {
     return (
         <a

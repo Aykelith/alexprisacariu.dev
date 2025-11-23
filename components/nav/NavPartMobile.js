@@ -17,6 +17,11 @@ import Menu from "@/constants/Menu";
 import MenuSVG from "@/components/icons/menu.svg";
 import XSVG from "@/components/icons/x.svg";
 
+/**
+ * The navigation part mobile component
+ * 
+ * @returns {JSX.Element} the navigation part mobile component
+ */
 export default function NavPartMobile() {
     const pathname = usePathname();
     const [showMenu, setShowMenu] = useState(false);
