@@ -54,7 +54,11 @@ export default async function Project({ params }) {
                 <div className="flex flex-col">
                     <BlurredSidesImg
                         className="mb-8"
-                        src={projectSettings.coverProjectImage}
+                        src={
+                            projectSettings.coverProjectImage?.png ||
+                            projectSettings.coverProjectImage
+                        }
+                        webp={projectSettings.coverProjectImage?.webp}
                         alt={`Cover image for project "${projectSettings.title}"`}
                         imgClassName="max-h-[200px]"
                     />
@@ -92,8 +96,9 @@ export default async function Project({ params }) {
                             (imageData, index) => {
                                 return (
                                     <ClickableImage
-                                        key={imageData.src}
-                                        src={imageData.src}
+                                        key={imageData.src || imageData.png}
+                                        src={imageData.src || imageData.png}
+                                        webp={imageData.webp}
                                         alt={`Image #${index + 1} for project "${projectSettings.title}"`}
                                         visibleAlt={imageData.alt}
                                         className="h-[300px]"

@@ -1,6 +1,8 @@
 // Method
-import { ProgressBarLink } from "@/components/progress_bar";
 import getListingProjects from "@/utilities/server/projects/getListingProjects";
+
+// Components
+import ShortProject from "@/components/ShortProject";
 
 async function constructData() {
     const projects = await getListingProjects();
@@ -66,66 +68,7 @@ export default async function ProjectsPage() {
                                 </h2>
                                 <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4">
                                     {projects.map((project) => {
-                                        return (
-                                            <ProgressBarLink
-                                                key={project.title}
-                                                className="project-card w-[205px]"
-                                                href={`/projects/${project.urlPart}`}
-                                            >
-                                                <div className="project-img">
-                                                    <img
-                                                        src={
-                                                            project.coverShortProjectImage
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="project-body">
-                                                    <div className="project-title">
-                                                        {project.title}
-                                                    </div>
-                                                    <div className="project-desc">
-                                                        {project.description}
-                                                    </div>
-                                                    <div className="flex-1 min-h-2"></div>
-                                                    <div className="project-tags">
-                                                        {project.tags.map(
-                                                            (tag, index) => {
-                                                                if (
-                                                                    index >= 2
-                                                                ) {
-                                                                    if (
-                                                                        index ==
-                                                                        2
-                                                                    ) {
-                                                                        return (
-                                                                            <div
-                                                                                key="more"
-                                                                                className="tag"
-                                                                            >
-                                                                                ...
-                                                                            </div>
-                                                                        );
-                                                                    }
-
-                                                                    return null;
-                                                                }
-
-                                                                return (
-                                                                    <div
-                                                                        key={
-                                                                            tag
-                                                                        }
-                                                                        className="tag"
-                                                                    >
-                                                                        {tag}
-                                                                    </div>
-                                                                );
-                                                            },
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </ProgressBarLink>
-                                        );
+                                        return <ShortProject key={project.title} project={project} className="w-[205px]" />;
                                     })}
                                 </div>
                             </div>

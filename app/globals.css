@@ -170,13 +170,16 @@ nav .nav-links>a {
     >.img {
         @apply flex justify-center items-center overflow-hidden;
 
-        >img {
+        >img,
+        >picture>img {
             @apply object-contain;
             @apply transition-transform duration-500 transform;
         }
 
         &:hover {
-            >img {
+
+            >img,
+            >picture>img {
                 @apply scale-103;
             }
         }
@@ -191,7 +194,8 @@ nav .nav-links>a {
     >.post-img {
         @apply w-full overflow-hidden px-2 pt-2;
 
-        >img {
+        >img,
+        >picture>img {
             @apply w-full h-38;
             @apply rounded-lg;
             @apply object-cover;
@@ -229,7 +233,9 @@ nav .nav-links>a {
 
         >.project-img,
         >.post-img {
-            >img {
+
+            >img,
+            >picture>img {
                 @apply scale-110;
             }
         }
@@ -289,7 +295,8 @@ nav .nav-links>a {
             background-position: right center;
         }
 
-        >img {
+        >img,
+        >picture>img {
             position: relative;
             z-index: 2;
         }
@@ -371,6 +378,7 @@ pre {
     }
 }
 
+#ProjectPage .post-content,
 #PostPage .post-content {
     p {
         @apply my-2;

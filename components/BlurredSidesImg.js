@@ -14,6 +14,7 @@ import clsx from "clsx";
 export default function BlurredSidesImg({
     className,
     src,
+    webp,
     alt,
     imgClassName,
     visibleAlt,
@@ -27,11 +28,22 @@ export default function BlurredSidesImg({
                     "--bg-img": `url(${src})`,
                 }}
             >
-                <img
-                    src={src}
-                    alt={alt}
-                    className={clsx("object-contain", imgClassName)}
-                />
+                {webp ? (
+                    <picture>
+                        <source srcSet={webp} type="image/webp" />
+                        <img
+                            src={src}
+                            alt={alt}
+                            className={clsx("object-contain", imgClassName)}
+                        />
+                    </picture>
+                ) : (
+                    <img
+                        src={src}
+                        alt={alt}
+                        className={clsx("object-contain", imgClassName)}
+                    />
+                )}
             </div>
             {!!visibleAlt && <div className="alt">{visibleAlt}</div>}
         </div>

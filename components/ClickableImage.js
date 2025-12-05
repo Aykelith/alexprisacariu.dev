@@ -17,6 +17,7 @@ import XSVG from "@/components/icons/x.svg";
 export default function ClickableImage({
     className,
     visibleAlt,
+    webp,
     ...otherProps
 }) {
     return (
@@ -29,7 +30,23 @@ export default function ClickableImage({
                         renderModal: (onClose) => {
                             return (
                                 <div className="flex items-center justify-center w-10/12">
-                                    <img className="h-auto" {...otherProps} />
+                                    {webp ? (
+                                        <picture>
+                                            <source
+                                                srcSet={webp}
+                                                type="image/webp"
+                                            />
+                                            <img
+                                                className="h-auto"
+                                                {...otherProps}
+                                            />
+                                        </picture>
+                                    ) : (
+                                        <img
+                                            className="h-auto"
+                                            {...otherProps}
+                                        />
+                                    )}
                                     <button
                                         className="fixed top-1 right-1 p-3 rounded-full bg-foreground-accent cursor-pointer"
                                         onClick={onClose}
@@ -42,7 +59,14 @@ export default function ClickableImage({
                     });
                 }}
             >
-                <img className={className} {...otherProps} />
+                {webp ? (
+                    <picture>
+                        <source srcSet={webp} type="image/webp" />
+                        <img className={className} {...otherProps} />
+                    </picture>
+                ) : (
+                    <img className={className} {...otherProps} />
+                )}
             </div>
             {!!visibleAlt && <div className="alt">{visibleAlt}</div>}
         </div>
