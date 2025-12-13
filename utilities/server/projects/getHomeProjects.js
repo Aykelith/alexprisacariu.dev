@@ -5,7 +5,7 @@ import getProjects from "./getProjects";
 const ProjectsDataVariablesNames = [
     "title",
     "description",
-    "coverShortProjectImage",
+    "thumbnail",
     "tags",
     "pinned",
     "urlPart",
@@ -18,9 +18,15 @@ const ProjectsDataVariablesNames = [
  * @returns {Promise<Project[]>} the home projects
  */
 export default async function getHomeProjects(includeIgnoredProjects = false) {
-    return getProjects(
+    const projects = await getProjects(
         ProjectsDataVariablesNames,
         (projectSettings) => !!projectSettings.pinned,
         includeIgnoredProjects,
     );
+
+    projects.sort((a, b) => {
+        return a.pinned - b.pinned;
+    });
+
+    return projects;
 }

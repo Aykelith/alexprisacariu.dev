@@ -7,7 +7,7 @@ import constructPostData from "./constructPostData";
 // Constants
 import PostsPerPage from "@/constants/PostsPerPage";
 
-const PostsDataVariablesNames = ["title", "tags", "publishedOn", "coverSmall", "coverLarge"];
+const PostsDataVariablesNames = ["title", "tags", "publishedOn", "thumbnail", "cover"];
 
 /**
  * Gets the blog posts

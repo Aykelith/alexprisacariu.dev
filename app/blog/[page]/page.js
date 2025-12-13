@@ -22,6 +22,8 @@ export default async function BlogPage({ params }) {
                 <div className="text-muted-foreground mb-12">Sometimes I like to write</div>
                 <div className="flex flex-col gap-8">
                     {posts.map((post) => {
+                        const postImage = post.cover || post.thumbnail;
+
                         return (
                             <ProgressBarLink
                                 key={post.title}
@@ -29,7 +31,17 @@ export default async function BlogPage({ params }) {
                                 href={`/posts/${post.urlPart}`}
                             >
                                 <div className="post-img">
-                                    <img src={post.coverLarge || post.coverSmall} />
+                                    {postImage?.webp ? (
+                                        <picture>
+                                            <source
+                                                srcSet={postImage.webp}
+                                                type="image/webp"
+                                            />
+                                            <img src={postImage.png || postImage} />
+                                        </picture>
+                                    ) : (
+                                        <img src={postImage} />
+                                    )}
                                 </div>
                                 <div className="post-body">
                                     <div className="post-title">

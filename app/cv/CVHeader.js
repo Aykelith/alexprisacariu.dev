@@ -4,6 +4,7 @@ import MailAddress from "@/constants/MailAddress";
 import WebsiteAddress from "@/constants/WebsiteAddress";
 import GitHubAddress from "@/constants/GitHubAddress";
 import GitLabAddress from "@/constants/GitLabAddress";
+import WebsiteAddressWithoutProtocol from "@/constants/WebsiteAddressWithoutProtocol";
 
 //= Assets
 // Own
@@ -27,11 +28,11 @@ export default function CVHeader() {
                 </a>
                 <a className={HeadItemClasses} href={WebsiteAddress}>
                     <GlobeSVG className="w-4 h-4" />
-                    {WebsiteAddress}
+                    {WebsiteAddressWithoutProtocol}
                 </a>
                 <a className={HeadItemClasses} href={GitLabAddress}>
                     <GitLabSVG className="w-4 h-4" />
-                    @AlexxanderX
+                    AlexxanderX
                 </a>
                 <a className={HeadItemClasses} href={GitHubAddress}>
                     <GitHubSVG className="w-4 h-4" />

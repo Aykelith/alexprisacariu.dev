@@ -42,13 +42,19 @@ export default async function Post({ params }) {
     const { data: postSettings, content } = matter(postSource);
     addPostDataDefaults(postSettings);
 
+    const postImage = postSettings.cover || postSettings.thumbnail;
+
     return (
         <div id="PostPage">
             <div className="box py-12">
                 <div className="flex flex-col">
                     <BlurredSidesImg
                         className="mb-8"
-                        src={postSettings.coverLarge || postSettings.coverSmall}
+                        src={
+                            postImage?.png ||
+                            postImage
+                        }
+                        webp={postImage?.webp}
                         alt={`Cover image for project "${postSettings.title}"`}
                         imgClassName="max-h-[200px]"
                     />
@@ -75,9 +81,13 @@ export default async function Post({ params }) {
                             );
                         })}
                     </div>
-                    <div className="text-muted-foreground mt-4">
-                        Disclaimer: Some of the images included in this article were generated using artificial-intelligence tools for illustrative purposes.
-                    </div>
+                    {
+                        postSettings.showAIDisclaimer
+                        &&
+                        <div className="text-muted-foreground mt-4">
+                            Disclaimer: Some of the images included in this post were generated using artificial-intelligence tools for illustrative purposes.
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -101,11 +111,11 @@ export async function generateMetadata({ params }) {
     const baseUrl = "https://alexprisacariu.dev";
     const url = `${baseUrl}/posts/${id}`;
     const images = [];
-    if (postSettings.coverLarge) {
-        images.push(postSettings.coverLarge);
+    if (postSettings.cover) {
+        images.push(postSettings.cover?.png || postSettings.cover);
     }
-    if (postSettings.coverSmall) {
-        images.push(postSettings.coverSmall);
+    if (postSettings.thumbnail) {
+        images.push(postSettings.thumbnail?.png || postSettings.thumbnail);
     }
 
     return {

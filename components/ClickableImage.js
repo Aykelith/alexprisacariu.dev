@@ -29,7 +29,7 @@ export default function ClickableImage({
                         allowCloseFromBackground: true,
                         renderModal: (onClose) => {
                             return (
-                                <div className="flex items-center justify-center w-10/12">
+                                <div className="flex items-center justify-center max-w-10/12">
                                     {webp ? (
                                         <picture>
                                             <source

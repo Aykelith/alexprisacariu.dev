@@ -24,7 +24,17 @@ export default function BlogPostsList({ posts, addSeeMore, className }) {
                         href={`/posts/${post.urlPart}`}
                     >
                         <div className="post-img">
-                            <img src={post.coverSmall} />
+                            {post.thumbnail?.webp ? (
+                                <picture>
+                                    <source
+                                        srcSet={post.thumbnail.webp}
+                                        type="image/webp"
+                                    />
+                                    <img src={post.thumbnail.png || post.thumbnail} />
+                                </picture>
+                            ) : (
+                                <img src={post.thumbnail} />
+                            )}
                         </div>
                         <div className="post-body">
                             <div className="post-title">{post.title}</div>

@@ -55,10 +55,10 @@ export default async function Project({ params }) {
                     <BlurredSidesImg
                         className="mb-8"
                         src={
-                            projectSettings.coverProjectImage?.png ||
-                            projectSettings.coverProjectImage
+                            projectSettings.cover?.png ||
+                            projectSettings.cover
                         }
-                        webp={projectSettings.coverProjectImage?.webp}
+                        webp={projectSettings.cover?.webp}
                         alt={`Cover image for project "${projectSettings.title}"`}
                         imgClassName="max-h-[200px]"
                     />
@@ -90,23 +90,36 @@ export default async function Project({ params }) {
                             />
                         </>
                     )}
-                    <h2 className="text-2xl font-accent mb-6">Images</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {projectSettings.otherImages?.map(
-                            (imageData, index) => {
-                                return (
-                                    <ClickableImage
-                                        key={imageData.src || imageData.png}
-                                        src={imageData.src || imageData.png}
-                                        webp={imageData.webp}
-                                        alt={`Image #${index + 1} for project "${projectSettings.title}"`}
-                                        visibleAlt={imageData.alt}
-                                        className="h-[300px]"
-                                    />
-                                );
-                            },
-                        )}
-                    </div>
+                    {
+                        projectSettings.otherImages?.length > 0
+                        &&
+                        <>
+                            <h2 className="text-2xl font-accent mb-6">Images</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {projectSettings.otherImages?.map(
+                                    (imageData, index) => {
+                                        return (
+                                            <ClickableImage
+                                                key={imageData.src || imageData.png}
+                                                src={imageData.src || imageData.png}
+                                                webp={imageData.webp}
+                                                alt={`Image #${index + 1} for project "${projectSettings.title}"`}
+                                                visibleAlt={imageData.alt}
+                                                className="h-[300px]"
+                                            />
+                                        );
+                                    },
+                                )}
+                            </div>
+                        </>
+                    }
+                    {
+                        projectSettings.showAIDisclaimer
+                        &&
+                        <div className="text-muted-foreground mt-4">
+                            Disclaimer: Some of the images included in this post were generated using artificial-intelligence tools for illustrative purposes.
+                        </div>
+                    }
                 </div>
             </div>
         </div>

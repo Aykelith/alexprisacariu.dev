@@ -12,24 +12,24 @@ export default function ShortProject({ project, className, maxTags = 2 }) {
             href={`/projects/${project.urlPart}`}
         >
             <div className="project-img">
-                {project.coverShortProjectImage?.webp ? (
+                {project.thumbnail?.webp ? (
                     <picture>
                         <source
                             srcSet={
-                                project.coverShortProjectImage.webp
+                                project.thumbnail.webp
                             }
                             type="image/webp"
                         />
                         <img
                             src={
-                                project.coverShortProjectImage
+                                project.thumbnail
                                     .png ||
-                                project.coverShortProjectImage
+                                project.thumbnail
                             }
                         />
                     </picture>
                 ) : (
-                    <img src={project.coverShortProjectImage} />
+                    <img src={project.thumbnail} />
                 )}
             </div>
             <div className="project-body">

@@ -4,7 +4,7 @@ import getProjects from "./getProjects";
 const ProjectsDataVariablesNames = [
     "title",
     "description",
-    "coverShortProjectImage",
+    "thumbnail",
     "tags",
     "yearsActive",
     "urlPart",

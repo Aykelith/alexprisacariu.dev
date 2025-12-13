@@ -6,12 +6,12 @@
  * @returns {Object} the post data with default values
  */
 export default function addPostDataDefaults(data, variablesNames = []) {
-    if (variablesNames.length === 0 || (variablesNames.includes("coverSmall") && !data.coverSmall)) {
-        data.coverSmall = "/imgs/posts/placeholder/cover-small.png";
+    if ((variablesNames.length === 0 && !data.thumbnail) || (variablesNames.includes("thumbnail") && !data.thumbnail)) {
+        data.thumbnail = "/imgs/posts/placeholder/cover-small.png";
     }
 
-    if (variablesNames.length === 0 || (variablesNames.includes("coverLarge") && !data.coverLarge)) {
-        data.coverLarge = "/imgs/posts/placeholder/cover-large.png";
+    if ((variablesNames.length === 0 && !data.cover) || (variablesNames.includes("cover") && !data.cover)) {
+        data.cover = "/imgs/posts/placeholder/cover-large.png";
     }
 
     return data;

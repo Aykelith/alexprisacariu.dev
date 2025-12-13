@@ -1,11 +1,11 @@
 ---
 title: "imocentral.ro"
-coverShortProjectImage: "/imgs/projects/imocentral.ro/cover.jpg"
-coverProjectImage: "/imgs/projects/imocentral.ro/image1.jpeg"
+thumbnail: "/imgs/projects/imocentral.ro/cover.jpg"
+cover: "/imgs/projects/imocentral.ro/image1.jpeg"
 tags:
   - NextJS
 description: "Real estate website optimized for speed and for Googlebot"
-pinned: 1
+pinned: 2
 url: "https://imocentral.ro"
 otherImages:
   - src: "/imgs/projects/imocentral.ro/image1.jpeg"
@@ -21,6 +21,11 @@ otherImages:
 useCoverImage: 1
 urlPart: imocentral-ro
 yearsActive: [2017, 2022]
+techStack:
+  - NextJS
+  - TypeScript
+  - TailwindCSS
+myInvolvement: "Implemented the website"
 ---
 <a href="https://imocentral.ro" target="_blank" rel="noreferrer noopener">imocentral.ro</a>
 is a website created for a real estate agency for displaying their offers and
@@ -30,7 +35,7 @@ offer informations about the company.
 - optimized for Googlebot;
 - PWA;
 - using SSR (Server-side rendering) and ISR (Incremental Static Regeneration);
-- getting the data from <a href="/project/panorocrm">PanoroCRM</a>.
+- getting the data from [PanoroCRM][PanoroCRM].
 
 My job was to implement the design into a functional website that would be very
 friendly with the Googlebot for crawling it and having max scores on
@@ -41,9 +46,11 @@ time, but also be able to update the data when is changed.
 
 Also I implemented for the website a PWA, and also published it on Google Play.
 
-The data of the website is gathered from <a href="/project/panorocrm">PanoroCRM</a>. Every request that must be
+The data of the website is gathered from [PanoroCRM][PanoroCRM]. Every request that must be
 called from client is proxied through another request created by NextJs in
 order to not expose sensitive data.
 
 The website design and backend was changed in 2023 where I was not that much
 involved. One day I will upload a demo of it up.
+
+[PanoroCRM]: /projects/panorocrm

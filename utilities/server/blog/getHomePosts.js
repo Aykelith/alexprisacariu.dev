@@ -3,7 +3,7 @@ import getPostsDirNames from "./getPostsDirNames";
 import readPostSettings from "./readPostSettings";
 import constructPostData from "./constructPostData";
 
-export const HomePostsDataVariablesNames = ["title", "tags", "publishedOn", "coverSmall"];
+export const HomePostsDataVariablesNames = ["title", "tags", "publishedOn", "thumbnail"];
 
 /**
  * Gets the home posts

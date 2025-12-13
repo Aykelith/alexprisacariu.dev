@@ -379,7 +379,8 @@ pre {
 }
 
 #ProjectPage .post-content,
-#PostPage .post-content {
+#PostPage .post-content,
+#AboutPage .post-content {
     p {
         @apply my-2;
     }
@@ -417,13 +418,16 @@ pre {
 #ProjectPage .post-content ul,
 #ProjectPage .post-content ol,
 #PostPage .post-content ul,
-#PostPage .post-content ol {
+#PostPage .post-content ol,
+#AboutPage .post-content ul,
+#AboutPage .post-content ol {
     padding: revert;
     margin: revert;
 }
 
 #ProjectPage .post-content ul li,
-#PostPage .post-content ul li {
+#PostPage .post-content ul li,
+#AboutPage .post-content ul li {
     list-style: disc;
 }
 
@@ -486,5 +490,49 @@ pre {
 
     .post-content {
         @apply mb-6;
+    }
+}
+
+#AboutPage {
+
+    .blue,
+    .green,
+    .pink,
+    .violet {
+        @apply font-bold;
+    }
+
+    .blue {
+        @apply text-blue-800;
+    }
+
+    .green {
+        @apply text-green-800;
+    }
+
+    .pink {
+        @apply text-pink-800;
+    }
+
+    .violet {
+        @apply text-violet-800;
+    }
+}
+
+.dark #AboutPage {
+    .blue {
+        @apply text-blue-400;
+    }
+
+    .green {
+        @apply text-green-400;
+    }
+
+    .pink {
+        @apply text-pink-400;
+    }
+
+    .violet {
+        @apply text-violet-400;
     }
 }

@@ -42,8 +42,6 @@ export default function ModalsSystem({ className }) {
         const modalSystemEventHandler = /** @type {ModalsSystemEvent} */ (
             event,
         ) => {
-            console.log(event);
-
             switch (event.type) {
                 case EventType.OPEN:
                     setModalsIDs((actualModalIDs) => [
@@ -58,8 +56,6 @@ export default function ModalsSystem({ className }) {
                         EventType.CLOSED_PROGRAMMATICALLY,
                     );
                     break;
-                default:
-                    console.error();
             }
         };
 

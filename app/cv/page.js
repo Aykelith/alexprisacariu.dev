@@ -68,8 +68,9 @@ export default function CVPageContent() {
                             <ul>
                                 <li className="list-disc! list-inside!">
                                     Working on porting the main application from
-                                    a multi-tenant to single-tenant with a
-                                    centralized control plane. It involved
+                                    a multi-tenant modular monolith architecture to
+                                    a partitioned multi-tenancy hub-and-spoke
+                                    modular monolith architecture. It involved
                                     creating from scratch a system for
                                     communicating between servers, the ability
                                     for users to switch between servers and
