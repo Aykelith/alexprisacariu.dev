@@ -245,7 +245,9 @@ nav .nav-links>a {
 
 .post-card {
     >.post-img {
-        >img {
+
+        >img,
+        >picture>img {
             @apply h-50;
         }
     }

@@ -22,16 +22,6 @@ const nextConfig = {
             },
         },
     },
-    async redirects() {
-        return [
-            // Basic redirect
-            {
-                source: "/blog",
-                destination: "/blog/1",
-                permanent: true,
-            },
-        ];
-    },
 };
 
 export default nextConfig;

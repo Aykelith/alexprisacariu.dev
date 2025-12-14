@@ -27,6 +27,8 @@ export default function CVPage({ id, pdfHref, children }) {
                 <AccentButton
                     href={pdfHref}
                     className="flex gap-1 items-center"
+                    rel="noopener"
+                    target="_blank"
                 >
                     <PDFSVG className="w-4 h-4 text-white" />
                     PDF
