@@ -5,6 +5,7 @@ import { ProgressBar } from "@/components/progress_bar";
 import { ThemeColorSchemeProvider } from "@/components/theme_color_scheme";
 import { Footer } from "@/components/footer";
 import { ModalsSystem } from "@/components/modals_system";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const lato = Lato({
   variable: "--font-lato",
@@ -58,6 +59,7 @@ export default function RootLayout({ children }) {
             {children}
             <Footer className="print:hidden" />
             <ModalsSystem />
+            <GoogleAnalytics />
           </ThemeColorSchemeProvider>
         </ProgressBar>
       </body>
