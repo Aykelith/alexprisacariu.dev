@@ -114,7 +114,7 @@ a {
 }
 
 .accent-button {
-    @apply bg-button-background text-white p-2 rounded cursor-pointer;
+    @apply bg-button-background text-white p-2 rounded cursor-pointer md:hover:bg-button-background/90;
 }
 
 nav .nav-links>a {
@@ -150,13 +150,13 @@ nav .nav-links>a {
     }
 
     >a {
-        @apply text-muted-foreground;
+        @apply text-muted-foreground md:hover:text-foreground;
     }
 }
 
 .techstack-card {
     >div>a {
-        @apply inline-flex items-center bg-tag hover:bg-tag/80;
+        @apply inline-flex items-center bg-tag md:hover:bg-tag/70;
         @apply rounded-full border border-transparent;
         @apply px-2.5 py-0.5;
         @apply text-xs text-foreground;
@@ -217,16 +217,6 @@ nav .nav-links>a {
         >.post-desc {
             @apply text-sm text-muted-foreground;
         }
-
-        >.project-tags,
-        >.post-tags {
-            @apply flex gap-2;
-
-            >div {
-                @apply bg-tag px-1 py-0.5 rounded;
-                @apply text-sm text-nowrap;
-            }
-        }
     }
 
     &:hover {
@@ -239,6 +229,17 @@ nav .nav-links>a {
                 @apply scale-110;
             }
         }
+    }
+}
+
+.project-tags,
+.post-tags {
+    @apply flex gap-2 flex-wrap;
+
+    >div,
+    >span {
+        @apply bg-tag px-1 py-0.5 rounded;
+        @apply text-sm text-nowrap;
     }
 }
 

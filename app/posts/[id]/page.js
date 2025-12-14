@@ -48,19 +48,33 @@ export default async function Post({ params }) {
         <div id="PostPage">
             <div className="box py-12">
                 <div className="flex flex-col">
-                    <BlurredSidesImg
-                        className="mb-8"
-                        src={
-                            postImage?.png ||
-                            postImage
-                        }
-                        webp={postImage?.webp}
-                        alt={`Cover image for project "${postSettings.title}"`}
-                        imgClassName="max-h-[200px]"
-                    />
-                    <h1 className="text-3xl font-accent mb-6">
+                    {
+                        postImage && !postImage?.noImage
+                        &&
+                        <BlurredSidesImg
+                            className="mb-8"
+                            src={
+                                postImage?.png ||
+                                postImage
+                            }
+                            webp={postImage?.webp}
+                            alt={`Cover image for project "${postSettings.title}"`}
+                            imgClassName="max-h-[200px]"
+                        />
+                    }
+                    <h1 className="text-3xl font-accent mb-2">
                         {postSettings.title}
                     </h1>
+                    <div className="post-tags mb-6">
+                        <span className="tag">{formatData(postSettings.publishedOn)}</span>
+                        {postSettings.tags.map((tag) => {
+                            return (
+                                <span key={tag} className="tag">
+                                    {tag}
+                                </span>
+                            );
+                        })}
+                    </div>
                     <div className="post-content">
                         <MDXRemote
                             source={content}
@@ -92,6 +106,17 @@ export default async function Post({ params }) {
             </div>
         </div>
     );
+}
+
+function formatData(dataString) {
+    const date = new Date(dataString);
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
 }
 
 export async function generateStaticParams() {

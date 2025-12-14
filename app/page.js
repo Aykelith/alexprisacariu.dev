@@ -70,6 +70,7 @@ export default async function Home() {
                                             key={index}
                                             href={tech.url}
                                             target="_blank"
+                                            rel="noopener"
                                         >
                                             <div className={`${tech.color} w-2 h-2 mr-2 rounded-full`} />
                                             {tech.name}

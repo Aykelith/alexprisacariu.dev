@@ -2,6 +2,7 @@
 title: "Creating a new version of alexprisacariu.dev"
 tags:
   - Showcase
+  - AI
   - NextJS
   - TypeScript
   - TailwindCSS
@@ -15,12 +16,63 @@ thumbnail:
 cover:
   png: "/imgs/posts/post014/cover.png"
   webp: "/imgs/posts/post014/cover.webp"
-seoKeywords:
-   - OpenAI
-   - ChatGPT
-   - WebSockets
-   - chatbot tutorial
-   - speech-to-text
-   - text-to-speech
-   - JavaScript
+seoKeywords: 
+  - AI
+  - NextJS
+  - TypeScript
+  - TailwindCSS
+  - GitHub
 ---
+
+Time to upgrade my website to have light & dark theme, some more dynamic
+features and a better home page.
+
+For the first version of my website I wanted to be it very simple and
+minimalistic so resulted in a very simple website, but with only one theme that
+was a light theme that I chosed for it's simplicity.
+
+But after some time I see the limitations of my website. I really wanted to
+have a dark theme, to integrate more colors, more life to my website but I
+didn't have the time to reimplement the website.
+
+But not anymore. With the advance of AI and the need to upgrade my project to
+latest NextJS version (and wanting to switch to Pages Router to App Router)
+I've decided to upgrade my website.
+
+And it went better than expected. I've used AI to ease the process of
+upgrading the project to latest NextJS version and to switch to App Router.
+
+For the home page layout and organisation of data I've been inspired by
+Míra Stejskal's
+<a href="https://swajp.me/" target="_blank" rel="noopener">swajp.me</a>
+personal website.
+
+For the icons I've found
+<a href="https://tabler.io/icons" target="_blank" rel="noopener">tabler.io</a>
+that offers free icons for personal and commercial use.
+
+For the projects page I've wanted a more visual way to display the projects
+I've worked on so I created a vertical timeline where the projects are grouped
+by the last year the project was worked on.
+
+In a previous project I worked on I've implemented a feature that was generating
+a webpage to the dimensions of an A4 page that when printed it was exactly how
+was seen on the screen. And I wanted to implement this feature on my website
+for the CV page.
+
+In the first version it was quite simple to do this: just setting the div
+dimensions to an A4 page, but now, having a dark theme also, I needed to handle
+that on any theme the printed version should have the light theme, with the
+background color set to white, but only when in printing mode, but this was
+easely solved by using the `@media print` CSS rule to force the right values for
+the variables.
+
+In the past I've used a NPM package to add a custom loading bar, but I wanted a
+more custom one where I could control the color of the bar. So I've found this
+<a href="https://buildui.com/posts/global-progress-in-nextjs" target="_blank" rel="noopener">article</a>
+that explains how to do it.
+
+<center><img src="/imgs/posts/post014/progress-bar.gif" alt="Progress bar" /></center>
+
+As always you can scroll the whole code for this website at
+<a href="https://github.com/Aykelith/alexprisacariu.dev" target="_blank" rel="noopener">this repository</a>.

@@ -41,7 +41,7 @@ I came with 2 possible solutions:
 
 The first possible solution would look like this:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 type SharedData = { clientName: string };
 type ParentState = { sharedData: SharedData };
 
@@ -100,7 +100,7 @@ and to update it in both places (in the actual data variable and in the
 component's state) but I don't handle much data so it will not be a bottleneck
 for my use case.
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 type SharedData = { clientName: string };
 
 class ParentComponent extends React.PureComponent<> {

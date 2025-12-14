@@ -16,14 +16,14 @@ export default function AboutPage() {
                         </p>
                         <p>
                             I started programming from little in <LanguageName>Visual Basic 3</LanguageName> at a programming club,
-                            progressed to <LanguageName>Visual Basic 6</LanguageName>. Switched to
-                            <LanguageName>C++</LanguageName> as my passion of creating games increased. Later started learning web
+                            progressed to <LanguageName>Visual Basic 6</LanguageName>. Switched to{" "}
+                            <LanguageName>C++</LanguageName> as my passion for creating games increased. Later started learning web
                             development.
                         </p>
                         <p>
-                            While I was studying for my bachelor's degree at <ProperName href="https://www.cs.ubbcluj.ro/">Babeș-Bolyai University (UBB) in Cluj-Napoca</ProperName>
+                            While I was studying for my bachelor's degree at <ProperName href="https://www.cs.ubbcluj.ro/">Babeș-Bolyai University (UBB) in Cluj-Napoca</ProperName>{" "}
                             I founded a tech company, <ProperName>Softprovider</ProperName>, with my uncle and we developed different
-                            applications in the real estate domain, but our main software was <ProperName href="/projects/panoro-ro">PanoroCRM</ProperName>
+                            applications in the real estate domain, but our main software was <ProperName href="/projects/panoro-ro">PanoroCRM</ProperName>{" "}
                             and our 360 tours editor, <ProperName href="/projects/panorovr-editor">PanoroVR Editor</ProperName>.
                         </p>
                         <p>

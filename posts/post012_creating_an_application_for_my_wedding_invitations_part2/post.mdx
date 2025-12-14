@@ -39,7 +39,7 @@ to invite him:
 a link of the following form: `website-link.com/invite/[INVITE_CODE]`. When
 accessed, he will see the next screen:
 
-<ClickableImage src="/imgs/projects/005_and-wedding-invitations/image1.jpeg" className="post-image center medium cursor-pointer"/>
+<ClickableImage src="/imgs/projects/and-wedding-invitations/image1.jpeg" className="post-image center medium cursor-pointer"/>
 
 This is a replica of the physical invitation, offering all the information to
 the invited person and, at the bottom of the invitation, a button to go to the
@@ -49,7 +49,7 @@ confirmation screen.
 `INVITE_CODE` written on the invitation and the QR code to access the website.
 When the invited person accesses the website, he will see the following screen:
 
-<ClickableImage src="/imgs/projects/005_and-wedding-invitations/image2.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
+<ClickableImage src="/imgs/projects/and-wedding-invitations/image2.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
 
 Introducing the correct code will redirect the invited person to the
 confirmation screen.
@@ -60,14 +60,14 @@ The confirmation screen that can be seen in the below screenshot is where the
 user can confirm that they will come to the wedding or tell us that they will
 not be able to attend it.
 
-<ClickableImage src="/imgs/projects/005_and-wedding-invitations/image5.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
+<ClickableImage src="/imgs/projects/and-wedding-invitations/image5.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
 
 If the user clicks on the button to confirm that they will **not** attend the
 wedding, he will be redirected to the refused screen, where we say that we are
 sad that he will not be able to attend the wedding, but I'm also giving him
 the chance to change his option and confirm that he will attend the wedding.
 
-<ClickableImage src="/imgs/projects/005_and-wedding-invitations/image6.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
+<ClickableImage src="/imgs/projects/and-wedding-invitations/image6.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
 
 If the user clicks on the button that confirms that they will come to the
 wedding, I show the options screen where the guest can choose some extra
@@ -78,7 +78,7 @@ options:
 - if he comes with kids and requires kids' menus (and how many);
 - if he needs a hotel overnight.
 
-<ClickableImage src="/imgs/projects/005_and-wedding-invitations/image3.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
+<ClickableImage src="/imgs/projects/and-wedding-invitations/image3.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
 
 This is pretty much what an invited person can see and choose on the website.
 But how can I add invite codes and set their settings?
@@ -86,7 +86,7 @@ But how can I add invite codes and set their settings?
 For this, I created a simple dashboard where I can add and edit guest settings
 using the unique invite code.
 
-<ClickableImage src="/imgs/projects/005_and-wedding-invitations/image4.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
+<ClickableImage src="/imgs/projects/and-wedding-invitations/image4.jpeg" className="post-image center medium cursor-pointer" loading="lazy"/>
 
 Where's the data stored? The tag `Google Spreadsheet` that I attached to this
 post may give that away. Yes, I'm storing the responses and options chosen by
@@ -122,7 +122,7 @@ the structs. This function comes in handy as I output to the log file when a
 change is made by the user to see that everything is good and works as
 expected.
 
-```go
+```go showLineNumbers
 func (e *Invitation) GetDifference(another *Invitation) (string) {
     var result string = ""
 
@@ -149,7 +149,7 @@ receive from a master configuration file and also keep the `instance` we create
 by logging to the Google Spreadsheet.
 
 
-```go
+```go showLineNumbers
 type InvitationsGSheetStorage struct {
     spreadsheetID string
     instance *sheets.Service
@@ -170,7 +170,7 @@ given spreadsheet. The method receives the data of the service account and the
 ID of the spreadsheet. In this method, I create an instance of Google Spreadsheet
 using the service account credentials.
 
-```go
+```go showLineNumbers
 func (e *InvitationsGSheetStorage) Setup(serviceAccountEmail string, serviceAccountKeyID string, serviceAccountKey string, spreadsheetID string) {
     e.spreadsheetID = spreadsheetID
 
@@ -200,8 +200,8 @@ func (e *InvitationsGSheetStorage) Setup(serviceAccountEmail string, serviceAcco
 I define a private method for reading a single cell. One thing to mention is
 that I am using the default name for the first sheet, `Sheet1`.
 
-```go
-func (e* InvitationsGSheetStorage) readCell(cell string) (string, error) {
+```go showLineNumbers
+func (e *InvitationsGSheetStorage) readCell(cell string) (string, error) {
     // Pull the data from the sheet
     resp, err := e.instance.Spreadsheets.Values.Get(e.spreadsheetID, "Sheet1!" + cell).Do()
     if err != nil {
@@ -222,7 +222,7 @@ with the data for the spreadsheet's row, and then, using the invitation's
 `GSheetRowIndex` (that stores the row index of the invitation in the spreadsheet),
 I update that row.
 
-```go
+```go showLineNumbers
 func (e *InvitationsGSheetStorage) UpdateInvitation(invitation *Invitation) (error) {
     data := []interface{}{invitation.Code, invitation.Name, invitation.Coming, invitation.NumberOfPersons, invitation.NumberOfVegMenus, invitation.NumberOfKidsMenus, invitation.LastUpdateTime.String()}
 
@@ -252,7 +252,7 @@ struct, checks if the code of the invitation exists (otherwise throws an error),
 then updates the invitation and calls the method `startTimerToUpdateChanges` which
 is responsible for saving the changes to the JSON file and the spreadsheet.
 
-```go
+```go showLineNumbers
 func (e *InvitationsStorage) UpdateInvitation(invitation *Invitation) (error) {
     var index int = e.GetInvitationIndexByCode(invitation.Code)
     if index == -1 {
@@ -275,7 +275,7 @@ it expires, will save the changes. While the timer is still not expired, all the
 required invitations that need to be updated are saved in an array of codes of
 invitations.
 
-```go
+```go showLineNumbers
 func (e *InvitationsStorage) startTimerToUpdateChanges(changedCode string) {
     {
         shouldAdd := true
@@ -311,7 +311,7 @@ The code for it is quite simple:
 - if all the rows were updated successfully, then try to update the hash 
   with the new one generated for maximum 3 times.
 
-```go
+```go showLineNumbers
 func (e *InvitationsStorage) saveOnTimerEnd() {
     log.Println("[InvitationsStorage:saveOnTimerEnd] Saving the changes...")
 
@@ -401,7 +401,7 @@ interesting in this package.
 I have some admin requests, where in order to check if the requester is
 authorized to do those operations, I created the function `IsAdmin`:
 
-```go
+```go showLineNumbers
 func IsAdmin(req *http.Request, sessionsStorage *storage.SessionsStorage) (bool) {
     sessionIDCookie, err := req.Cookie("session_id")
     if err != nil {
@@ -421,7 +421,7 @@ following: check if the session exists, if exists check if the time has not
 expired, and, if expired, will delete it and return the error, otherwise, will
 add 10 minutes to the `expireTime`.
 
-```go
+```go showLineNumbers
 func (e *SessionsStorage) CheckSession(sessionID string) error {
     for i, session := range e.sessions {
         if session.id == sessionID {
@@ -447,7 +447,7 @@ Another interesting request is the login request, which after checking that
 the password was sent and is correct, will use `SessionsStorage` to create a
 new entry but also set a cookie on the client side with the ID of the session.
 
-```go
+```go showLineNumbers
 type loginAPI_Body struct {
     Password string
 }
@@ -504,7 +504,7 @@ I created a very simple HTML template file where `<!-- TITLE -->` will be
 replaced by the title of the page, `<!-- SCRIPT_NAME -->` by the name of the
 script, and `<!-- EXTRA_CODE -->` with extra code when needed.
 
-```html
+```html showLineNumbers
 <!doctype html>
 <html lang="ro-RO">
     <head>
@@ -531,7 +531,7 @@ the user to the required screen.
 
 Let's look at the `/` route:
 
-```go
+```go showLineNumbers
 func CreateWelcomeRoute(server *http.ServeMux, utils *Utils) {
     var template = utils.GetHTMLTemplate("Bine ai venit - Alex&Diana", "welcome", "") 
 
@@ -578,7 +578,7 @@ of the invitation. This way, can serve directly all the data required for
 rendering the page without the need to add an additional request for retrieving
 the invitation data and also without needing to implement a loading screen.
 
-```go
+```go showLineNumbers
 func generateWithCodeWindowData(invitation *storage.Invitation) (string, error) {
     var data string = "<script>window.invitation="
     
@@ -649,7 +649,7 @@ Here is the configuration file I used for bundling using rollup.js. The config
 is able to compile all my entry points, each one in an output name with the
 same name, so the back-end knows how to load it.
 
-```js
+```js showLineNumbers
 import path from "node:path";
 import { fileURLToPath } from 'url';
 import terser from '@rollup/plugin-terser';
@@ -762,7 +762,7 @@ project.
 
 So I created the following script:
 
-```bash
+```bash showLineNumbers
 #!/bin/bash
 cd /home/user/and-wedding-invitations
 git pull
@@ -779,7 +779,7 @@ are already stored in the git repository.
 Because I wanted the app to restart at every crash and to start if the VPS
 would be rebooted for some reason or had any downtime, I created a service:
 
-```toml
+```toml showLineNumbers
 [Unit]
 Description=and-wedding-invitations
 After=network-online.target

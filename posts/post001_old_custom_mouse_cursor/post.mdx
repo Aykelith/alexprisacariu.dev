@@ -20,13 +20,13 @@ Have you ever wanted to have your own mouse cursor for you game or your applicat
 
 First you need to deactivate mouse cursor in your SFML window:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 window.setMouseCursorVisible(false);
 ```
 
 And then you only need to show an sf::Sprite( or equivalent) positioned in the coordinates of the mouse:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 sf::Sprite cursor;
 
 // ...
@@ -47,7 +47,7 @@ And that’s all. Now you have your own custom mouse cursor.
 
 Here is a complet example using `sf::CircleShape` as the mouse cursor. I setted the origin of the circle to the center because the click position of mouse would fall in the exterior of the circle.
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 #include <SFML/Graphics.hpp>
 
 int main()

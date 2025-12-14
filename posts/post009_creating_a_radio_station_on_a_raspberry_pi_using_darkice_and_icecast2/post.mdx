@@ -47,7 +47,7 @@ be quite perfect for a normal radio station, but not what I needed.
 
 So here are the complet steps that I followed:
 
-```bash[class="line-numbers"]
+```bash showLineNumbers
 # Installing icecast2
 # Installing ALSA utilities
 # Installing pkgconfig required for `darkice` configuration
@@ -81,7 +81,7 @@ The config for `icecast2` can be found at `/etc/icecast2/icecast.xml`.
 
 The configuration for `darkice` saved in `~/darkice.cfg`:
 
-```bash[class="line-numbers"]
+```bash showLineNumbers
 # this section describes general aspects of the live streaming session 
 [general] 
 duration     = 0     # duration of encoding, in seconds. 0 means forever 
@@ -117,20 +117,20 @@ The password field is the source-password from the icecast2  config.
 And now, for starting everything we need first to start icecast2 by starting
 its service:
 
-```bash[class="line-numbers"]
+```bash showLineNumbers
 sudo systemctl start icecast2
 ```
 
 And then we run darkice with our config file:
 
-```bash[class="line-numbers"]
+```bash showLineNumbers
 sudo darkice -c ~/darkice.cfg
 ```
 
 You can also create a service for darkice replacing the username with your
 account username (line 8 and 14):
 
-```bash[class="line-numbers"]
+```bash showLineNumbers
 # /etc/systemd/system/darkice.service
 [Unit]
 Description=Darkice service

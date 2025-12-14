@@ -21,7 +21,7 @@ One of my biggest problems when creating games was not collision detection, it w
 
 First, we create a simple code that creates a window, a player sprite and some terrain sprites. We then add gravity and move functions for the player.
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 #include <SFML/Graphics.hpp>
 
 #include <vector>
@@ -122,7 +122,7 @@ These are the texture images I used: <a href="https://github.com/Aykelith/Alexan
 
 Now we need to detect the collision and after we detect it, we resolve it; but first, you need to know that objects which can be moved or destroyed are called ‘dynamic objects’ and other objects like terrain (grass) are called ‘static objects’. Because in our code we only have one dynamic object (the player) and 4 static objects (grass) we will verify the collision between the player and the grass blocks. If we had 2 dynamic objects and 4 static objects then we would have verified the collision between first dynamic objects and all 4 static objects and between second dynamic objects and all 4 static objects. And with that being said lets see how to detect collision:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 int main()
 {
 	// ...
@@ -153,7 +153,7 @@ From what you can see we only call the intersects function of class `sf::Rect` w
 
 The above code can be translated into pseudo code:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 for every dynamic object
 	for every static object && (dynamic object - actual dynamic object)
 		if is collision
@@ -162,7 +162,7 @@ for every dynamic object
 
 For applying collision we need to know the affected area or the collision area so we will use the intersects function but with the second argument which returns the affected area. After we get the affected area we will verify from which side comes the collision and apply it:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Affected area
 sf::FloatRect area;
 

@@ -7,11 +7,18 @@
  */
 export default function addPostDataDefaults(data, variablesNames = []) {
     if ((variablesNames.length === 0 && !data.thumbnail) || (variablesNames.includes("thumbnail") && !data.thumbnail)) {
-        data.thumbnail = "/imgs/posts/placeholder/cover-small.png";
+        data.thumbnail = {
+            png: "/imgs/posts/no-thumbnail.png",
+            webp: "/imgs/posts/no-thumbnail.webp"
+        };
     }
 
     if ((variablesNames.length === 0 && !data.cover) || (variablesNames.includes("cover") && !data.cover)) {
-        data.cover = "/imgs/posts/placeholder/cover-large.png";
+        data.cover = {
+            noImage: true,
+            png: "/imgs/posts/no-cover.png",
+            webp: "/imgs/posts/no-cover.webp"
+        };
     }
 
     return data;

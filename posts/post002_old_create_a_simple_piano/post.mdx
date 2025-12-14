@@ -27,14 +27,14 @@ More informations about SFML handling the sounds you can find here or check SFML
 
 We will use std::array because we know the exact size of everything:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 const unsigned int whiteKeys = 7;
 const unsigned int keys = 12;
 ```
 
 First, we create a loading function which will load the sounds from the folder “sounds” into an array of `sf::SoundBuffer`:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 std::array<sf::SoundBuffer, keys> soundBuffers;
 
 void loadBuffers()
@@ -52,7 +52,7 @@ As you can see, we load 12 sounds because an octave consists of 7 white keys and
 
 Next step is to set the buffers to the sounds, so we create a vector of sounds:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 std::array<sf::Sound, keys> keySounds;
 
 void setBuffers()
@@ -66,7 +66,7 @@ void setBuffers()
 
 Next we need to setup the piano. Because the piano keys are simple rectangles, we will use a vector of `sf::RectangleShape` for keys: the first 7 rectangles are the white keys and the rest of 5 rectangles are the black keys.
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 std::array<sf::RectangleShape, keys> keyRects;
 const sf::Vector2f whiteKeySize(80, 230);
 const sf::Vector2f blackKeySize(40, 120);
@@ -108,26 +108,26 @@ For pressing the keys we use the keyboard: for the white keys we use the keyboar
 
 In order to make handling every key much easier, we create an array with the key codes we want:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 //                       A,  S, D, F, G, H, J,  W, E,  R,  T,  Y
 int keyboardKey[keys] = {0, 18, 3, 5, 6, 7 ,9, 22, 4, 17, 19, 24};
 ```
 
 And we need another array of booleans so we know when the keys are ready and set them to true as a default value:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 bool keyReady[keys] = {true, true, true, true, true, true, true, true, true, true, true, true};
 ```
 
 Now let’s create the window with the width of 7 white keys and the height of one white key:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 sf::RenderWindow window(sf::VideoMode(whiteKeySize.x*whiteKeys, whiteKeySize.y), "Piano");
 ```
 
 And let’s render our piano to the window:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 while (window.isOpen())
 {
     // ...
@@ -145,7 +145,7 @@ while (window.isOpen())
 
 And the last step is to play our sounds when the right keyboard key is pressed. For this we will use `sf::Event::KeyPressed` and `sf::Event::KeyReleased`. We will go through the array of keyboard keys and verify if the key is pressed or released. If the keyboard key is pressed and ready to play the sound, it will change the color of the respective piano key, and if is released to stop the sound from playing, it will change back to the color of the piano key.
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 while (window.isOpen())
 {
     sf::Event event;
@@ -203,7 +203,7 @@ And this is how we create a simple piano with SFML.
 
 If you listen to the piano sounds of the University of Iowa, you will notice that they are a bit delayed. In order to correct this, we need to use the function <a href="https://www.sfml-dev.org/documentation/2.1/classsf_1_1Sound.php#ab905677846558042022dd6ab15cddff0" rel="noopener noreferrer" target="_blank">setPlayingOffset(Time timeOffset)</a> to the sounds on the `setBuffer()` function:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 void setBuffers()
 {
     for (unsigned int i=0; i<keySounds.size(); ++i)
@@ -216,7 +216,7 @@ void setBuffers()
 
 But we also need to set the playing offset when the keyboard key is released:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 if (event.type == sf::Event::KeyReleased)
 {
     for (int i=0; i<keys; ++i)
@@ -237,7 +237,7 @@ if (event.type == sf::Event::KeyReleased)
 
 And this is the complete code of our simple piano:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 #include <array>
 
 #include <SFML/Graphics.hpp>

@@ -22,7 +22,7 @@ In this tutorial I will show you how to create a simple button. For the button d
 
 Here is our initial class code:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
@@ -45,7 +45,7 @@ From what you can observe from the code, our Button class inherits the class `sf
 
 In the constructor, we pass as parameter the size of the button and declare a `sf::Vector2f` variable for holding it:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 public:
 	Button(const sf::Vector2f size = sf::Vector2f(0,0));
 
@@ -57,7 +57,7 @@ We also declare as private a `sf::RectangleShape` and we call it `m_body` becaus
 
 In the constructor we pass the size parameter to `m_size` variable and call the function `setSize()` to set the size of `m_body`:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void setSize(const sf::Vector2f size);
@@ -81,7 +81,7 @@ void Button::setSize(const sf::Vector2f size)
 
 And in the `draw()` function we draw the body:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
@@ -93,7 +93,7 @@ If we run an app with the code we’ve written so far we will see on screen a bl
 
 Every button, besides the body, has a text or an image, or both, but in this tutorial we will create a button only with text. For this we create a private `sf::Text` named `m_text` and the following function which will set the string of the text and call another function named `update()`:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	setString(const std::string string);
@@ -112,7 +112,7 @@ void Button::setString(const std::string string)
 
 When a variable **x** depends on a variable **y**, and the variable **y** is changed, the variable **x** needs to be readjusted according to the variable **y**. Therefore, we create the function `update()` which readjusts the character size of the text according to the size of the button:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 private:
 	update();
@@ -168,7 +168,7 @@ You can play with those values to find the ones you need.
 
 Also we need to add the `update()` function to the `setSize()` function because if the size is changed then we need to change the text size too:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 void Button::setSize(const sf::Vector2f size)
 {
 	m_size = size;
@@ -179,7 +179,7 @@ void Button::setSize(const sf::Vector2f size)
 
 In order to draw a `sf::Text` we need a `sf::Font`, and for this we need to modify the constructor’s parameters by adding a reference to `sf::Font` and call the function `setFont()`:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	Button(sf::Font& font, const sf::Vector2f size = sf::Vector2f(0,0));
@@ -208,7 +208,7 @@ We also call the function `update()` after we set the font because a new font me
 
 Now we can add functions for styling the button:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void setBackgroundColor(const sf::Color &color);
@@ -253,7 +253,7 @@ Next I will show you how to add some actions to our button.
 
 First action we add is changing the colors of the button when the mouse cursor is over it. We won’t want this action every time, so we create a function and a variable that will enable/disable it and for the default value of feature we will set the variable to true/activated:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void setOverAction(bool active = true);
@@ -275,7 +275,7 @@ void Button::setOverAction(bool active = true)
 
 And we add some functions to save the colors so we can use them when the mouse cursor is over the button:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void setOverAction(bool active = true);
@@ -308,7 +308,7 @@ void Button::setOverOutlineColor(const sf::Color &color)
 
 And now we create a function named ‘handler’ which will verify if the mouse cursor is over the button and if is over the button and if `m_overActive` is `true` so it will change the colors of the button:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void handler(sf::RenderWindow &window);
@@ -343,7 +343,7 @@ First we create a `sf::FloatRect` with the ‘real’ position of our button (ca
 
 The second action and the most important one is the click action. For click action we will use a function pointer that we will call the triggered function when the left button of the mouse is released after is has been pressed in the area of the button. For this we create another function named `events()` which takes as parameter a `sf::Event`. For determining when the mouse cursor is in/over the button, we declare a boolean variable named `m_mouseCursorOver` that we set to `true` for when the mouse cursor is over the button:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void events(sf::Event &event);
@@ -371,13 +371,13 @@ void Button::handler(sf::RenderWindow &window)
 
 For the function pointer we declare it’s prototype using typedef key:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 typedef void (*function)(void);
 ```
 
 Now we can easily create a private variable named `m_triggerFunction` which will hold the address of the function that will be triggered:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 private:
 	function m_triggerFunction;
 
@@ -386,7 +386,7 @@ private:
 
 And for taking the address of the function we create the function `setTriggerFunction()`:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 // Button.hpp
 public:
 	void setTriggerFunction(function triggerFunction);
@@ -409,7 +409,7 @@ mouse button was released. If yes, we set the `m_butonPressed` to `false` and
 check if the mouse cursor is still over the button and if the function pointer
 is not null, if so we call the function held by the function pointer:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 void Button::events(sf::Event &event)
 {
 	if (event.type == sf::Event::MouseButtonPressed && m_mouseCursorOver)
@@ -430,7 +430,7 @@ void Button::events(sf::Event &event)
 
 We also we need to set to false in constructor our `m_buttonPressed` variable:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 Button::Button(sf::Font& font, const sf::Vector2f size)
 : m_overActive (true)
 , m_buttonPressed (false)
@@ -441,7 +441,7 @@ And that’s it. You can add more features like changing the color when you clic
 
 Here is an example in which we move our button by **(10.f, 10.f)** pixels by every click:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 #include <SFML/Graphics.hpp>
 #include "Button.hpp"
 

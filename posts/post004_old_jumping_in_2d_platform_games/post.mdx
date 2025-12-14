@@ -21,7 +21,7 @@ Based on the last tutorial, <a href="/posts/post003_old_how_to_apply_collision">
 
 First thing we need to do in order to enable an entity to jump is to verify if the entity is on a ground:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 bool onGround = false;
 
 int main()
@@ -74,7 +74,7 @@ We set the variable to false to every frame because we don’t know if the playe
 
 We need two variables: for the maximum time the player is jumping and for the actual time the player is in the air:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 float inAir;
 
 float maxInAir = 0.3f;
@@ -82,7 +82,7 @@ float maxInAir = 0.3f;
 
 And now in the function `move()` we add the code for jumping:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 void move(sf::Vector2f &playerVelocity, float dt)
 {
 	// ...
@@ -112,7 +112,7 @@ Last thing to do is to reset the `inAir` when the player is hitting the ground.
 
 Here is the complete code:
 
-```ts[class="line-numbers"]
+```ts showLineNumbers
 #include <SFML/Graphics.hpp>
 #include <vector>
 
