@@ -137,10 +137,10 @@ export async function generateMetadata({ params }) {
     const url = `${baseUrl}/posts/${id}`;
     const images = [];
     if (postSettings.cover) {
-        images.push(postSettings.cover?.png || postSettings.cover);
+        images.push(`${baseUrl}${postSettings.cover?.png || postSettings.cover}`);
     }
     if (postSettings.thumbnail) {
-        images.push(postSettings.thumbnail?.png || postSettings.thumbnail);
+        images.push(`${baseUrl}${postSettings.thumbnail?.png || postSettings.thumbnail}`);
     }
 
     return {
