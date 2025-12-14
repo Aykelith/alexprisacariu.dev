@@ -21,7 +21,7 @@ seoKeywords:
    - ChatGPT
    - WebSockets
    - chatbot tutorial
-   - speech-to-texk now how the request is handled on the servert
+   - speech-to-text
    - text-to-speech
    - JavaScript
 ---
@@ -131,7 +131,7 @@ inputTextElement.addEventListener('keydown', async (event) => {
 ```
 
 Once the user hits the enter key and the input is not empty, we will disable
-both the text input and the audio button so the user wouldn't send another
+both the text input and the audio button so the user won't send another
 message while we getting a response to the previous message. Once we get the
 answer we restore the functionality.
 
@@ -312,7 +312,7 @@ Once the stop button is hit, we convert the audio chunks to a `Blob` object and
 the blob to a base64 encoded string and return it.
 
 We also go through each audio track and stop them, then remove them. This is
-necesarry because, at least on Chrome, calling `mediaRecorder.stop()` will not
+necessary because, at least on Chrome, calling `mediaRecorder.stop()` will not
 stop the "listening" state of the microphone.
 
 > Encoding the audio to `base64` is not a very efficient method of sending the
@@ -521,7 +521,7 @@ async function getAnswer(openai, messages) {
 
 Last part is about converting the response from the AI to an audio using the
 function `tts` that uses the method `openai.audio.speech.create` to create
-an audio file. The OpenAI's TTS support multiple formats but we've choosen `mp3`
+an audio file. The OpenAI's TTS support multiple formats but we've chosen `mp3`
 for this tutorial.
 
 Once the audio data is got we convert it into a `Buffer` and from there to a
@@ -559,7 +559,7 @@ a real-time writing effect because we will stream the result from ChatGPT to
 the client in real time.
 
 This implementation has a drawback, but only because we are using OpenAI's TTS,
-which accepts a maximum of 3 requests per minut. Therefore, for this
+which accepts a maximum of 3 requests per minute. Therefore, for this
 implementation, we will drop the text-to-speech feature [but I will give tips on
 how to reimplement it and what to look for when doing so](#tips-for-adding-the-tts-functionality-back).
 
@@ -655,7 +655,7 @@ the following:
 /**
  * Add a function to the list of functions to be called when the socket receives
  * a new message. The function must return a boolean: if `true` is returned then
- * is considered that the message was handled and will stop the exection of the
+ * is considered that the message was handled and will stop the execution of the
  * rest of the subscribers in the list.
  *
  * @param {Function} fn the function to be added
@@ -697,7 +697,7 @@ ws.sendTextMessage = async (message, onNewMessageContent) => {
 };
 ```
 
-The `sendTextMessage` method accepts the message that needs to sent to the
+The `sendTextMessage` method accepts the message that needs to be sent to the
 server and a function that will be called multiple times with the stream of data
 received from ChatGPT.
 

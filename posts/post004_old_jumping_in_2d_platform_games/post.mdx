@@ -17,7 +17,7 @@ seoKeywords:
    - game development
    - platformer tutorial
 ---
-Based on the last tutorial, <a href="/posts/post003_old_how_to_apply_collision">How to apply collision?</a>, in this post I will you show how to make an entity jump in a platform game.
+Based on the last tutorial, <a href="/posts/post003_old_how_to_apply_collision">How to apply collision?</a>, in this post I will show you how to make an entity jump in a platform game.
 
 First thing we need to do in order to enable an entity to jump is to verify if the entity is on a ground:
 
@@ -68,9 +68,9 @@ int main()
 }
 ```
 
-We set the variable `onGround` initially to `false` because we set the player in air.
+We set the variable `onGround` initially to `false` because we set the player in the air.
 
-We set the variable to false to every frame because we don’t know if the player is still colliding with a block of grass. If the player collides with a block of grass we set the value to `true`.
+We set the variable to false every frame because we don’t know if the player is still colliding with a block of grass. If the player collides with a block of grass we set the value to `true`.
 
 We need two variables: for the maximum time the player is jumping and for the actual time the player is in the air:
 
@@ -106,7 +106,7 @@ We enable the player to jump only by pressing the `UP` key if the player is on g
 
 If the above conditions have been met we set the velocity of vertical axis, `y` member, to `-gravity` and increase the `inAir` with the time of the frame, `dt`.
 
-Otherwise we set the y value of velocity to gravity, so the player will fall down until it hits a block of grass, then we set `inAir` to `maxInAir` so the player can’t jump from air.
+Otherwise we set the y value of velocity to gravity, so the player will fall down until they hit a block of grass, then we set `inAir` to `maxInAir` so the player can’t jump from air.
 
 Last thing to do is to reset the `inAir` when the player is hitting the ground.
 

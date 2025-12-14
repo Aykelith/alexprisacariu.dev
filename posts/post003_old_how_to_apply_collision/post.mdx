@@ -19,7 +19,7 @@ seoKeywords:
 ---
 One of my biggest problems when creating games was not collision detection, it was how to apply collision. In this tutorial I will show you how to detect and apply collision on AABB objects.
 
-First, we create a simple code that creates a window, a player sprite and some terrain sprites. We then add gravity and move functions for the player.
+First, we create simple code that creates a window, a player sprite and some terrain sprites. We then add gravity and move functions for the player.
 
 ```ts showLineNumbers
 #include <SFML/Graphics.hpp>
@@ -149,7 +149,7 @@ int main()
 }
 ```
 
-From what you can see we only call the intersects function of class `sf::Rect` which is returned by the `getGlobalBounds()` function.
+As you can see, we only call the intersects function of class `sf::Rect` which is returned by the `getGlobalBounds()` function.
 
 The above code can be translated into pseudo code:
 

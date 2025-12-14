@@ -101,7 +101,7 @@ from a technical point of view at how I've done this website.
 ## The back-end
 
 The backend was done in Go and is my first complete project in Go. Used
-only standard packages, beside the `golang.org/x/oauth2` and
+only standard packages, besides the `golang.org/x/oauth2` and
 `google.golang.org/api` required for Google Spreadsheet.
 
 I created 3 sub-packages for this project:
@@ -640,7 +640,7 @@ screen section, the last one being for the admin dashboard.
 I also used TailwindCSS for fast styling of the pages and TypeScript for a better
 JavaScript experience.
 
-The design was made to be fully responsible, with a focus on the mobile
+The design was made to be fully responsive, with a focus on the mobile
 experience, because I'm pretty sure 99% of the invited people will access the 
 website from a mobile device.
 
@@ -724,7 +724,7 @@ project.
 While I've already explained how and where I store the data for the invitations,
 I want to talk about how I do the synchronization between the JSON file and the
 spreadsheet. While the JSON file that is stored on the server has fewer changes
-of being modified manually, the spreadsheet is much more easy to be modified
+of being modified manually, the spreadsheet is much easier to be modified
 manually by mistake (I make sure that only the service account has the right
 to make changes to the spreadsheet, but who knows?). So I needed to introduce some
 synchronization mechanisms.

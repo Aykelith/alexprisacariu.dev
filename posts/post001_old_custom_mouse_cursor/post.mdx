@@ -16,7 +16,7 @@ seoKeywords:
    - SFML tutorial
    - game programming
 ---
-Have you ever wanted to have your own mouse cursor for you game or your application? Well… now you can!
+Have you ever wanted to have your own mouse cursor for your game or your application? Well… now you can!
 
 First you need to deactivate mouse cursor in your SFML window:
 
@@ -24,7 +24,7 @@ First you need to deactivate mouse cursor in your SFML window:
 window.setMouseCursorVisible(false);
 ```
 
-And then you only need to show an sf::Sprite( or equivalent) positioned in the coordinates of the mouse:
+And then you only need to show an sf::Sprite (or equivalent) positioned in the coordinates of the mouse:
 
 ```ts showLineNumbers
 sf::Sprite cursor;
@@ -45,7 +45,7 @@ while(window.isOpen())
 
 And that’s all. Now you have your own custom mouse cursor.
 
-Here is a complet example using `sf::CircleShape` as the mouse cursor. I setted the origin of the circle to the center because the click position of mouse would fall in the exterior of the circle.
+Here is a complete example using `sf::CircleShape` as the mouse cursor. I set the origin of the circle to the center because the click position of mouse would fall in the exterior of the circle.
 
 ```ts showLineNumbers
 #include <SFML/Graphics.hpp>

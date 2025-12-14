@@ -29,17 +29,17 @@ Created a crypto trading bot platform that allows users to:
 
 The platform is composed of 3 main parts:
 
-- the front part that is a web application built with NodeJs & ReactJS;
-- the controller part that controls the bots services and act as a middleware
+- the front part that is a web application built with Node.js & ReactJS;
+- the controller part that controls the bots services and acts as a middleware
   between the front and the bots;
-- the bots part that are the actual bots that utilize the Binance API for
-  trading and sends the updates to the controller.
+- the bots part, which consists of the actual bots that utilize the Binance API for
+  trading and send the updates to the controller.
 
-The bots services are only and only communicating with the controller and is
+The bots services communicate only with the controller and are
 not available to be accessed from outside the cluster. In this way the bots
 are protected from being attacked or manipulated.
 
-The both controller and the bots services are using NodeJS and TypeScript. Not
+Both the controller and the bots services are using NodeJS and TypeScript. Not
 the fastest language & runtime environment, but at the time of development it
 was only a proof of concept that was never rewritten in a better performant
 language and/or framework.
@@ -50,7 +50,7 @@ commands that are sent to the bot to be run.
 The communication between all the parts is done using WebSockets with a custom
 protocol on top of it with a predefined set of messages.
 
-The controller save the data to a MongoDB database that the front part can
+The controller saves the data to a MongoDB database that the front part can
 access directly for non real-time data.
 
 For the moment the platform is not available for public use and is only

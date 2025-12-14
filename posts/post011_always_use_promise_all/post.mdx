@@ -70,24 +70,24 @@ const streams = {
 What is wrong here? Well, without much knowledge of JavaScript everything looks
 fine. But then why the code fails in some situations?
 
-If only one promise from `res.streams` fails then our code handle it very fine 
+If only one promise from `res.streams` fails then our code handles it very well 
 and will respond to the client with the 500 status code.
 
-But if both promises fails then our code will crash.
+But if both promises fail then our code will crash.
 
 Why? Because we are not handling the second failed promise. When the first
-promise get rejected it triggers the `catch` block and in our `catch` block of
+promise gets rejected it triggers the `catch` block and in our `catch` block of
 code we have a `return` that will break the loop and our second promise will
-not have the change to be checked thus crashing the service with the proper
+not have the chance to be checked thus crashing the service with the proper
 error (that we are not handling a promise).
 
-Yes, we can done it correctly using the foor loop (or any loop) as long as we
+Yes, we can do it correctly using the for loop (or any loop) as long as we
 check every single promise we have. But why? We already have special methods
 inside the `Promise` object for handling all the cases we would want:
 
 - `Promise.all()` for when we want for all the promises to succeed;
 - `Promise.allSettled()` for when we just want for all the promises to be done; will never reject;
-- `Promise.any()` for when we want at least one promise to succeed; first one to succeed will be returned; if all fails when the method fails;
+- `Promise.any()` for when we want at least one promise to succeed; first one to succeed will be returned; if all fail then the method fails;
 - `Promise.race()` for when we want the fastest promise to succeed.
 
 And using the methods inside the `Promise` object allow us the benefit of

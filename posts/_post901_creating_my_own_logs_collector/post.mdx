@@ -19,7 +19,7 @@ using something that already exists and how it works.
 
 ## Overview
 
-I came to the conclusion that I need a single place from where to be able to
+I came to the conclusion that I needed a single place from where to be able to
 see all the logs of all the apps that I manage. After searching the vast
 internet and trying different solutions I couldn't find a good tool for my
 use case. There are many good tools out there, but not for what I needed.
@@ -28,7 +28,7 @@ For my case I needed an application that could:
 
 - use low resources on the processing side;
 - fast on the client side;
-- be able to still use the classical way of logging (to a console) without a hassle;
+- be able to still use the classical way of logging (to a console) without hassle;
 
 For this I created 3 packages:
 
@@ -36,7 +36,7 @@ For this I created 3 packages:
 - `logs catcher app`: an application that will receive the raw logs from all the applications and send them to the application that will process them;
 - `client`: the package that will send the logs of the application to the `logs catcher app`.
 
-$ the formmat of logs
+$ the format of logs
 
 $ the transport of logs from client to logs catcher app through TCP
 
