@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack && mv out dist",
+    "build": "next build --turbopack && mv out docs && echo 'alexprisacariu.dev' > docs/CNAME && touch docs/.nojekyll",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
