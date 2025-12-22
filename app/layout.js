@@ -20,8 +20,8 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "Alexandru Priscariu: The Website",
-  description: "Place where Alexandru Prisacariu post things",
+  title: "Alexandru Prisacariu: The Website",
+  description: "Place where Alexandru Prisacariu posts things",
 };
 
 export default function RootLayout({ children }) {

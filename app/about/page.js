@@ -11,13 +11,13 @@ export default function AboutPage() {
                     </h1>
                     <div className="post-content mb-6">
                         <p>
-                            My name is <AltName>Alex</AltName> and I'm passionate programmer from Romania who loves coming out with solutions.
+                            My name is <AltName>Alex</AltName> and I'm a passionate programmer from Romania who loves coming out with solutions.
                             I also enjoy audio engineering, going hiking and playing ukulele and electric guitar.
                         </p>
                         <p>
-                            I started programming from little in <LanguageName>Visual Basic 3</LanguageName> at a programming club,
-                            progressed to <LanguageName>Visual Basic 6</LanguageName>. Switched to{" "}
-                            <LanguageName>C++</LanguageName> as my passion for creating games increased. Later started learning web
+                            I started programming from a young age in <LanguageName>Visual Basic 3</LanguageName> at a programming club,
+                            progressed to <LanguageName>Visual Basic 6</LanguageName>. I switched to{" "}
+                            <LanguageName>C++</LanguageName> as my passion for creating games increased. Later, I started learning web
                             development.
                         </p>
                         <p>
@@ -39,7 +39,7 @@ export default function AboutPage() {
                         </p>
                         <p>
                             My editor of choice, right now, is <ProperName>Antigravity</ProperName>, while having a terminal
-                            prepared with <ProperName>Neovim</ProperName> for when I need to access fast some other project's files,
+                            prepared with <ProperName>Neovim</ProperName> for when I need to quickly access some other project's files,
                             all running on <OSName>Linux Mint</OSName>.
                         </p>
                     </div>

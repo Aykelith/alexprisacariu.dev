@@ -1,6 +1,6 @@
 # Progress Bar
 
-Inspired from [Global Progress with Next.js](https://github.com/builduilabs/2024-03-14-global-progress-with-nextjs).
+Inspired by [Global Progress with Next.js](https://github.com/builduilabs/2024-03-14-global-progress-with-nextjs).
 
 This directory contains a custom implementation of a global progress bar for Next.js App Router, handling both link navigation and browser history events (back/forward).
 

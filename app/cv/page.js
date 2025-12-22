@@ -21,40 +21,40 @@ export default function CVPageContent() {
                 <div className="flex flex-col gap-6">
                     <Section title="Skills">
                         <Subsection title="Programming Languages">
-                            <ExpertizeSection title="Expert:">
+                            <ExpertiseSection title="Expert:">
                                 JavaScript, Typescript, C++, HTML, CSS
-                            </ExpertizeSection>
-                            <ExpertizeSection title="Proficient:">
+                            </ExpertiseSection>
+                            <ExpertiseSection title="Proficient:">
                                 Go, SQL, Java, Lua, PHP
-                            </ExpertizeSection>
-                            <ExpertizeSection title="Familiar with:">
+                            </ExpertiseSection>
+                            <ExpertiseSection title="Familiar with:">
                                 C#, Python, Rust
-                            </ExpertizeSection>
+                            </ExpertiseSection>
                         </Subsection>
                         <Subsection title="Libraries & Frameworks">
-                            <ExpertizeSection title="Expert:">
+                            <ExpertiseSection title="Expert:">
                                 Node.js, React, Express, Next.js, TailwindCSS
-                            </ExpertizeSection>
-                            <ExpertizeSection title="Proficient:">
+                            </ExpertiseSection>
+                            <ExpertiseSection title="Proficient:">
                                 SolidJS, Qt, Laravel, Meteor, SFML
-                            </ExpertizeSection>
+                            </ExpertiseSection>
                         </Subsection>
                         <Subsection title="Tools & Platforms & Databases">
-                            <ExpertizeSection title="Expert:">
+                            <ExpertiseSection title="Expert:">
                                 Git, NGINX, Docker, Kubernetes, MongoDB
-                            </ExpertizeSection>
-                            <ExpertizeSection title="Proficient:">
+                            </ExpertiseSection>
+                            <ExpertiseSection title="Proficient:">
                                 ChatGPT API, Azure Pipelines, PostgreSQL,
                                 Binance API
-                            </ExpertizeSection>
-                            <ExpertizeSection title="Familiar with:">
+                            </ExpertiseSection>
+                            <ExpertiseSection title="Familiar with:">
                                 Microsoft SQL Server, GitLab CI/CD, Godot Engine
-                            </ExpertizeSection>
+                            </ExpertiseSection>
                         </Subsection>
                         <Subsection title="OSs">
-                            <ExpertizeSection title="Proficient:">
+                            <ExpertiseSection title="Proficient:">
                                 Linux (Debian/Ubuntu, RedHat), Windows
-                            </ExpertizeSection>
+                            </ExpertiseSection>
                         </Subsection>
                     </Section>
                     <Section title="Work">
@@ -148,7 +148,7 @@ export default function CVPageContent() {
                                 </li>
                                 <li className="list-disc! list-inside!">
                                     Created different web applications for real
-                                    estate agenciesm, providing complete
+                                    estate agencies, providing complete
                                     solutions from backend and frontend to
                                     releasing and maintaining applications like{" "}
                                     <a
@@ -212,7 +212,7 @@ function Subsection({ className, title, company, children }) {
     );
 }
 
-function ExpertizeSection({ className, title, children }) {
+function ExpertiseSection({ className, title, children }) {
     return (
         <div>
             <span className={classNames("underline mr-2", className)}>
