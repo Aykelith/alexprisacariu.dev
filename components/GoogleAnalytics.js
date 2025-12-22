@@ -11,14 +11,7 @@ export default function GoogleAnalytics() {
 
     return (
         <>
-            <noscript>
-                <iframe
-                    src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-                    height="0"
-                    width="0"
-                    style={{ display: "none", visibility: "hidden" }}
-                ></iframe>
-            </noscript>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
             <Script id="google-analytics" strategy="afterInteractive">
                 {`
         window.dataLayer = window.dataLayer || [];
