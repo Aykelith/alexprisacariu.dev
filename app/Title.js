@@ -3,6 +3,7 @@
 // Methods
 import { motion } from "motion/react";
 import { useState, useEffect } from "react";
+import clsx from "clsx";
 
 // Components
 import { AnimatePresence } from "motion/react";
@@ -12,6 +13,13 @@ const TitleTextOptions = [
     ["creating open-source\nprojects", "oklch(54.6% 0.245 262.881)"],
     ["working on beautiful\nwebsites", "oklch(59.2% 0.249 0.584)"],
     ["cutting down\ncost", "oklch(55.8% 0.288 302.321)"],
+];
+
+const TitleVerySmallTextOptions = [
+    ["implementing\nperformant\nsolutions", "oklch(72.3% 0.219 149.579)"],
+    ["creating\nopen-source\nprojects", "oklch(54.6% 0.245 262.881)"],
+    ["working\non beautiful\nwebsites", "oklch(59.2% 0.249 0.584)"],
+    ["cutting\ndown\ncost", "oklch(55.8% 0.288 302.321)"],
 ];
 
 export default function Title() {
@@ -27,22 +35,37 @@ export default function Title() {
     return (
         <h1 className="font-accent font-bold text-4xl md:text-5xl lg:text-6xl text-center mt-16">
             Hello. I'm{" "}
-            <div
-                className="h-[120px] transition-colors delay-500 whitespace-pre"
-                style={{ color: TitleTextOptions[index][1] }}
-            >
-                <AnimatePresence mode="wait">
-                    <motion.p
-                        key={TitleTextOptions[index][0]}
-                        initial={{ opacity: 0, y: -40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 40 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        {TitleTextOptions[index][0]}
-                    </motion.p>
-                </AnimatePresence>
-            </div>
+            <TitleText
+                index={index}
+                texts={TitleTextOptions}
+                className="h-[120px] hidden xs:block"
+            />
+            <TitleText
+                index={index}
+                texts={TitleVerySmallTextOptions}
+                className="h-[140px] block xs:hidden"
+            />
         </h1>
+    );
+}
+
+function TitleText({ index, texts, className }) {
+    return (
+        <div
+            className={clsx("transition-colors delay-500 whitespace-pre", className)}
+            style={{ color: texts[index][1] }}
+        >
+            <AnimatePresence mode="wait">
+                <motion.p
+                    key={texts[index][0]}
+                    initial={{ opacity: 0, y: -40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 40 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    {texts[index][0]}
+                </motion.p>
+            </AnimatePresence>
+        </div>
     );
 }

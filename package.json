@@ -15,7 +15,7 @@
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
     "motion": "^12.23.24",
-    "next": "15.5.6",
+    "next": "15.5.9",
     "next-mdx-remote-client": "^2.1.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",

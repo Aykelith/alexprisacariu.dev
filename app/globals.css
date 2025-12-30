@@ -53,6 +53,8 @@
 }
 
 @theme inline {
+    --breakpoint-xxs: 20rem;
+    --breakpoint-xs: 30rem;
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-muted-foreground: hsl(var(--muted-foreground));

@@ -67,7 +67,7 @@ export default function BlogPostsList({ posts, addSeeMore, className }) {
             })}
             {addSeeMore && (
                 <ProgressBarLink
-                    href="/blog"
+                    href="/blog/1"
                     className="post-card-base flex justify-center items-center py-10 font-bold text-center"
                 >
                     See more<br />blog posts
