@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Alexandru Prisacariu: The Website</title>
+    <link>https://alexprisacariu.dev</link>
+    <description>Place where Alexandru Prisacariu posts things</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 30 Dec 2025 10:08:40 GMT</lastBuildDate>
+    
+    <item>
+      <title><![CDATA[Creating a new version of alexprisacariu.dev]]></title>
+      <link>https://alexprisacariu.dev/posts/post014_alexprisacariu_v2</link>
+      <guid>https://alexprisacariu.dev/posts/post014_alexprisacariu_v2</guid>
+      <pubDate>Sat, 06 Dec 2025 12:25:43 GMT</pubDate>
+      <description><![CDATA[Time to upgrade my website to have light & dark theme, some more dynamic
+features and a better home page.]]></description>
+      <category>Showcase</category><category>AI</category><category>NextJS</category><category>TypeScript</category><category>TailwindCSS</category><category>GitHub</category>
+    </item>
+    <item>
+      <title><![CDATA[Creating a simple popup chatbot using OpenAI]]></title>
+      <link>https://alexprisacariu.dev/posts/post013_creating_a_simple_popup_chatbot_using_openai</link>
+      <guid>https://alexprisacariu.dev/posts/post013_creating_a_simple_popup_chatbot_using_openai</guid>
+      <pubDate>Tue, 21 May 2024 12:25:43 GMT</pubDate>
+      <description><![CDATA[Learn how to build a popup AI chatbot using OpenAI's ChatGPT, Whisper (STT), and TTS. Covers both a simple HTTP implementation and a real-time WebSocket version.]]></description>
+      <category>JavaScript/JS</category><category>OpenAI</category><category>ChatGPT</category><category>WebSockets</category><category>Audio</category><category>TTS</category><category>STT</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[Creating an application for my wedding invitations - Launch]]></title>
+      <link>https://alexprisacariu.dev/posts/post012_creating_an_application_for_my_wedding_invitations_part2</link>
+      <guid>https://alexprisacariu.dev/posts/post012_creating_an_application_for_my_wedding_invitations_part2</guid>
+      <pubDate>Sat, 02 Dec 2023 13:11:43 GMT</pubDate>
+      <description><![CDATA[Part 2 of the wedding invitation app series. A deep dive into the Go backend architecture, Google Sheets integration, SolidJS frontend, and deployment on a VPS.]]></description>
+      <category>Go</category><category>SolidJS</category><category>Google Spreadsheet</category><category>Bundling</category><category>TypeScript</category><category>DevOps</category>
+    </item>
+    <item>
+      <title><![CDATA[Always use Promise.all() (or any other Promise's method) for array of promises]]></title>
+      <link>https://alexprisacariu.dev/posts/post011_always_use_promise_all</link>
+      <guid>https://alexprisacariu.dev/posts/post011_always_use_promise_all</guid>
+      <pubDate>Sat, 16 Sep 2023 16:01:00 GMT</pubDate>
+      <description><![CDATA[Understand why using Promise.all(), Promise.allSettled(), or Promise.any() is crucial for handling arrays of promises in JavaScript to prevent crashes and improve performance.]]></description>
+      <category>JavaScript/JS</category>
+    </item>
+    <item>
+      <title><![CDATA[Creating an application for my wedding invitations - Setup]]></title>
+      <link>https://alexprisacariu.dev/posts/post010_creating_an_application_for_my_wedding_invitations_part1</link>
+      <guid>https://alexprisacariu.dev/posts/post010_creating_an_application_for_my_wedding_invitations_part1</guid>
+      <pubDate>Sat, 02 Sep 2023 13:11:43 GMT</pubDate>
+      <description><![CDATA[Part 1 of creating a custom wedding invitation application. Discussing the choice of Go for backend, SolidJS for frontend, and Google Sheets for storage.]]></description>
+      <category>Go</category><category>SolidJS</category><category>Google Spreadsheet</category>
+    </item>
+    <item>
+      <title><![CDATA[Creating a radio station on a Raspberry Pi using DarkIce and IceCast2]]></title>
+      <link>https://alexprisacariu.dev/posts/post009_creating_a_radio_station_on_a_raspberry_pi_using_darkice_and_icecast2</link>
+      <guid>https://alexprisacariu.dev/posts/post009_creating_a_radio_station_on_a_raspberry_pi_using_darkice_and_icecast2</guid>
+      <pubDate>Sat, 12 Mar 2022 16:36:45 GMT</pubDate>
+      <description><![CDATA[Create your own radio station using a Raspberry Pi 3. Step-by-step guide to configuring DarkIce and IceCast2 for live audio streaming on Ubuntu.]]></description>
+      <category>Linux</category><category>Raspberry Pi</category><category>Ubuntu</category><category>Audio</category>
+    </item>
+    <item>
+      <title><![CDATA[Dev Ideas #1: Handle data between tabs components]]></title>
+      <link>https://alexprisacariu.dev/posts/post008_dev_ideas_1_handle_data_between_tabs_components</link>
+      <guid>https://alexprisacariu.dev/posts/post008_dev_ideas_1_handle_data_between_tabs_components</guid>
+      <pubDate>Sat, 28 Aug 2021 12:36:45 GMT</pubDate>
+      <description><![CDATA[Explore efficient ways to share data between tab components in React. A comparison of lifting state up vs. using a parent class variable for data persistence.]]></description>
+      <category>ReactJS</category><category>DevIdeas</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: How to create a screenshot system]]></title>
+      <link>https://alexprisacariu.dev/posts/post007_old_how_to_create_a_screenshot_system</link>
+      <guid>https://alexprisacariu.dev/posts/post007_old_how_to_create_a_screenshot_system</guid>
+      <pubDate>Wed, 11 Jun 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[Implement a screenshot system in your SFML game. This tutorial shows how to capture the window, save images with timestamps, and handle key presses.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: How to create a simple button]]></title>
+      <link>https://alexprisacariu.dev/posts/post006_old_how_to_create_a_simple_button</link>
+      <guid>https://alexprisacariu.dev/posts/post006_old_how_to_create_a_simple_button</guid>
+      <pubDate>Wed, 21 May 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[A comprehensive guide to creating a reusable button class in SFML. Learn to handle mouse events, hover effects, and click actions in C++.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: How to flip sprites]]></title>
+      <link>https://alexprisacariu.dev/posts/post005_old_how_to_flip_sprites</link>
+      <guid>https://alexprisacariu.dev/posts/post005_old_how_to_flip_sprites</guid>
+      <pubDate>Wed, 30 Apr 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[Learn how to flip sprites in SFML using C++. This tutorial covers two methods: modifying sprite scale and inverting texture rects for animation.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: Jumping in 2D platform games]]></title>
+      <link>https://alexprisacariu.dev/posts/post004_old_jumping_in_2d_platform_games</link>
+      <guid>https://alexprisacariu.dev/posts/post004_old_jumping_in_2d_platform_games</guid>
+      <pubDate>Tue, 22 Apr 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[Learn how to implement smooth jumping mechanics in a 2D platform game using C++ and SFML. Covers gravity, ground detection, and jump physics.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: How to apply collision]]></title>
+      <link>https://alexprisacariu.dev/posts/post003_old_how_to_apply_collision</link>
+      <guid>https://alexprisacariu.dev/posts/post003_old_how_to_apply_collision</guid>
+      <pubDate>Tue, 15 Apr 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[Master AABB collision detection and resolution in SFML. This tutorial explains how to handle collisions between dynamic and static objects in 2D games using C++.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: Create a simple piano]]></title>
+      <link>https://alexprisacariu.dev/posts/post002_old_create_a_simple_piano</link>
+      <guid>https://alexprisacariu.dev/posts/post002_old_create_a_simple_piano</guid>
+      <pubDate>Fri, 11 Apr 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[Learn how to create a simple piano application using C++ and SFML. This tutorial covers sound handling, keyboard input, and visual feedback for a virtual piano.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+    <item>
+      <title><![CDATA[OLD: Custom mouse cursor]]></title>
+      <link>https://alexprisacariu.dev/posts/post001_old_custom_mouse_cursor</link>
+      <guid>https://alexprisacariu.dev/posts/post001_old_custom_mouse_cursor</guid>
+      <pubDate>Thu, 10 Apr 2014 12:36:45 GMT</pubDate>
+      <description><![CDATA[A step-by-step tutorial on implementing a custom mouse cursor in SFML using C++. Learn to hide the default cursor and render a sprite at the mouse position.]]></description>
+      <category>Old</category><category>SFML</category><category>C++</category><category>Tutorial</category>
+    </item>
+  </channel>
+</rss>
