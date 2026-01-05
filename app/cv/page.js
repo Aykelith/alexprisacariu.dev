@@ -22,10 +22,10 @@ export default function CVPageContent() {
                     <Section title="Skills">
                         <Subsection title="Programming Languages">
                             <ExpertiseSection title="Expert:">
-                                JavaScript, Typescript, C++, HTML, CSS
+                                JavaScript, Typescript, Go, HTML, CSS
                             </ExpertiseSection>
                             <ExpertiseSection title="Proficient:">
-                                Go, SQL, Java, Lua, PHP
+                                SQL, Java, Lua, PHP, C++
                             </ExpertiseSection>
                             <ExpertiseSection title="Familiar with:">
                                 C#, Python, Rust
@@ -39,27 +39,22 @@ export default function CVPageContent() {
                                 SolidJS, Qt, Laravel, Meteor, SFML
                             </ExpertiseSection>
                         </Subsection>
-                        <Subsection title="Tools & Platforms & Databases">
+                        <Subsection title="Tools, Platforms & Data">
                             <ExpertiseSection title="Expert:">
                                 Git, NGINX, Docker, Kubernetes, MongoDB
                             </ExpertiseSection>
                             <ExpertiseSection title="Proficient:">
-                                ChatGPT API, Azure Pipelines, PostgreSQL,
+                                Protobuf, ChatGPT API, Azure Pipelines, PostgreSQL,
                                 Binance API
                             </ExpertiseSection>
                             <ExpertiseSection title="Familiar with:">
                                 Microsoft SQL Server, GitLab CI/CD, Godot Engine
                             </ExpertiseSection>
                         </Subsection>
-                        <Subsection title="OSs">
-                            <ExpertiseSection title="Proficient:">
-                                Linux (Debian/Ubuntu, RedHat), Windows
-                            </ExpertiseSection>
-                        </Subsection>
                     </Section>
                     <Section title="Work">
                         <Subsection
-                            title="Senior FullStack Developer"
+                            title="Principal Software Engineer (formerly Senior FullStack Developer)"
                             company="AirportLabs"
                         >
                             <div className="text-accent font-semibold">
@@ -67,26 +62,17 @@ export default function CVPageContent() {
                             </div>
                             <ul>
                                 <li className="list-disc! list-inside!">
-                                    Working on porting the main application from
+                                    Architected the transition of the main application from
                                     a multi-tenant modular monolith architecture to
                                     a partitioned multi-tenancy hub-and-spoke
-                                    modular monolith architecture. It involved
-                                    creating from scratch a system for
-                                    communicating between servers, the ability
-                                    for users to switch between servers and
-                                    databases, handling sync issues and managing
-                                    all the servers from a central server;
+                                    modular monolith architecture; developed custom
+                                    inter-server communication protocols, cross-database user routing,
+                                    and a centralized server management orchestration system;
                                 </li>
                                 <li className="list-disc! list-inside!">
-                                    Working on adding a plugins system to the
-                                    main application where the company and the
-                                    clients could create plugins that would be
-                                    integrated into the application. It involves
-                                    creating from scratch the plugin framework,
-                                    the integration into the application and
-                                    constructing a deploying framework where
-                                    each plugin is versioned and can be deployed
-                                    to the application.
+                                    Engineered an extensible, version-controlled plugin framework from the ground up,
+                                    enabling seamless third-party and internal integrations through a
+                                    bespoke deployment and versioning pipeline.
                                 </li>
                             </ul>
                         </Subsection>
@@ -99,21 +85,36 @@ export default function CVPageContent() {
                             </div>
                             <ul>
                                 <li className="list-disc! list-inside!">
-                                    I created an application that worked with
-                                    ChatGPT to generate texts for various
-                                    sections of the portals. It had the
-                                    capability to check for dead links, bad
-                                    characters, and also to format currencies
-                                    that ChatGPT would not format according to
-                                    our instructions;
+                                    Developed a LLM-powered content generation tool using ChatGPT to automate
+                                    portal copy; implemented custom validation logic for link integrity,
+                                    character encoding, and region-specific currency formatting;
                                 </li>
                                 <li className="list-disc! list-inside!">
-                                    Implemented a complex module system into the
-                                    project, making it easier for the whole team
-                                    to add new features and work on them in
-                                    parallel; also reduced the complexity and
-                                    clutter of some files because code was moved
-                                    to their own modules;
+                                    Introduced a modular system architecture that facilitated parallel development
+                                    across the engineering team, significantly reducing code complexity and
+                                    technical debt by decoupling monolithic files into specialized modules.
+                                </li>
+                            </ul>
+                        </Subsection>
+                        <Subsection title="Freelancer">
+                            <div className="text-accent font-semibold">
+                                2017 - Present
+                            </div>
+                            <ul>
+                                <li className="list-disc! list-inside!">
+                                    Developed{" "}
+                                    <a
+                                        href="https://alexprisacariu.dev/project/002_panorocrm"
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                        className="underline black"
+                                    >
+                                        PanoroCRM
+                                    </a>
+                                    , a comprehensive real estate CRM featuring automated multi-portal
+                                    listing distribution, lead management, and advanced analytics.
+                                    Architected the backend using a microservices-based approach to
+                                    ensure high availability and horizontal scalability;
                                 </li>
                             </ul>
                         </Subsection>
@@ -123,34 +124,14 @@ export default function CVPageContent() {
             <BasePage>
                 <div className="flex flex-col gap-6">
                     <Section>
-                        <Subsection title="Freelancer">
-                            <div className="text-accent font-semibold">
-                                2017 - Present
-                            </div>
+                        <Subsection>
                             <ul>
                                 <li className="list-disc! list-inside!">
-                                    Created{" "}
-                                    <a
-                                        href="https://alexprisacariu.dev/project/002_panorocrm"
-                                        target="_blank"
-                                        rel="noreferrer noopener"
-                                        className="underline black"
-                                    >
-                                        PanoroCRM
-                                    </a>
-                                    , a CRM application created for real estate
-                                    agencies with modules for managing offers,
-                                    publishing them to different portals,
-                                    analytics, module for managing contacts, and
-                                    other modules. The application's backend is
-                                    constructed as microservices for easy
-                                    scaling when required;
-                                </li>
-                                <li className="list-disc! list-inside!">
-                                    Created different web applications for real
-                                    estate agencies, providing complete
-                                    solutions from backend and frontend to
-                                    releasing and maintaining applications like{" "}
+                                    Delivered end-to-end full-stack implementations for real estate agencies,
+                                    translating complex UI/UX designs into high-performance web applications.
+                                    Managed the full technical lifecycle, including backend architecture,
+                                    frontend development, deployment, and ongoing maintenance for platforms
+                                    including{" "}
                                     <a
                                         href="https://alexprisacariu.dev/project/001_imocentral.ro"
                                         target="_blank"
@@ -204,7 +185,7 @@ function Subsection({ className, title, company, children }) {
     return (
         <div className={classNames("flex flex-col", className)}>
             <div className="font-bold">
-                {title}
+                {title ? title : ""}
                 {company ? `  •  ${company}` : ""}
             </div>
             {children}
