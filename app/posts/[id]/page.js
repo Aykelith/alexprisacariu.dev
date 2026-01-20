@@ -96,6 +96,13 @@ export default async function Post({ params }) {
                         })}
                     </div>
                     {
+                        postSettings.showNoAIPost
+                        &&
+                        <div className="text-muted-foreground mt-4">
+                            Notice: This post was written by a human and gramatically checked by an AI.
+                        </div>
+                    }
+                    {
                         postSettings.showAIDisclaimer
                         &&
                         <div className="text-muted-foreground mt-4">

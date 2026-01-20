@@ -1,0 +1,240 @@
+---
+title: "Applying retry pattern in Async Rust"
+tags:
+  - Rust
+  - Async
+  - Retry
+  - Idempotency
+publishedOn: "2026-01-20T12:25:43.054Z"
+seoTitle: "Applying retry pattern in Async Rust"
+seoDescription: ""
+thumbnail:
+  png: "/imgs/posts/post015/thumbnail.png"
+  webp: "/imgs/posts/post015/thumbnail.webp"
+cover:
+  png: "/imgs/posts/post015/cover.png"
+  webp: "/imgs/posts/post015/cover.webp"
+seoKeywords: 
+  - Rust
+  - Async
+  - Retry
+  - Idempotency
+showNoAIPost: true
+---
+Every good software requires a retry mechanism for calls to async functions or
+to external services.
+
+In this post we will not focus on what is a retry pattern, nor on
+what is a good retry system, but we will explore how to implement a good retry
+mechanism in async Rust based on some already good-written articles.
+
+What is the main condition for a function to be able to be run within a retry
+system? Of course, **idempotency**, which tells us that our function will not
+introduce unintended side effects (like increasing a number using `INCR`
+command in a Redis database).
+
+Here you can read more about retry patterns & mechanisms:
+
+- <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/" target="_blank" rel="noopener">AWS: Exponential Backoff And Jitter, by Marc Brooker</a> -
+  a solid article describing the retry mechanism that we will use in this post
+- <a href="https://sre.google/sre-book/handling-overload/" target="_blank" rel="noopener">Google SRE: Chapter 21 - Handling Overload, by Alejandro Forero Cuervo</a>
+- <a href="https://stripe.com/blog/idempotency" target="_blank" rel="noopener">Stripe: Designing robust and predictable APIs with idempotency, by Brandur Leach</a>
+- <a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/retry" target="_blank" rel="noopener">Microsoft: Retry pattern</a>
+- <a href="https://en.wikipedia.org/wiki/Exponential_backoff" target="_blank" rel="noopener">Wikipedia: Exponential backoff</a>
+
+Now let's get to work.
+
+Let's see first how our `main` function looks like where we will call our `run_with_retry` function, that we will define later, giving a function as argument that prints the current time then throws an error.
+
+```rust showLineNumbers
+use std::time::{SystemTime, UNIX_EPOCH};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let result: Result<i32, Box<dyn std::error::Error>> = run_with_retry(|| async {
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_millis();
+
+        println!("Failed at {}", now);
+        Err::<i32, Box<dyn std::error::Error>>("Failed".into())
+    }, 100, 5)
+    .await;
+
+    match result {
+        Ok(value) => println!("Success {}", value),
+        Err(err) => println!("Failed after retries: {}", err),
+    }
+
+    Ok(())
+}
+```
+
+> Don't forget to activate the feature flags `rt-multi-thread`/`rt` and `macros`, or `full` in order for the compiler do not throw error because `main` is async.
+
+Let's see how a simple retry mechanism that make use of the exponential backoff would look like:
+
+```rust showLineNumbers
+use std::time::Duration;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+async fn run_with_retry<F, Fut, T, E>(f: F, initial_backoff_ms: u64, max_tries: u32) -> Result<T, E>
+where
+    F: Fn() -> Fut,
+    Fut: std::future::Future<Output = Result<T, E>>,
+{
+    let mut current_try: u32 = 1;
+    let mut backoff_ms = initial_backoff_ms;
+
+    loop {
+        match f().await {
+            Ok(value) => return Ok(value),
+            Err(err) => {
+                if current_try == max_tries {
+                    return Err(err);
+                }
+
+                tokio::time::sleep(Duration::from_millis(backoff_ms)).await;
+                backoff_ms *= 2;
+                current_try += 1;
+            }
+        }
+    }
+}
+```
+
+Our function `run_with_retry` can receive any async function that returns a
+`Result` (defined by
+`F: Fn() -> Fut, Fut: std::future::Future<Output = Result<T, E>>`), the initial
+backoff that will be increased exponentially and the number of tries it will
+attempt to run.
+
+But if you read the blog post from AWS listed above you would know that we can improve by adding "full jitter" to our retry mechanism:
+
+```rust showLineNumbers {21-22}
+use std::time::Duration;
+use rand::Rng;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+async fn run_with_retry<F, Fut, T, E>(f: F, initial_backoff_ms: u64, max_tries: u32) -> Result<T, E>
+where
+    F: Fn() -> Fut,
+    Fut: std::future::Future<Output = Result<T, E>>,
+{
+    let mut current_try: u32 = 1;
+    let mut backoff_ms = initial_backoff_ms;
+
+    loop {
+        match f().await {
+            Ok(value) => return Ok(value),
+            Err(err) => {
+                if current_try == max_tries {
+                    return Err(err);
+                }
+
+                let actual_backoff_ms = rand::rng().random_range(0..backoff_ms);
+                tokio::time::sleep(Duration::from_millis(actual_backoff_ms)).await;
+                backoff_ms *= 2;
+                current_try += 1;
+            }
+        }
+    }
+}
+```
+
+We just added one line where we get a random value as the backoff value and use it for sleep resulting in us using the "full jitter" mechanism.
+
+But there is one more thing that we can do to improve our `run_with_retry` method: checking if the returned error is transient.
+This is an important check because not all the time it is worth to attempt to retry.
+
+For this we will use a closer-to-reality code where we will ...
+This is a retry mechanism for Redis commands called using `redis` crate:
+
+```rust showLineNumbers {5,17,30-48,61-70}
+use std::time::Duration;
+use rand::Rng;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+async fn run_with_retry<F, Fut, T, E>(f: F, initial_backoff_ms: u64, max_tries: u32, is_transient_error: fn(&E) -> bool) -> Result<T, E>
+where
+    F: Fn() -> Fut,
+    Fut: std::future::Future<Output = Result<T, E>>,
+{
+    let mut current_try: u32 = 1;
+    let mut backoff_ms = initial_backoff_ms;
+
+    loop {
+        match f().await {
+            Ok(value) => return Ok(value),
+            Err(err) => {
+                if current_try == max_tries || !is_transient_error(&err) {
+                    return Err(err);
+                }
+
+                let actual_backoff_ms = rand::rng().random_range(0..backoff_ms);
+                tokio::time::sleep(Duration::from_millis(actual_backoff_ms)).await;
+                backoff_ms *= 2;
+                current_try += 1;
+            }
+        }
+    }
+}
+
+fn is_redis_error_transient(err: &redis::RedisError) -> bool {
+    err.is_timeout()
+        || err.is_connection_dropped()
+        || err.is_connection_refusal()
+        || err.is_io_error()
+}
+
+async fn run_redis_with_retry<F, Fut, T>(f: F, initial_backoff_ms: u64, max_tries: u32) -> Result<T, redis::RedisError>
+where
+    F: Fn() -> Fut,
+    Fut: std::future::Future<Output = Result<T, redis::RedisError>>,
+{
+    run_with_retry(
+        f,
+        initial_backoff_ms,
+        max_tries,
+        is_redis_error_transient
+    ).await
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let result = run_redis_with_retry::<_, _, i32>(
+        || async {
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis();
+
+            println!("Failed at {}", now);
+
+            // Uncomment for a non-transient error
+            // Err(redis::RedisError::from((
+            //     redis::ErrorKind::UnexpectedReturnType, 
+            //     "Non-transient error"
+            // )))
+
+            Err(redis::RedisError::from((
+                redis::ErrorKind::Io, 
+                "Transient error"
+            )))
+        },
+        100,
+        5,
+    )
+    .await;
+
+    match result {
+        Ok(value) => println!("Success {}", value),
+        Err(err) => println!("Failed after retries: {}", err),
+    }
+
+    Ok(())
+}
+```
+
+

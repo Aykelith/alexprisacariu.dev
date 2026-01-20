@@ -321,6 +321,9 @@ pre {
     }
 
     code {
+        display: grid;
+        min-width: 100%;
+
         &[data-line-numbers] {
             counter-reset: line;
         }
@@ -355,13 +358,30 @@ pre {
             background-color: var(--shiki-light-bg);
         }
 
-        @media (prefers-color-scheme: dark) {
+        & [data-highlighted-line] {
 
-            &[data-theme*=" "],
-            &[data-theme*=" "] span {
-                color: var(--shiki-dark);
-                background-color: var(--shiki-dark-bg);
+            &,
+            span {
+                background: #dddddd !important;
             }
+        }
+
+    }
+}
+
+.dark pre code {
+
+    &[data-theme*=" "],
+    &[data-theme*=" "] span {
+        color: var(--shiki-dark);
+        background-color: var(--shiki-dark-bg);
+    }
+
+    & [data-highlighted-line] {
+
+        &,
+        span {
+            background: #333e4b !important;
         }
     }
 }
