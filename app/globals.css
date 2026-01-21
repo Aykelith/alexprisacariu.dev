@@ -23,6 +23,7 @@
     --foreground-accent: oklch(0.55 0.24 262.88);
     --button-background: oklch(0.55 0.24 262.88);
     --link-color: lab(32.4486% 49.2217 -84.6695);
+    --quote-block-background: hsl(0 0% 100%);
 }
 
 .dark {
@@ -37,6 +38,7 @@
     --ring: 0 0% 83.1%;
     --page-color: oklch(20.5% 0 0);
     --link-color: lab(57 30.11 -62.04);
+    --quote-block-background: oklch(0.26 0 0);
 }
 
 @media print {
@@ -68,6 +70,7 @@
     --font-normal: var(--font-roboto);
     --font-accent: var(--font-lato);
     --color-link: var(--link-color);
+    --color-quote-block-background: var(--quote-block-background);
 }
 
 @layer base {
@@ -319,57 +322,57 @@ pre {
     & [data-line] {
         padding: 0 1rem;
     }
-
-    code {
-        display: grid;
-        min-width: 100%;
-
-        &[data-line-numbers] {
-            counter-reset: line;
-        }
-
-        &[data-line-numbers]>[data-line]::before {
-            counter-increment: line;
-            content: counter(line);
-
-            /* Other styling */
-            display: inline-block;
-            width: 0.75rem;
-            margin-right: 2rem;
-            text-align: right;
-            color: gray;
-        }
-
-        &[data-line-numbers-max-digits="2"]>[data-line]::before {
-            width: 1.25rem;
-        }
-
-        &[data-line-numbers-max-digits="3"]>[data-line]::before {
-            width: 1.75rem;
-        }
-
-        &[data-line-numbers-max-digits="4"]>[data-line]::before {
-            width: 2.25rem;
-        }
-
-        &[data-theme*=" "],
-        &[data-theme*=" "] span {
-            color: var(--shiki-light);
-            background-color: var(--shiki-light-bg);
-        }
-
-        & [data-highlighted-line] {
-
-            &,
-            span {
-                background: #dddddd !important;
-            }
-        }
-
-    }
 }
 
-.dark pre code {
+code {
+    @apply py-0.5 px-1;
+    @apply rounded;
+
+    &[data-line-numbers] {
+        counter-reset: line;
+    }
+
+    &[data-line-numbers]>[data-line]::before {
+        counter-increment: line;
+        content: counter(line);
+
+        /* Other styling */
+        display: inline-block;
+        width: 0.75rem;
+        margin-right: 2rem;
+        text-align: right;
+        color: gray;
+    }
+
+    &[data-line-numbers-max-digits="2"]>[data-line]::before {
+        width: 1.25rem;
+    }
+
+    &[data-line-numbers-max-digits="3"]>[data-line]::before {
+        width: 1.75rem;
+    }
+
+    &[data-line-numbers-max-digits="4"]>[data-line]::before {
+        width: 2.25rem;
+    }
+
+    &[data-theme*=" "],
+    &[data-theme*=" "] span {
+        color: var(--shiki-light);
+        background-color: var(--shiki-light-bg);
+    }
+
+    & [data-highlighted-line] {
+
+        &,
+        span {
+            background: #dddddd !important;
+        }
+    }
+
+}
+
+.dark code {
 
     &[data-theme*=" "],
     &[data-theme*=" "] span {
@@ -433,10 +436,17 @@ pre {
     }
 
     blockquote {
-        @apply bg-card;
+        @apply bg-quote-block-background;
         @apply p-2;
         @apply rounded;
         @apply my-2;
+    }
+
+    code:not([data-theme]),
+    code:not(figure *) {
+        @apply bg-quote-block-background;
+        @apply py-0.5 px-1;
+        @apply rounded;
     }
 }
 

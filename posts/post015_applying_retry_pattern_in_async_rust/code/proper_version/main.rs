@@ -1,5 +1,4 @@
 use std::time::Duration;
-use rand::Rng;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 async fn run_with_retry<F, Fut, T, E>(f: F, initial_backoff_ms: u64, max_tries: u32) -> Result<T, E>
@@ -18,7 +17,7 @@ where
                     return Err(err);
                 }
 
-                let actual_backoff_ms = rand::rng().random_range(0..backoff_ms);
+                let actual_backoff_ms = rand::random_range(0..backoff_ms);
                 tokio::time::sleep(Duration::from_millis(actual_backoff_ms)).await;
                 backoff_ms *= 2;
                 current_try += 1;

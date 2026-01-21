@@ -5,8 +5,16 @@
     <link>https://alexprisacariu.dev</link>
     <description>Place where Alexandru Prisacariu posts things</description>
     <language>en</language>
-    <lastBuildDate>Mon, 05 Jan 2026 06:57:16 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 21 Jan 2026 07:29:06 GMT</lastBuildDate>
     
+    <item>
+      <title><![CDATA[Applying retry pattern in Async Rust]]></title>
+      <link>https://alexprisacariu.dev/posts/post015_applying_retry_pattern_in_async_rust</link>
+      <guid>https://alexprisacariu.dev/posts/post015_applying_retry_pattern_in_async_rust</guid>
+      <pubDate>Tue, 20 Jan 2026 12:25:43 GMT</pubDate>
+      <description><![CDATA[Implementing robust retry system in async Rust with exponential backoff, full jitter, and transient error checks.]]></description>
+      <category>Rust</category><category>Async</category><category>Retry</category><category>Idempotency</category>
+    </item>
     <item>
       <title><![CDATA[Creating a new version of alexprisacariu.dev]]></title>
       <link>https://alexprisacariu.dev/posts/post014_alexprisacariu_v2</link>
