@@ -27,15 +27,19 @@ where
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let result: Result<i32, Box<dyn std::error::Error>> = run_with_retry(|| async {
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_millis();
+    let result: Result<i32, Box<dyn std::error::Error>> = run_with_retry(
+        || async {
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis();
 
-        println!("Failed at {}", now);
-        Err::<i32, Box<dyn std::error::Error>>("Failed".into())
-    }, 100, 5)
+            println!("Failed at {}", now);
+            Err::<i32, Box<dyn std::error::Error>>("Failed".into())
+        },
+        100,
+        5
+    )
     .await;
 
     match result {
