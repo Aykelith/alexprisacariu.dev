@@ -10,19 +10,12 @@ import ProjectsDirectoryPath from "@/constants/server/ProjectsDirectoryPath";
  * @param {boolean} includeIgnoredProjects - whether to include ignored projects
  * @returns {Promise<String[]>} the projects directories names
  */
-export default async function getProjectsDirNames(
-    includeIgnoredProjects = false,
-) {
-    let projectsDirectoriesNames;
+export default async function getProjectsDirNames() {
     try {
-        projectsDirectoriesNames = await fs.readdir(ProjectsDirectoryPath);
+        return await fs.readdir(ProjectsDirectoryPath);
     } catch (error) {
         throw new Error(
             `Failed to read the directory at "${ProjectsDirectoryPath}": ${error}`,
         );
     }
-
-    return projectsDirectoriesNames.filter((projectDirectoryName) => {
-        return includeIgnoredProjects || !projectDirectoryName.startsWith("_");
-    });
 }

@@ -7,6 +7,9 @@ const ProjectsDataVariablesNames = [
     "thumbnail",
     "tags",
     "yearsActive",
+    "status",
+    "started_on",
+    "last_activity_on",
     "urlPart",
 ];
 

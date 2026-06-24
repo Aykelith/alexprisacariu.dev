@@ -18,11 +18,11 @@ import { HomePostsDataVariablesNames } from "@/utilities/server/blog/getHomePost
 const StatisticsRows = [
     {
         label: "Period involved",
-        data: (data) => (
+        data: (data) => data.yearsActive ? (
             <div>
                 {data.yearsActive[0]} - {data.yearsActive[1]}
             </div>
-        ),
+        ) : null,
     },
     {
         label: "Tech stack",

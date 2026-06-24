@@ -5,7 +5,7 @@
     <link>https://alexprisacariu.dev</link>
     <description>Place where Alexandru Prisacariu posts things</description>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Jan 2026 07:29:06 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jun 2026 17:45:55 GMT</lastBuildDate>
     
     <item>
       <title><![CDATA[Applying retry pattern in Async Rust]]></title>
@@ -63,6 +63,14 @@ features and a better home page.]]></description>
       <pubDate>Sat, 12 Mar 2022 16:36:45 GMT</pubDate>
       <description><![CDATA[Create your own radio station using a Raspberry Pi 3. Step-by-step guide to configuring DarkIce and IceCast2 for live audio streaming on Ubuntu.]]></description>
       <category>Linux</category><category>Raspberry Pi</category><category>Ubuntu</category><category>Audio</category>
+    </item>
+    <item>
+      <title><![CDATA[Creating my own logs collector]]></title>
+      <link>https://alexprisacariu.dev/posts/_post901_creating_my_own_logs_collector</link>
+      <guid>https://alexprisacariu.dev/posts/_post901_creating_my_own_logs_collector</guid>
+      <pubDate>Sat, 28 Aug 2021 12:36:45 GMT</pubDate>
+      <description><![CDATA[Learn why and how I built a custom logs collector system with NodeJS, featuring a processing app, catcher app, and client for efficient log management.]]></description>
+      <category>NodeJS</category>
     </item>
     <item>
       <title><![CDATA[Dev Ideas #1: Handle data between tabs components]]></title>

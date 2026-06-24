@@ -18,12 +18,10 @@ const PostsDataVariablesNames = ["title", "tags", "publishedOn", "thumbnail", "c
  * @returns {Promise<Post[]>} the blog posts
  */
 export default async function getBlogPosts(page, includeIgnoredPosts = false, addFirstParagraph = false) {
-    const dirNames = (await getPostsDirNames(includeIgnoredPosts))
-        .reverse()
-        .slice((page - 1) * PostsPerPage, page * PostsPerPage);
+    const allDirNames = (await getPostsDirNames()).reverse();
 
-    const posts = [];
-    for (const dirName of dirNames) {
+    const allPosts = [];
+    for (const dirName of allDirNames) {
         let source;
         try {
             source = await readPostSource(dirName);
@@ -35,18 +33,18 @@ export default async function getBlogPosts(page, includeIgnoredPosts = false, ad
 
         const { data, content } = matter(source);
 
-        const post = constructPostData(
-            data,
-            dirName,
-            PostsDataVariablesNames,
-        );
+        if (!includeIgnoredPosts && data.hide) {
+            continue;
+        }
+
+        const post = constructPostData(data, dirName, PostsDataVariablesNames);
 
         if (addFirstParagraph) {
             post.firstParagraph = content.trim().split(/\n\s*\n/)[0];
         }
 
-        posts.push(post);
+        allPosts.push(post);
     }
 
-    return posts;
+    return allPosts.slice((page - 1) * PostsPerPage, page * PostsPerPage);
 }
