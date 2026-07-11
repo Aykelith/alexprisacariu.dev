@@ -14,13 +14,22 @@ export const HomePostsDataVariablesNames = ["title", "tags", "publishedOn", "thu
 export default async function getHomePosts(includeIgnoredPosts = false) {
     let dirNames = await getPostsDirNames(includeIgnoredPosts);
     dirNames.reverse();
-    dirNames = dirNames.slice(0, 3);
 
     const posts = [];
     for (const dirName of dirNames) {
+        if (posts.length >= 3) {
+            break;
+        }
+
+        const postSettings = await readPostSettings(dirName);
+
+        if (!includeIgnoredPosts && postSettings.hide) {
+            continue;
+        }
+
         posts.push(
             constructPostData(
-                await readPostSettings(dirName),
+                postSettings,
                 dirName,
                 HomePostsDataVariablesNames,
             ),
