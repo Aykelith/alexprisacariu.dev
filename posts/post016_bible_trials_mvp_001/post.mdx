@@ -158,3 +158,49 @@ stateDiagram-v2
 
     Aborted --> [*]
 ```
+
+And here the FSM for the client-side for a match:
+
+```mermaid
+stateDiagram-v2
+    [*] --> ReceiveMessageThatPlayersWereFound
+    ReceiveMessageThatPlayersWereFound --> LoadingAllResourcesAndWaitingForOpponentsDataPhase
+    LoadingAllResourcesAndWaitingForOpponentsDataPhase --> SendMessageReadyForMatch : all resources loaded
+    SendMessageReadyForMatch --> PlayersShowcaseIntroScene
+    PlayersShowcaseIntroScene --> ChooseMatchTrialsScene : animation is done
+    ChooseMatchTrialsScene --> WaitingForEveryoneToBeReady : player has chosen the trials or timeout
+    WaitingForEveryoneToBeReady --> MatchLoop : received message from server to start match
+
+    state MatchLoop {
+        [*] --> ChooseRoundTrailScene
+        ChooseRoundTrailScene --> WaitForEveryoneToChooseATrial : player has chosen a trial or timeout
+        WaitForEveryoneToChooseATrial --> RoundModifiersScreen : received message from server
+        RoundModifiersScreen --> SendMessageReadyForQuestion : animation is done
+        SendMessageReadyForQuestion --> WaitForQuestionDataFromServerPhase
+        WaitForQuestionDataFromServerPhase --> PrepareQuestionScreen : received question data
+        PrepareQuestionScreen --> SendMessageReadyToDisplayQuestion
+        SendMessageReadyToDisplayQuestion --> WaitForConfirmationToDisplayQuestionPhase
+        WaitForConfirmationToDisplayQuestionPhase --> QuestionScreen : received confirmation
+        QuestionScreen --> SendAnswer : player answered the question
+        SendAnswer --> WaitForOthersPhase
+
+        QuestionScreen --> Timeout : player time expired
+        Timeout --> WaitForOthersPhase
+
+        WaitForOthersPhase --> RoundResultScreen : received round results
+        RoundResultScreen --> SendMessageReadyForNextRound : rounds remain
+        SendMessageReadyForNextRound --> WaitForOthersToBeReadyForNextRound
+        WaitForOthersToBeReadyForNextRound --> ChooseRoundTrailScene : received confirmation
+
+        RoundResultScreen --> [*] : no more rounds
+    }
+
+    MatchLoop --> MatchResultScreen
+    MatchResultScreen --> [*]
+```
+
+Next weeks I hope I can start programming know that the tasks are ready and I
+have a documentation for how the match should/want to work.
+
+I'm still not sure how much AI I want to involve into the coding. I want to
+learn Rust and GDScript better, but I also want to advance much faster.
