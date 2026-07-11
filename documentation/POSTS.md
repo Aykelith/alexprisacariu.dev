@@ -100,6 +100,26 @@ showNoAIPost: true
 
 ---
 
+## Tag listing routes
+
+Posts are also listable by tag, paginated the same way as the main blog listing:
+
+- `/blog/tag-{slug}/{page}` — public, excludes hidden posts
+- `/blog-hidden/tag-{slug}/{page}` — includes hidden posts, `noindex`
+
+`{slug}` is `tags` run through `utilities/slugifyTag.js` (lowercase, non-alphanumeric
+runs collapsed to `-`), since raw tags can contain spaces/slashes/`+`/mixed case
+(`Raspberry Pi`, `JavaScript/JS`, `C++`). Two distinct tags that slugify to the same
+value are merged into one listing — acceptable for the current tag set.
+
+`/blog/tag-{slug}` with no page number is not generated (404) — only
+`/blog/tag-{slug}/1`, `/2`, etc. exist. Implemented at
+`app/blog/[page]/[tagPage]/page.js` (the outer `[page]` param holds the literal
+`tag-{slug}`, forced by Next.js not allowing a sibling slug name alongside the
+existing `[page]` route).
+
+---
+
 ## Notes
 
 - `thumbnail` vs `cover`: on the post page, `cover` is displayed at the top; `thumbnail` is used in listing cards. If `cover` is missing, the post page falls back to `thumbnail`. Both default to placeholder images if absent.

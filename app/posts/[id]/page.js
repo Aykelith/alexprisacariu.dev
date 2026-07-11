@@ -1,174 +1,172 @@
 // Method
-import matter from "gray-matter";
-import { transformerMetaHighlight } from "@shikijs/transformers";
-import remarkGfm from "remark-gfm";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
-import getPostSourceByUrlPart from "@/utilities/server/blog/getPostSourceByUrlPart";
-import getPostsUrlParts from "@/utilities/server/blog/getPostsUrlParts";
-import addPostDataDefaults from "@/utilities/server/blog/addPostDataDefaults";
-import rehypePrettyCode from "rehype-pretty-code";
 
+import { transformerMetaHighlight } from "@shikijs/transformers";
+import matter from "gray-matter";
 // Components
 import { MDXRemote } from "next-mdx-remote-client/rsc";
-import ClickableImage from "@/components/ClickableImage";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
 import BlurredSidesImg from "@/components/BlurredSidesImg";
+import ClickableImage from "@/components/ClickableImage";
+import Mermaid from "@/components/Mermaid";
+import getTagDisplayName from "@/utilities/getTagDisplayName";
+import remarkMermaid from "@/utilities/remarkMermaid";
+import addPostDataDefaults from "@/utilities/server/blog/addPostDataDefaults";
+import getPostSourceByUrlPart from "@/utilities/server/blog/getPostSourceByUrlPart";
+import getPostsUrlParts from "@/utilities/server/blog/getPostsUrlParts";
 import readPostSettings from "@/utilities/server/blog/readPostSettings";
 
 const MDXComponents = {
-    ClickableImage,
+  ClickableImage,
+  Mermaid,
 };
 
 const MDXOptions = {
-    mdxOptions: {
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [
-            [
-                rehypePrettyCode,
-                {
-                    theme: { light: "github-light", dark: "github-dark" },
-                    transformers: [transformerMetaHighlight()],
-                },
-            ],
-            rehypeSlug,
-            [rehypeAutolinkHeadings, { behavior: "wrap" }],
-        ],
-    },
+  mdxOptions: {
+    remarkPlugins: [remarkGfm, remarkMermaid],
+    rehypePlugins: [
+      [
+        rehypePrettyCode,
+        {
+          theme: { light: "github-light", dark: "github-dark" },
+          transformers: [transformerMetaHighlight()],
+        },
+      ],
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: "wrap" }],
+    ],
+  },
 };
 
 export default async function Post({ params }) {
-    const { id } = await params;
-    const postSource = await getPostSourceByUrlPart(id);
-    const { data: postSettings, content } = matter(postSource);
-    addPostDataDefaults(postSettings);
+  const { id } = await params;
+  const postSource = await getPostSourceByUrlPart(id);
+  const { data: postSettings, content } = matter(postSource);
+  addPostDataDefaults(postSettings);
 
-    const postImage = postSettings.cover || postSettings.thumbnail;
+  const postImage = postSettings.cover || postSettings.thumbnail;
 
-    return (
-        <div id="PostPage">
-            <div className="box py-12">
-                <div className="flex flex-col">
-                    {
-                        postImage && !postImage?.noImage
-                        &&
-                        <BlurredSidesImg
-                            className="mb-8"
-                            src={
-                                postImage?.png ||
-                                postImage
-                            }
-                            webp={postImage?.webp}
-                            alt={`Cover image for project "${postSettings.title}"`}
-                            imgClassName="max-h-[200px]"
-                        />
-                    }
-                    <h1 className="text-3xl font-accent mb-2">
-                        {postSettings.title}
-                    </h1>
-                    <div className="post-tags mb-6">
-                        <span className="tag">{formatData(postSettings.publishedOn)}</span>
-                        {postSettings.tags.map((tag) => {
-                            return (
-                                <span key={tag} className="tag">
-                                    {tag}
-                                </span>
-                            );
-                        })}
-                    </div>
-                    <div className="post-content">
-                        <MDXRemote
-                            source={content}
-                            components={MDXComponents}
-                            options={MDXOptions}
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {postSettings.otherImages?.map((imageData, index) => {
-                            return (
-                                <ClickableImage
-                                    key={imageData.src}
-                                    src={imageData.src}
-                                    alt={`Image #${index + 1} for project "${postSettings.title}"`}
-                                    visibleAlt={imageData.alt}
-                                    className="h-[300px]"
-                                />
-                            );
-                        })}
-                    </div>
-                    {
-                        postSettings.showNoAIPost
-                        &&
-                        <div className="text-muted-foreground mt-4">
-                            Notice: This post was written by a human and gramatically checked by an AI.
-                        </div>
-                    }
-                    {
-                        postSettings.showAIDisclaimer
-                        &&
-                        <div className="text-muted-foreground mt-4">
-                            Disclaimer: Some of the images included in this post were generated using artificial-intelligence tools for illustrative purposes.
-                        </div>
-                    }
-                </div>
+  return (
+    <div id="PostPage">
+      <div className="box py-12">
+        <div className="flex flex-col">
+          {postImage && !postImage?.noImage && (
+            <BlurredSidesImg
+              className="mb-8"
+              src={postImage?.png || postImage}
+              webp={postImage?.webp}
+              alt={`Cover image for project "${postSettings.title}"`}
+              imgClassName="max-h-[200px]"
+            />
+          )}
+          <h1 className="text-3xl font-accent mb-2">{postSettings.title}</h1>
+          <div className="post-tags mb-6">
+            <span className="tag">{formatData(postSettings.publishedOn)}</span>
+            {postSettings.tags.map((tag) => {
+              return (
+                <span key={tag} className="tag">
+                  {getTagDisplayName(tag)}
+                </span>
+              );
+            })}
+          </div>
+          <div className="post-content">
+            <MDXRemote
+              source={content}
+              components={MDXComponents}
+              options={MDXOptions}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {postSettings.otherImages?.map((imageData, index) => {
+              return (
+                <ClickableImage
+                  key={imageData.src}
+                  src={imageData.src}
+                  alt={`Image #${index + 1} for project "${postSettings.title}"`}
+                  visibleAlt={imageData.alt}
+                  className="h-[300px]"
+                />
+              );
+            })}
+          </div>
+          {postSettings.showNoAIPost && (
+            <div className="text-muted-foreground mt-4">
+              Notice: This post was written by a human and gramatically checked
+              by an AI.
             </div>
+          )}
+          {postSettings.showAIDisclaimer && (
+            <div className="text-muted-foreground mt-4">
+              Disclaimer: Some of the images included in this post were
+              generated using artificial-intelligence tools for illustrative
+              purposes.
+            </div>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 function formatData(dataString) {
-    const date = new Date(dataString);
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    });
+  const date = new Date(dataString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export async function generateStaticParams() {
-    return (await getPostsUrlParts()).map((urlPart) => ({
-        id: urlPart,
-    }));
+  return (await getPostsUrlParts()).map((urlPart) => ({
+    id: urlPart,
+  }));
 }
 
 export async function generateMetadata({ params }) {
-    const { id } = await params;
-    const postSettings = await readPostSettings(id);
-    addPostDataDefaults(postSettings);
+  const { id } = await params;
+  const postSettings = await readPostSettings(id);
+  addPostDataDefaults(postSettings);
 
-    const title = postSettings.seoTitle;
-    const description = postSettings.seoDescription;
-    const keywords = postSettings.seoKeywords;
-    const baseUrl = "https://alexprisacariu.dev";
-    const url = `${baseUrl}/posts/${id}`;
-    const images = [];
-    if (postSettings.cover) {
-        images.push(`${baseUrl}${postSettings.cover?.png || postSettings.cover}`);
-    }
-    if (postSettings.thumbnail) {
-        images.push(`${baseUrl}${postSettings.thumbnail?.png || postSettings.thumbnail}`);
-    }
+  const title = postSettings.seoTitle;
+  const description = postSettings.seoDescription;
+  const keywords = postSettings.seoKeywords;
+  const baseUrl = "https://alexprisacariu.dev";
+  const url = `${baseUrl}/posts/${id}`;
+  const images = [];
+  if (postSettings.cover) {
+    images.push(`${baseUrl}${postSettings.cover?.png || postSettings.cover}`);
+  }
+  if (postSettings.thumbnail) {
+    images.push(
+      `${baseUrl}${postSettings.thumbnail?.png || postSettings.thumbnail}`,
+    );
+  }
 
-    return {
-        title,
-        description,
-        keywords,
-        openGraph: {
-            title,
-            description,
-            url,
-            type: "article",
-            images,
-        },
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images,
-        },
-        alternates: {
-            canonical: url,
-        },
-    };
+  return {
+    title,
+    description,
+    keywords,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images,
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
 }
