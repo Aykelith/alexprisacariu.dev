@@ -5,7 +5,7 @@
     <link>https://alexprisacariu.dev</link>
     <description>Place where Alexandru Prisacariu posts things</description>
     <language>en</language>
-    <lastBuildDate>Wed, 24 Jun 2026 17:45:55 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 17:47:44 GMT</lastBuildDate>
     
     <item>
       <title><![CDATA[Applying retry pattern in Async Rust]]></title>
@@ -14,6 +14,14 @@
       <pubDate>Tue, 20 Jan 2026 12:25:43 GMT</pubDate>
       <description><![CDATA[Implementing robust retry system in async Rust with exponential backoff, full jitter, and transient error checks.]]></description>
       <category>Rust</category><category>Async</category><category>Retry</category><category>Idempotency</category>
+    </item>
+    <item>
+      <title><![CDATA[Starting to work again]]></title>
+      <link>https://alexprisacariu.dev/posts/post016_bible_trials_mvp_001</link>
+      <guid>https://alexprisacariu.dev/posts/post016_bible_trials_mvp_001</guid>
+      <pubDate>Tue, 20 Jan 2026 12:25:43 GMT</pubDate>
+      <description><![CDATA[After a pause of some months I got back to work.]]></description>
+      <category>Rust</category><category>AI</category><category>Godot</category><category>bible-trials</category>
     </item>
     <item>
       <title><![CDATA[Creating a new version of alexprisacariu.dev]]></title>
