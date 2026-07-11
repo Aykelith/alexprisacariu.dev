@@ -4,14 +4,24 @@ import clsx from "clsx";
 // Components
 import { ProgressBarLink } from "@/components/progress_bar";
 
-export default function ShortProject({ project, className, maxTags = 2 }) {
+// Constants
+import { PROJECT_STATUSES } from "@/constants/ProjectStatuses";
+
+export default function ShortProject({ project, className, maxTags = 2, showStatus = false }) {
+    const statusInfo = showStatus && project.status ? PROJECT_STATUSES[project.status] : null;
+
     return (
         <ProgressBarLink
             key={project.title}
             className={clsx("project-card", className)}
             href={`/projects/${project.urlPart}`}
         >
-            <div className="project-img">
+            <div className="project-img relative">
+                {statusInfo && (
+                    <span className={clsx("absolute top-1 left-1 z-10 text-xs font-semibold px-1.5 py-0.5 rounded", statusInfo.className)}>
+                        {statusInfo.label}
+                    </span>
+                )}
                 {project.thumbnail?.webp ? (
                     <picture>
                         <source

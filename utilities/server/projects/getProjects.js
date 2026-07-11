@@ -19,9 +19,7 @@ export default async function getProjects(
 ) {
     let projectsDirectoriesNames;
     try {
-        projectsDirectoriesNames = await getProjectsDirNames(
-            includeIgnoredProjects,
-        );
+        projectsDirectoriesNames = await getProjectsDirNames();
     } catch (error) {
         throw new Error(`Failed to read the projects names: ${error}`);
     }
@@ -38,6 +36,10 @@ export default async function getProjects(
         }
 
         const { data: projectSettings } = matter(source);
+
+        if (!includeIgnoredProjects && projectSettings.hide) {
+            continue;
+        }
 
         if (extraCheckProject) {
             if (!extraCheckProject(projectSettings)) {

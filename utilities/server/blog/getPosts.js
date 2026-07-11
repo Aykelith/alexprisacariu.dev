@@ -19,7 +19,7 @@ export default async function getPosts(
 ) {
     let postsDirectoriesNames;
     try {
-        postsDirectoriesNames = await getPostsDirNames(includeIgnoredPosts);
+        postsDirectoriesNames = await getPostsDirNames();
     } catch (error) {
         throw new Error(`Failed to read the blog posts names: ${error}`);
     }
@@ -36,6 +36,10 @@ export default async function getPosts(
         }
 
         const { data: postSettings } = matter(source);
+
+        if (!includeIgnoredPosts && postSettings.hide) {
+            continue;
+        }
 
         if (extraCheckPost) {
             if (!extraCheckPost(postSettings)) {

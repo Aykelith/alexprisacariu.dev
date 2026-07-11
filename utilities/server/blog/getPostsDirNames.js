@@ -10,17 +10,12 @@ import BlogPostsDirectoryPath from "@/constants/server/BlogPostsDirectoryPath";
  * @param {boolean} includeIgnoredPosts - whether to include ignored posts
  * @returns {Promise<String[]>} the posts directories names
  */
-export default async function getPostsDirNames(includeIgnoredPosts = false) {
-    let postsDirectoriesNames;
+export default async function getPostsDirNames() {
     try {
-        postsDirectoriesNames = await fs.readdir(BlogPostsDirectoryPath);
+        return await fs.readdir(BlogPostsDirectoryPath);
     } catch (error) {
         throw new Error(
             `Failed to read the directory at "${BlogPostsDirectoryPath}": ${error}`,
         );
     }
-
-    return postsDirectoriesNames.filter((postDirectoryName) => {
-        return includeIgnoredPosts || !postDirectoryName.startsWith("_");
-    });
 }
