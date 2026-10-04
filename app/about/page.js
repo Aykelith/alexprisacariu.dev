@@ -38,8 +38,7 @@ export default function AboutPage() {
                             <LanguageName>Ruby</LanguageName>. I also play with <LanguageName>Rust</LanguageName> from time to time.
                         </p>
                         <p>
-                            My editor of choice, right now, is <ProperName>Antigravity</ProperName>, while having a terminal
-                            prepared with <ProperName>Neovim</ProperName> for when I need to quickly access some other project's files,
+                            My editor of choice, right now, is <ProperName>NeoVim</ProperName>,
                             all running on <OSName>Linux Mint</OSName>.
                         </p>
                     </div>
