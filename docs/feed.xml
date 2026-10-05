@@ -5,8 +5,16 @@
     <link>https://alexprisacariu.dev</link>
     <description>Place where Alexandru Prisacariu posts things</description>
     <language>en</language>
-    <lastBuildDate>Sat, 11 Jul 2026 18:01:43 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 05 Oct 2026 05:25:45 GMT</lastBuildDate>
     
+    <item>
+      <title><![CDATA[First sewing project]]></title>
+      <link>https://alexprisacariu.dev/posts/post017_first_sewing_project</link>
+      <guid>https://alexprisacariu.dev/posts/post017_first_sewing_project</guid>
+      <pubDate>Sun, 04 Oct 2026 12:25:43 GMT</pubDate>
+      <description><![CDATA[I started sewing.]]></description>
+      <category>Sewing</category>
+    </item>
     <item>
       <title><![CDATA[Applying retry pattern in Async Rust]]></title>
       <link>https://alexprisacariu.dev/posts/post015_applying_retry_pattern_in_async_rust</link>
