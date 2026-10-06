@@ -448,6 +448,24 @@ code {
         @apply py-0.5 px-1;
         @apply rounded;
     }
+
+    table {
+        @apply my-4;
+    }
+
+    th,
+    td {
+        @apply px-3 py-1.5 text-left align-middle;
+        @apply border border-foreground-light-accent;
+    }
+
+    th {
+        @apply bg-quote-block-background;
+    }
+
+    .table-icon {
+        @apply size-8;
+    }
 }
 
 #ProjectPage .post-content ul,
